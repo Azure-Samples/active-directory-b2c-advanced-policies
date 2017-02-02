@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="IdentityServer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="B2CPolicy" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2C_1_signin</Value>
+    </Setting>
+    <Setting Name="B2CMetadata" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://login.microsoftonline.com/{0}/v2.0/.well-known/openid-configuration?p={1}</Value>
+    </Setting>
+    <Setting Name="B2CTenant" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2CAuth.onmicrosoft.com</Value>
+    </Setting>
+    <Setting Name="B2CAuthProviderName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">AzureAD</Value>
+    </Setting>
+    <Setting Name="B2CClientSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">e]&gt;kJd#{P3EM4}5?</Value>
+    </Setting>
+    <Setting Name="B2CClientId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">a8120a38-ac09-411b-b317-1cfa78c86dbe</Value>
+    </Setting>
+    <Setting Name="SiteName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2CAuth</Value>
+    </Setting>
+    <Setting Name="IdentityServerRedirectUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://b2cauth.azurewebsites.net/identity</Value>
+    </Setting>
+    <Setting Name="Origin" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://b2cauth.azurewebsites.net/</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

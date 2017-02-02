@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Recorder Configuration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="config_102.js"></script>
+    <script>
+        $(document).ready(function () {
+            if (typeof (Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+            } else {
+                var checkboxDiv = document.getElementById("Checkboxes");
+                checkboxDiv.innerHTML = "<b>This browser doesn't support HTML5 'localStorage' so cannot be configured.</b>";
+            }
+            Config_InitializeConfigUI();
+        });
+    </script>
+    <style>
+        .Checkboxes {
+            padding-left: 2em;
+            padding-bottom: 2em;
+            padding-top: 2em;
+        }
+        .CheckboxClass {
+            line-height: 150%;
+        }
+    </style>
+</head>
+<body>
+    <h2>B2C Recorder Reader Configuration</h2>
+    <div id="Checkboxes" class="Checkboxes">
+        <form id="configForm"></form>
+    </div>
+    <button type="button" id="resetButton" onclick="Config_ResetConfig();">Reset Configuration</button>
+    <button type="button" id="saveButton" onclick="Config_WriteConfig();">Save Configuration</button>
+    <button type="button" id="readerButton" onclick="Config_ReturnToReader();">Return to Reader</button>
+</body>
+</html>

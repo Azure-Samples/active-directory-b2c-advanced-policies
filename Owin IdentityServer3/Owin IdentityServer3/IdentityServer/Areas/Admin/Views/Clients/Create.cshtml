@@ -1,0 +1,35 @@
+﻿@model IdentityServer.Areas.Admin.ViewModels.CreateClientViewModel
+@{
+    ViewBag.HtmlCssClass = "admin";
+    ViewBag.Title = "New Client";
+}
+<h1>New Client</h1>
+<hr />
+@Html.ValidationSummary(true)
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.TenantName)
+        @Html.TextBoxFor(m => m.TenantName, new { @class = "form-control", maxlength = 100, placeholder = "<tenant>.onmicrosoft.com", required = "required" })
+        @Html.ValidationMessageFor(m => m.TenantName)
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+}
+@section Scripts
+{
+    <script language="javascript">
+        (function($) {
+            $('span.field-validation-valid, span.field-validation-error').each(function () {
+                $(this).addClass('help-block');
+            });
+
+            $('form').each(function () {
+                $(this).find('div.form-group').each(function () {
+                    if ($(this).find('span.field-validation-error').length > 0) {
+                        $(this).addClass('has-error');
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+}

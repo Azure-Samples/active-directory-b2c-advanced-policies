@@ -1,0 +1,32 @@
+﻿@model IEnumerable<IdentityServer.Areas.Admin.ViewModels.ClientDisplayViewModel>
+@{
+    ViewBag.HtmlCssClass = "admin";
+    ViewBag.Title = "Clients";
+}
+<h1>Clients</h1>
+<hr />
+<a class="btn btn-default" href="@Url.Action("Create", "Clients")">New Client</a>
+<table class="table table-stripped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Redirect URIs</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var client in Model)
+    {
+        <tr>
+            <td>@client.ClientName</td>
+            <td>@client.ClientId</td>
+            <td>
+                @if (!string.IsNullOrEmpty(client.RedirectUri))
+                {
+                    <a href="@client.RedirectUri">@client.RedirectUri</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

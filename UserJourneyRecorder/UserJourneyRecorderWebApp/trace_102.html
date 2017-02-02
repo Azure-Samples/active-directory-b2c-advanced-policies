@@ -1,0 +1,1202 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>User Journey Player</title>
+    <link rel="stylesheet" type="text/css" href="trace_102.css" /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="config_102.js"></script>
+    <script src="base64url_102.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            Config_ReadConfig();
+
+            Config_ReadLanguage();            
+        });
+
+        var G_StatebagTruth = [];
+        var G_StatebagLastShown = [];
+        var G_RequestKind = "";
+        var G_RequestDetail = "";
+        var G_HtmlIdCounter = 1;
+        var G_TokenContents = new Array();
+        var G_SuppressDisplay = false;  // set in ProcessPredicate and Action then used in HandlerResult
+        var G_SummaryDetails = new Array();
+        var G_DictionaryMoniker = "System.Collections.Generic.Dictionary";
+        var G_DictionaryMonikerLength = G_DictionaryMoniker.length;
+        var G_LastCorrelationId = "";
+        var G_2linefeeds = "\r\n\r\n";
+        var G_linefeed = "\r\n";
+
+        var G_PredicateSuppressions = [
+            "Web.TPEngine.StateMachineHandlers.NoOpHandler",
+            "Web.TPEngine.SSO.IsSSOSessionParticipantHandler",
+            "Web.TPEngine.StateMachineHandlers.ShouldOrchestrationStepBeInvokedHandler",
+            "Web.TPEngine.StateMachineHandlers.IsClaimsExchangeProtocolARedirectionHandler",
+            "Web.TPEngine.StateMachineHandlers.IsClaimsExchangeProtocolAServiceCallHandler",
+            "Web.TPEngine.StateMachineHandlers.IsClaimsExchangeProtocolAnApiHandler",
+            "Web.TPEngine.StateMachineHandlers.IsPresentationTokenGeneratedHandler",
+            "Web.TPEngine.StateMachineHandlers.CrossSiteRequestForgeryValidationHandler"
+        ];
+
+        var G_ActionSuppressions = [
+            "Web.TPEngine.SSO.ResetSSOSessionHandler",
+            "Web.TPEngine.StateMachineHandlers.RequestTracingHandler",
+            "Web.TPEngine.StateMachineHandlers.PreSetupHandler",
+            "Web.TPEngine.StateMachineHandlers.ClaimsExchangeCleanupHandler",
+            "Web.TPEngine.StateMachineHandlers.SpecialCaseClaimsExchangeCleanupHandler",
+            "Web.TPEngine.SSO.SSOSessionHandler",
+            "Web.TPEngine.SSO.ActivateSSOSessionHandler",
+            "Web.TPEngine.StateMachineHandlers.TransactionEndHandler",
+            "Web.TPEngine.StateMachineHandlers.SigninSignUpApiLoadHandler"
+        ];
+
+        var G_StatebagSuppressions = [
+            "$type",
+            "MACHSTATE",
+			"EID",
+            "TID",
+            "PID",
+            "IPP",
+            "RQCTX",
+            "Complex-CLMS",
+            "Complex-API_SETTINGS",
+            "Complex-API_RESULT",
+            "ComplexItems",
+            "OTID",
+            "JC",
+            "APIURL",
+            "CLIENTID",
+            "CMESSAGE",
+            "IMESSAGE"
+        ];
+
+        var G_ExceptionsToSkip =  [
+            "Please see the HTTP response returned by the 'Response' property of this exception for details"
+        ];
+
+
+        function Clip(kind, content) {
+            this.kind = kind;
+            this.content = content;
+        }
+
+        function InitializeRefreshMode()
+        {
+            if (Config_AutoRefresh) {
+                var actionButton = document.getElementById("refreshActionButton");
+                actionButton.innerText = G_Resources.AutoRefresh;
+                actionButton.enabled = false;
+                document.getElementById("DeleteStreamButton").style.visibility = "hidden";
+                retrieveRecording();
+            }
+        }
+
+        function ToggleRefreshMode()
+        {
+            var actionButton = document.getElementById("refreshActionButton");
+            if (Config_AutoRefresh) {
+                Config_AutoRefresh = false;
+                actionButton.innerText = G_Resources.Refresh;
+                actionButton.disabled = false;
+                document.getElementById("DeleteStreamButton").style.visibility = "visible";
+            }
+            else
+            {
+                Config_AutoRefresh = true;
+                actionButton.innerText = G_Resources.AutoRefresh;
+                actionButton.disabled = true;
+                document.getElementById("DeleteStreamButton").style.visibility = "hidden";
+                retrieveRecording();
+            }
+        }
+
+        function ManualRefresh()
+        {
+            retrieveRecording();
+        }
+
+        function retrieveRecording()
+        {
+            var url = getStreamUrl();
+            if (!Config_AutoRefresh)
+            {
+                url += "&autodelete=false";
+            }
+
+            $.get(url, processRecording, "text");
+
+            if (Config_AutoRefresh) {
+                window.setTimeout(retrieveRecording, 2000);
+            }
+        }
+
+        function DeleteStream()
+        {
+            var url = getStreamUrl();
+            $.get(url, processStreamDelete, "text");
+        }
+
+        function processStreamDelete()
+        {
+            G_StatebagTruth = [];
+            G_StatebagLastShown = [];
+            window.location.reload(true);
+        }
+
+        function processRecording(recording, status, jqXHR) {
+            if (recording !== undefined) {
+                var journeySegments = recording.split("\r\n]");
+                for (var segmentCount = 0; segmentCount < journeySegments.length; segmentCount++) {
+                    if (journeySegments[segmentCount].length === 0) {
+                        continue;
+                    }
+
+                    // hydrate the clips in a journey segment
+                    var clips = eval("(" + journeySegments[segmentCount] + "])");
+                    for (var clipCount = 0; clipCount < clips.length; clipCount++) {
+                        var clip = clips[clipCount];
+                        switch (clip.Kind) {
+                            case "Headers":
+                                ProcessHeaders(clip);
+                                break;
+
+                            case "Transition":
+                                ProcessTransition(clip);
+                                break;
+
+                            case "Predicate":
+                                ProcessPredicate(clip);
+                                break;
+
+                            case "Action":
+                                ProcessAction(clip);
+                                break;
+
+                            case "HandlerResult":
+                                ProcessHandlerResult(clip);
+                                break;
+
+                            case "FatalException":
+                                ProcessFatalException(clip);
+                                break;
+
+                            default:
+                                ProcessUnrecognized(clip)
+                                break;
+                        }
+                    }
+
+                    if (Config_PlaySound && Config_AutoRefresh) {
+                        var audio = new Audio('sounds/' + Config_Sound + '.mp3');
+                        audio.play();
+                    }
+                }
+            }
+        }
+
+        function GetPresentationRow(kind, rowTitle)
+        {
+            var table = document.getElementById("ClipTable");
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            row.className = kind;
+            var cell1 = row.insertCell(0);
+            cell1.className = "KindColumn";
+            cell1.innerHTML = rowTitle;
+
+            var cell2 = row.insertCell(1);
+            cell2.className = kind + "_c2";
+            return (cell2);
+        }
+
+        function ProcessHeaders(clip)
+        {
+            G_StatebagTruth = [];
+            var cell2 = GetPresentationRow(clip.Kind, G_HeadersTitle);
+            var headers = clip.Content;
+            var text = "";
+            text += OutputValue(headers.EventInstance);
+
+            if (headers.CurrentOrchestrationStep === undefined) {
+                G_StatebagLastShown = [];
+                G_LastCorrelationId = "";
+            }
+
+            if (headers.CorrelationId !== G_LastCorrelationId)
+            {
+                text += OutputKeyValue(G_Resources.CorrelationId, headers.CorrelationId);
+                text += OutputKeyValue(G_Resources.TenantId, headers.TenantId);
+                text += OutputKeyValue(G_Resources.PolicyId, headers.PolicyId);
+                text += OutputKeyValue(G_Resources.UserJourneyRecorderEndpoint, headers.UserJourneyRecorderEndpoint);
+                G_LastCorrelationId = headers.CorrelationId;
+            }
+
+            text += renderHeaderThatIsStatebagElement("ORCH_CS", headers.CurrentOrchestrationStep);
+            text += renderHeaderThatIsStatebagElement("TAGE", headers.TargetEntity);
+            text += renderHeaderThatIsStatebagElement("IPP", headers.ClaimsProviderProtocolProviderType);
+
+            cell2.innerHTML = text;
+        }
+
+        function renderHeaderThatIsStatebagElement(key, value)
+        {
+            var text = "";
+            if (value !== undefined)
+            {
+                text = OutputKeyValue(stateitemKeyFriendlyName(key), value);
+                G_StatebagLastShown[key] = new Item(key, value);
+            }
+
+            return text;
+        }
+
+        function Item(key, value)
+        {
+            this.k;
+            this.p = key;
+            this.v = value;
+        }
+
+        function OutputKeyValue(key, value)
+        {
+            var result = "<p>" + key + ": " + value + "</p>\r\n";
+            return result;
+        }
+
+        function OutputValue(value) {
+            var result = "<p>" + value + "</p>\r\n";
+            return result;
+        }
+
+        function ProcessTransition(clip)
+        {
+            if (Config_ShowTransitions)
+            {
+                var cell2 = GetPresentationRow(clip.Kind, G_Resources.Transition);
+                var text = "";
+                text += OutputKeyValue(G_Resources.StateName, clip.Content.StateName);
+                text += OutputKeyValue(G_Resources.EventName, clip.Content.EventName);
+                cell2.innerHTML = text;
+            }
+        }
+
+        function ProcessPredicate(clip)
+        {
+            G_RequestKind = clip.Kind;
+            G_RequestDetail = clip.Content;
+            if (Config_EnablePredicateSuppression && G_PredicateSuppressions.indexOf(clip.Content) >= 0) {
+                G_SuppressDisplay = true;
+            }
+            else {
+                G_SuppressDisplay = false;
+
+                if (Config_ShowUnsuppressedRequests) {
+                    var cell2 = GetPresentationRow(clip.Kind, G_Resources.Predicate);
+                    var text = "";
+                    text += OutputKeyValue(G_Resources.Predicate, clip.Content);
+                    cell2.innerHTML = text;
+                }
+            }
+        }
+
+        function ProcessAction(clip)
+        {
+            G_RequestKind = clip.Kind;
+            G_RequestDetail = clip.Content;
+            if (Config_EnableActionSuppression && G_ActionSuppressions.indexOf(clip.Content) >= 0) {
+                G_SuppressDisplay = true;
+            }
+            else
+            {
+                G_SuppressDisplay = false;
+
+                if (Config_ShowUnsuppressedRequests)
+                {
+                    var cell2 = GetPresentationRow(clip.Kind, G_Resources.Action);
+                    var text = "";
+                    text += OutputKeyValue(G_Resources.Action, clip.Content);
+                    cell2.innerHTML = text;
+                }
+            }
+        }
+
+        function ProcessHandlerResult(clip)
+        {
+            var statebagContent = false;
+            if (clip.Content.Statebag !== undefined) {
+                statebagContent = hydrateStatebagTruth(clip);
+            }
+
+            if (G_SuppressDisplay)
+            {
+                if (!Config_SummariesTrumpSuppressions || clip.Content.RecorderRecord === undefined)
+                {
+                    return;
+                }
+            }
+
+            if (SpecializedResultProcessing(G_RequestDetail, clip))
+            {
+                return;
+            }
+
+            var idtext = "";
+            var friendlyName = handlerFriendlyName(G_RequestDetail);
+            var resultTitle;
+
+            switch (G_RequestKind)
+            {
+                case "Action":
+                    resultTitle = G_Resources.Result;
+
+                    idtext += OutputValue(friendlyName);
+                    idtext += renderHandlerDescription(G_RequestDetail);
+                    break;
+
+                case "Predicate":
+                    resultTitle = G_Resources.Result;
+                    idtext += OutputValue(friendlyName);
+                    idtext += renderHandlerDescription(G_RequestDetail);
+                    break;
+
+                default:
+                    resultTitle = G_Resources.UnknownRequest + G_RequestKind;
+                    break;
+            }
+
+            var text = "";
+            if (clip.Content.RecorderRecord !== undefined)
+            {
+                text += ProcessRecorderRecord(clip.Content.RecorderRecord);
+            }
+
+            if (statebagContent)
+            {
+                text += getPresentationDelta(clip);
+            }
+
+            if (clip.Content.Exception !== undefined)
+            {
+                text += "<div class=\"Exception\"><p>" + stringFormat(G_Resources.Exception, [null]) + "</p>";
+                text += renderException(clip.Content.Exception);
+                text += "</div>";
+            }
+
+            if (text.length === 0)
+            {
+                if (Config_EnableSuppressionOfEmptyHandlerResults)
+                {
+                    return;
+                }
+            }
+
+            var cell2 = GetPresentationRow(clip.Kind, resultTitle);
+            cell2.innerHTML = idtext + text;
+        }
+
+        function ProcessRecorderRecord(recorderRecord)
+        {
+            var text = "";
+
+            if (recorderRecord === undefined || recorderRecord.Values === undefined)
+            {
+                return text;
+            }
+
+            for (var infoCount=0; infoCount < recorderRecord.Values.length; infoCount++)
+            {
+                var info = recorderRecord.Values[infoCount];
+                switch (info.Key)
+                {
+                    case "Validation":
+                        var details = "";
+                        for (var count = 0; count < info.Value.Values.length; count++) {
+                            var item = info.Value.Values[count];
+                            switch (item.Key) {
+                                case "SubmittedBy":
+                                    var sender = item.Value;
+                                    if (sender === "Application") {
+                                        sender = G_Resources.TheApplication;
+                                    }
+
+                                    text += "<p>" + stringFormat(G_Resources.MessageSubmittedBy, [sender]) + "</p>";
+                                    break;
+
+                                case "ProtocolProviderType":
+                                    text += "<p>" + stringFormat(G_Resources.ProtocolProviderType, [item.Value]) + "</p>";
+                                    break;
+									
+								case "ValidationTechnicalProfile":
+                                    text += "<p>" + stringFormat(G_Resources.AdditionalValidation, [null]) + "</p>";
+									text += "<div class=\"ValidationTechnicalProfile\">"
+												+ ProcessRecorderRecord(item.Value) + "</div>";
+                            }
+                        }
+
+                        if (details.length > 0)
+                        {
+                            var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                            G_SummaryDetails[htmlId] = details;
+                            text += "<p  class=\"ExecutingStep\">" + G_Resources.PreconditionList + ": &nbsp;<button type=\"button\" class=\"InfoButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.LogicDetail + "</button> </p>";
+                            text += "<div id=\"" + htmlId + "\"></div>";
+                        }
+                        break;
+
+                    case "PreconditionList":
+                        var details = "";
+                        for (var count = 0; count < info.Value.Values.length; count++)
+                        {
+                            var key = info.Value.Values[count].Key;
+                            if (key === "Precondition")
+                            {
+                                var precondition = info.Value.Values[count].Value;
+                                var claimNames = "";
+
+                                // if claims are present
+                                for (var claimCount = 0; claimCount < precondition.Values.length; claimCount++) {
+                                    if (claimCount > 0) {
+                                        claimNames += " " + G_Resources.AndConjunction + " ";
+                                    }
+
+                                    claimNames += precondition.Values[claimCount];
+                                }
+
+                                var intent = getIntent(precondition.ExecuteActionsIf);
+
+                                if (precondition.Type === 0) {
+                                    details += stringFormat(G_Resources.IfClaimsPresent, [intent, claimNames]) + G_linefeed;
+                                }
+                                else if (precondition.Type === 1) {
+                                    details += stringFormat(G_Resources.IfClaimsEqual, [intent, claimNames]) + G_linefeed;
+                                }
+                            }
+                            else if (key === "SkippingStep")
+                            {
+                                var value = info.Value.Values[count].Value;
+                                details += stringFormat(G_Resources.SkippingStep, [value]) + G_linefeed;
+                            }
+                        }
+
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        G_SummaryDetails[htmlId] = details;
+                        text += "<p  class=\"ExecutingStep\">" + G_Resources.PreconditionList + ": &nbsp;<button type=\"button\" class=\"InfoButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.LogicDetail + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        break;
+
+                    case "InitiatingClaimsExchange":
+                        text += "<p>" + stringFormat(G_Resources.InitiatingClaimsExchange, 
+                            [info.Value.ProtocolType, info.Value.TargetEntity, 
+                                info.Value.TechnicalProfileId, info.Value.ProtocolProviderType 
+                            ]) + "</p>";
+                        break;
+
+                    case "InitiatingBackendClaimsExchange":
+                        text += "<p>" + stringFormat(G_Resources.InitiatingBackendClaimsExchange,
+                            [info.Value.TechnicalProfileId, info.Value.ProtocolProviderType
+                            ]) + "</p>";
+                        break;
+
+                    case "OAuth1RequestInfo":
+                        var details = "";
+                        details += stringFormat(G_Resources.OAuth1RequestInfo, [info.Value.TechnicalProfileId, info.Value.AccessTokenEndpoint]) + G_2linefeeds;
+                        details += stringFormat(G_Resources.AuthorizationEndpoint, [info.Value.AuthorizationEndpoint]) + G_2linefeeds;
+                        details += stringFormat(G_Resources.CallbackUri, [info.Value.CallbackUri]) + G_2linefeeds;
+                        details += stringFormat(G_Resources.ClientId, [info.Value.ClientId]) + G_linefeed;
+
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        G_SummaryDetails[htmlId] = details;
+                        text += "<p><button type=\"button\" class=\"TokenButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.Request + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        break;
+
+                    case "MappingPartnerTypeForClaim":
+                        if (info.Value.PartnerClaimType !== info.Value.PolicyClaimType)
+                        {
+                            text += "<p>" + stringFormat(G_Resources.MappingPartnerClaim, [info.Value.PartnerClaimType, info.Value.PolicyClaimType]) + "</p>";
+                        }
+                        break;
+
+                    case "MappingDefaultValueForClaim":
+                        text += "<p>" + stringFormat(G_Resources.MappingDefaultValueForClaim, [info.Value.DefaultValue, info.Value.PolicyClaimType]) + "</p>";
+                        break;
+
+                    case "Response":
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        G_SummaryDetails[htmlId] = info.Value + G_linefeed;
+                        text += "<p><button type=\"button\" class=\"TokenButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.Response + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        break;
+
+                    case "SkippingStep":
+                        text += "<p>" + stringFormat(G_Resources.SkippingStep, [info.Value]) + "</p>";
+                        break;
+
+                    case "SendingRequest":
+                        text += "<p>" + stringFormat(G_Resources.SendingRequest, [info.Value]) + "</p>";
+                        break;
+
+                    case "HomeRealmDiscovery":
+                    case "EnabledForUserJourneysTrue":
+                    case "EnabledForUserJourneysFalse":
+                        if (info.Key === "EnabledForUserJourneysFalse" || Config_ReportEnabledTechnicalProfiles) {
+                            var details = "";
+                            var currentStep = 0;
+                            for (var count = 0; count < info.Value.Values.length; count++) {
+                                var profile = info.Value.Values[count].Value;
+                                if (count === 0)
+                                {
+                                    currentStep = profile;
+                                    continue;
+                                }
+
+                                var enabled;
+                                if (profile.EnabledResult === true) {
+                                    enabled = G_Resources.IsEnabled;
+                                }
+                                else {
+                                    enabled = G_Resources.IsDisabled;
+                                }
+
+                                details += stringFormat(G_Resources.TechnicalProfileEnabled,
+                                    [profile.TechnicalProfile, enabled, profile.EnabledRule]) + G_linefeed;
+                            }
+
+                            var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                            G_SummaryDetails[htmlId] = details;
+                            var explanation = stringFormat(G_Resources[info.Key], [currentStep]);
+                            text += "<p  class=\"newInfo\">" + explanation + ": <button type=\"button\" class=\"TokenButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.LogicDetail + "</button> </p>";
+                            text += "<div id=\"" + htmlId + "\"></div>";
+                        }
+                        break;
+
+                    case "GettingClaims":
+                        var details = "";
+                        for (var count = 0; count < info.Value.Values.length; count++) {
+                            var key = info.Value.Values[count].Key;
+                            var mapping = info.Value.Values[count].Value;
+                            switch (key) {
+                                case "InitiatingBackendClaimsExchange":
+                                    text += stringFormat(G_Resources.InitiatingBackendClaimsExchange,
+                                        [mapping.TechnicalProfileId, mapping.ProtocolProviderType]) + G_linefeed;
+                                    break;
+
+                                case "RequestEndpointUrl":
+                                    details += stringFormat(G_Resources.RequestEndpointUrl, [mapping]) + G_2linefeeds;
+                                    break;
+
+                                case "MappingFromPartnerClaimType":
+                                    details += stringFormat(G_Resources.MappingFromPartnerClaimType,
+                                        [mapping.PartnerClaimType, mapping.PolicyClaimType]) + G_2linefeeds;
+                                    break;
+
+                                case "MappingToPartnerClaimType":
+                                    details += stringFormat(G_Resources.MappingToPartnerClaimType,
+                                        [mapping.PolicyClaimType, mapping.PartnerClaimType]) + G_2linefeeds;
+                                    break;
+
+                                case "MappingDefaultValueForClaim":
+                                    details += stringFormat(G_Resources.MappingDefaultValueForClaim,
+                                        [mapping.DefaultValue, mapping.PolicyClaimType]) + G_2linefeeds;
+                                    break;
+
+                                default:
+                                    alert("Undefined key " + key);
+                                    break;
+                            }
+                        }
+
+                        if (details.length > 0)
+                        {
+                            var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                            G_SummaryDetails[htmlId] = details;
+                            var explanation = stringFormat(G_Resources.GettingClaimsTransformation, [null]);
+                            text += "<p  class=\"newInfo\">" + explanation + ": <button type=\"button\" class=\"TokenButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.LogicDetail + "</button> </p>";
+                            text += "<div id=\"" + htmlId + "\"></div>";
+                        }
+                        break;
+
+                    case "MappingToPartnerClaimType":
+                        var mapping = info.Value;
+                        text += stringFormat(G_Resources.MappingToPartnerClaimType,
+                            [mapping.PolicyClaimType, mapping.PartnerClaimType]) + G_linefeed;
+                        break;
+
+                    case "OutputClaimsTransformation":
+                        var details = "";
+                        for (var count = 0; count < info.Value.Values.length; count++) {
+                            var key = info.Value.Values[count].Key;
+                            var mapping = info.Value.Values[count].Value;
+                            switch (key) {
+                                case "MappingFromPartnerClaimType":
+                                    details += stringFormat(G_Resources.MappingFromPartnerClaimType,
+                                        [mapping.PartnerClaimType, mapping.PolicyClaimType]) + G_linefeed;
+                                    break;
+
+                                case "MappingDefaultValueForClaim":
+                                    details += stringFormat(G_Resources.MappingDefaultValueForClaim,
+                                        [mapping.DefaultValue, mapping.PolicyClaimType]) + G_linefeed;
+                                    break;
+
+                                case "MappingPartnerTypeForClaim":
+                                    break;
+
+                                case "ClaimsTransformation":
+                                    for (var ctCount = 0; ctCount < mapping.Values.length; ctCount++)
+                                    {
+                                        var field = mapping.Values[ctCount];
+                                        switch (field.Key)
+                                        {
+                                            case "Id":
+                                                details += G_linefeed + stringFormat(G_Resources.ClaimsTransformationId,
+                                                    [field.Value]) + G_linefeed;
+                                                break;
+
+                                            case "InputClaim":
+                                                var claim = field.Value;
+                                                details += stringFormat(G_Resources.TransformationInputClaim, [claim.PolicyClaimType, claim.Value]) + G_linefeed;
+                                                break;
+
+                                            case "InputParameter":
+                                                var parameter = field.Value;
+                                                details += stringFormat(G_Resources.TransformationInputParameter, [parameter.Id, parameter.Value]) + G_linefeed;
+                                                break;
+
+                                            case "Result":
+                                                var claim = field.Value;
+                                                details += stringFormat(G_Resources.TransformationResult, [claim.PolicyClaimType, claim.Value]) + G_linefeed;
+                                                break;
+
+                                        }
+                                    }
+
+                                    break;
+                            }
+                        }
+
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        G_SummaryDetails[htmlId] = details;
+                        var explanation = stringFormat(G_Resources.OutputClaimsTransformation, [null]);
+                        text += "<p  class=\"newInfo\">" + explanation + ": <button type=\"button\" class=\"TokenButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.LogicDetail + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        break;
+
+                    case "ApiUiManagerInfo":
+                        var details = "";
+                        var apiName = "";
+                        for (var count = 0; count < info.Value.Values.length; count++) {
+                            var key = info.Value.Values[count].Key;
+                            var json = info.Value.Values[count].Value;
+                            switch (key) {
+                                case "Settings":
+                                    var settings = eval("(" + json + ")");
+                                    apiName = settings === undefined || settings.api === undefined ? "Api" : settings.api;
+                                    details += json + G_linefeed;
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        G_SummaryDetails[htmlId] = details;
+                        var explanation = stringFormat(G_Resources.ApiUIManagerInfo, [apiName]);
+                        text += "<p  class=\"newInfo\">" + explanation + ": <button type=\"button\" class=\"TokenButton\" onclick=\"populateSummaryDetailsDiv('" + htmlId + "');\">" + G_Resources.ApiDetail + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        break;
+
+                    case "SendErrorTechnicalProfile": 
+					case "ValidationRequestUrl":
+                    case "TechnicalProfileId":
+                    case "ErrorResponseReceived":
+                        text += "<p>" + stringFormat(G_Resources[info.Key], [info.Value]) + "</p>";
+                        break;
+											
+					case "Exception":
+					    text += "<div class=\"Exception\"><p>" + stringFormat(G_Resources.Exception, [null]) + "</p>";
+					    text += renderException(info.Value);
+					    text += "</div>";
+					    break;
+						
+					case "ValidationResult":
+						break;
+						
+                    default:
+                        alert("Unrecognized RecorderRecord Key: " + recorderRecord.Values[infoCount].Key);
+                        break;
+                }
+            }
+
+            return text;
+        }
+
+        function renderExceptionData(data)
+        {
+            var text = "";
+            var properties = Object.getOwnPropertyNames(data);
+
+            for (var count = 1; count < properties.length; count++) {
+                if (text === "")
+                {
+                    text = "<ul>";
+                }
+
+                var name = properties[count];
+                var value = data[properties[count]];
+                if (name === "Headers" && value.length > 0)
+                {
+                    // string trailing cr/lf
+                    if (value.lastIndexOf("\r\n") == value.length - 2)
+                    {
+                        value = value.substring(0, value.length - 2);
+                    }
+
+                    // now replace cr/lf with li's
+                    var regex = new RegExp('\r\n', 'g');
+                    value = value.replace(regex, "</li><li>");
+                    value = "<ul><li>" + value + "</li></ul>";
+                }
+
+                text += "<li>" + name + ": " + value + "</li>"
+            }
+
+            if (text !== "")
+            {
+                text += "</ul>"
+            }
+
+            return text;
+        }
+
+        function renderException(exception) {
+            var text = "";
+            while (exception) {
+                var exit = false;
+                for (var count=0; count < G_ExceptionsToSkip.length; count++)
+                {
+                    if (~exception.Message.indexOf(G_ExceptionsToSkip[count]))
+                    {
+                        exit = true;
+                        break;
+                    }
+                }
+
+                if (exit)
+                {
+                    break;
+                }
+
+                text += "<p>" + exception.Message + "</p>";
+                if (exception.Data !== undefined)
+                {
+                    text += renderExceptionData(exception.Data);
+                }
+
+                exception = exception.Exception;
+            }
+
+            return text;
+        }
+
+        function getIntent(boolean)
+        {
+            var intent = "";
+            if (boolean === true) {
+                intent = G_Resources.SkipStep;
+            }
+            else {
+                intent = G_Resources.DontSkipStep;
+            }
+
+            return intent;
+        }
+
+        function stringFormat(format, arguments)
+        {
+            if (format !== undefined)
+            {
+                for (var count = 0; count < arguments.length; count++) {
+                    format = format.replace("{" + count.toString() + "}", arguments[count]);
+                }
+            }
+            else
+            {
+                format = "FIX FORMAT: ";
+                for (var count = 0; count < arguments.length; count++) {
+                    if (count > 1)
+                    {
+                        format += " - ";
+                    }
+                    format += arguments[count];
+                }
+            }
+
+            return format;
+        }
+
+        function SpecializedResultProcessing(requestDetail, clip)
+        {
+            var retval = true;
+
+            switch (requestDetail)
+            {
+                case "Web.TPEngine.OrchestrationManager":
+                    var currentStep = G_StatebagTruth["ORCH_CS"];
+                    G_StatebagLastShown["ORCH_CS"] = currentStep;
+                    var cell2 = GetPresentationRow("ExecutingStep", handlerFriendlyName(requestDetail));
+                    var text = ProcessRecorderRecord(clip.Content.RecorderRecord);
+                    text += OutputKeyValue(G_Resources.ExecutingStep, currentStep.v);
+                    cell2.innerHTML = text;
+                    break;
+
+                case "Web.TPEngine.StateMachineHandlers.SendRequestHandler":
+                    retval = false;
+                    break;
+
+                default:
+                    retval = false;
+                    break;
+            }
+
+            return retval;
+        }
+
+        function handlerFriendlyName(name)
+        {
+            var result = name;
+            if (G_HandlerFriendlyNames[name] !== undefined)
+            {
+                result = G_HandlerFriendlyNames[name];
+            }
+            else
+            {
+                var offset = name.lastIndexOf(".");
+                if (offset > 0)
+                {
+                    result = name.substring(offset + 1, name.length);
+                }
+            }
+
+            return result;
+        }
+
+        function stateitemKeyFriendlyName(name)
+        {
+            var result = G_StateitemKeyNames[name];
+            if (result === undefined)
+            {
+                result = name;
+            }
+
+            return result;
+        }
+
+        function renderHandlerDescription(name)
+        {
+            var text = "";
+            if (G_HandlerDescriptions[name] !== undefined){
+                text += "<p class=\"handlerDesc\">" + G_HandlerDescriptions[name] + "</p>";
+            }
+
+            return text;
+        }
+
+        function getPresentationDelta(clip)
+        {
+            var newStatebagShown = [];
+            var text = "";
+            var keys = Object.keys(G_StatebagTruth);
+            for (var count = 0; count < keys.length; count++) {
+                var itemKey = keys[count];
+                if (StateBagIgnoreKey(itemKey))
+                {
+                    continue;
+                }
+
+                var htmlClass = "newInfo";
+                var lastItemShown = G_StatebagLastShown[itemKey];
+                if (lastItemShown !== undefined && (lastItemShown.v !== undefined || lastItemShown.Value !== undefined))
+                {
+                    lastValueShown = lastItemShown.v;
+                    itemTruth = G_StatebagTruth[itemKey];
+                    if (lastValueShown === itemTruth.v || lastValueShown === itemTruth.Value) {
+                        htmlClass = "seenInfo";
+                    }
+                }
+
+                if (Config_ShowFullStatebag || htmlClass === "newInfo")
+                {
+                    if (statebagEntryIsMsgToken(itemKey))
+                    {
+                        var tokenType = G_StatebagTruth[itemKey].t;
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        text += "<p  class=\"newInfo\">" + tokenType + " " + G_Resources.Message + ": " + itemKey + " <button type=\"button\" class=\"TokenButton\" onclick=\"populateTokenDiv('" + htmlId + "');\">" + G_Resources.MessageDetail + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        G_TokenContents[htmlId] =  renderJson(G_StatebagTruth[itemKey].v, false);
+                    }
+                    else if (statebagEntryIsTokenStatebagItem(itemKey))
+                    {
+                        var spacer = " ";
+                        var tokenType = G_StatebagTruth[itemKey].ContentType;
+                        if (!tokenType)
+                        {
+                            tokenType = "";
+                            spacer = "";
+                        }
+
+                        var htmlId = "HtmlId_" + G_HtmlIdCounter++;
+                        text += "<p  class=\"newInfo\">" + tokenType + spacer + G_Resources.Message + " " + itemKey + " <button type=\"button\" class=\"TokenButton\" onclick=\"populateTokenDiv('" + htmlId + "');\">" + G_Resources.MessageDetail + "</button> </p>";
+                        text += "<div id=\"" + htmlId + "\"></div>";
+                        switch (tokenType)
+                        {
+                            case "Jwt":
+                                G_TokenContents[htmlId] = renderOAuthMessage(G_StatebagTruth[itemKey].Value);
+                                break;
+
+                            case "Json":
+                                G_TokenContents[htmlId] = renderJsonMessage(G_StatebagTruth[itemKey].Value);
+                                break;
+
+                            case "WsFed":
+                            case "Saml11":
+                                //G_TokenContents[htmlId] = renderXmlMessage(G_StatebagTruth[itemKey].Value);
+                                G_TokenContents[htmlId] = G_StatebagTruth[itemKey].Value;
+                                break;
+
+                            default:
+                                G_TokenContents[htmlId] = G_StatebagTruth[itemKey].Value;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        text += "<p class=\"" + htmlClass + "\">" + stateitemKeyFriendlyName(itemKey) + ": " + htmlEncode(G_StatebagTruth[itemKey].v) + "</p>";
+                    }
+                }
+
+                newStatebagShown[itemKey] = G_StatebagTruth[itemKey];
+            }
+
+            text += getComplexItemsRendering(clip);
+            G_StatebagLastShown = newStatebagShown;
+            return text;
+        }
+
+        function statebagEntryIsTokenStatebagItem(itemKey)
+        {
+            var tokenStatebagItem = "Web.TPEngine.TokenStateBagItem";
+            if (G_StatebagTruth[itemKey].$type !== undefined && G_StatebagTruth[itemKey].$type.substring(0, tokenStatebagItem.length) === tokenStatebagItem)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        function populateTokenDiv(id)
+        {
+            var text = "";
+            var div = document.getElementById(id);
+            if (div.innerHTML.length === 0)
+            {
+                text = "<textarea rows=\"10\" cols=\"80\" class=\"token\">" + G_TokenContents[id] + "</textarea>";
+            }
+
+            div.innerHTML = text;
+        }
+
+        function populateSummaryDetailsDiv(id) {
+            var text = "";
+            var div = document.getElementById(id);
+            if (div.innerHTML.length === 0) {
+                text = "<textarea rows=\"10\" cols=\"80\" class=\"SummaryDetails\">" + G_SummaryDetails[id] + "</textarea>";
+            }
+
+            div.innerHTML = text;
+        }
+
+        function statebagEntryIsMsgToken(itemKey)
+        {
+            if (itemKey.substring(0, 4) === "MSG(") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function hydrateStatebagTruth(clip)
+        {
+            var contentPresent = false;
+            var keys = Object.keys(clip.Content.Statebag);
+            for (var count = 0; count < keys.length; count++) {
+                var itemKey = keys[count];
+                if (itemKey === "$type")
+                {
+                    continue;
+                }
+
+                G_StatebagTruth[itemKey] = clip.Content.Statebag[itemKey];
+                contentPresent = true;
+            }
+
+            return contentPresent;
+        }
+
+        function getComplexItemsRendering(clip)
+        {
+            var itemText = "";
+
+            var complexItemNames = Object.keys(G_ComplexStatebagItems);
+            for (var itemCount = 0; itemCount < complexItemNames.length; itemCount++) {
+                var itemName = complexItemNames[itemCount];
+                var item = clip.Content.Statebag[itemName];
+                if (item === undefined)
+                {
+                    continue;
+                }
+
+                var itemLastShownJson = JSON.stringify(G_StatebagLastShown[itemName]);
+                if (itemLastShownJson === JSON.stringify(item))
+                {
+                    continue;
+                }
+
+                var itemTitle = G_ComplexStatebagItems[itemName];
+                var fieldKeyNames = Object.keys(item);
+                if (fieldKeyNames.length > 1) {
+                    itemText += "<div class=\"" + itemName + "\"><p>" + itemTitle + "</p>";
+                    itemText += renderDictionary(item, itemName);
+                    itemText += "</div>";
+                }
+            }
+
+            return itemText;
+        }
+
+        function isFieldADictionary(field)
+        {
+            return typeof field === "object" &&
+                field["$type"].substring(0, G_DictionaryMonikerLength) === G_DictionaryMoniker;
+        }
+
+        function renderDictionary(dictionary, dictionaryName)
+        {
+            var text = "";
+            var dictionaryKeyNames = Object.keys(dictionary);
+            if (dictionaryKeyNames.length > 1)
+            {
+                text = "<ul class=\"" + dictionaryName + "\">";
+                for (var keyCount = 1; keyCount < dictionaryKeyNames.length; keyCount++)
+                {
+                    var dictionaryKey = dictionaryKeyNames[keyCount];
+                    var field = dictionary[dictionaryKey];
+
+                    if (isFieldADictionary(field)) {
+                        text += renderDictionary(field, dictionaryKey);
+                    }
+                    else {
+                        text += "<li>" + dictionaryKey + ": " + field + "</li>";
+                    }
+                }
+                text += "</ul>";
+            }
+
+            return text;
+        }
+
+		
+        function htmlEncode(value) {
+            //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+            //then grab the encoded contents back out.  The div never exists on the page.
+            return $('<div/>').text(value).html();
+        }
+
+        function ProcessFatalException(clip)
+        {
+            var cell2 = GetPresentationRow(clip.Kind, G_Resources.FatalException);
+            var exception = clip.Content.Exception;
+            var exceptionText = renderException(exception);
+            exceptionText = "<div class=\"ExceptionDetail\">" + exceptionText + OutputKeyValue(G_Resources.Time, clip.Content.Time) + "</div";
+            cell2.innerHTML = exceptionText;
+        }
+
+        function ProcessUnrecognized(clip)
+        {
+            var cell2 = GetPresentationRow("Unrecognized", G_Resources.UnknownTrace);
+            var kind = "Empty";
+            if (clip.Kind !== undefined)
+            {
+                kind = clip.Kind;
+            }
+
+            cell2.innerHTML = "Clip Kind: " + kind;
+        }
+
+        function StateBagIgnoreKey(key)
+        {
+            return G_StatebagSuppressions.indexOf(key) >= 0;
+        }
+
+        function ConfigureReader()
+        {
+            document.location = "config_" + G_Version + ".html?stream=" + G_StreamId;
+        }
+
+        function DownloadStream() {
+            var url = getStreamUrl() + "&autodelete=false";
+            $.get(url, processDownloadStream, "text");
+        }
+
+        function processDownloadStream(recording, status, jqXHR) {
+            browserDownload(recording, G_StreamId + ".txt", "text/plain");
+        }
+
+        function browserDownload(strData, strFileName, strMimeType) {
+            var D = document,
+                a = D.createElement("a");
+            strMimeType = strMimeType || "application/octet-stream";
+
+
+            if (navigator.msSaveBlob) { // IE10
+                return navigator.msSaveBlob(new Blob([strData], { type: strMimeType }), strFileName);
+            } /* end if(navigator.msSaveBlob) */
+
+
+            if ('download' in a) { //html5 A[download]
+                a.href = "data:" + strMimeType + "," + encodeURIComponent(strData);
+                a.setAttribute("download", strFileName);
+                a.innerHTML = "downloading...";
+                D.body.appendChild(a);
+                setTimeout(function () {
+                    a.click();
+                    D.body.removeChild(a);
+                }, 66);
+                return true;
+            } /* end if('download' in a) */
+
+
+            //do iframe dataURL download (old ch+FF):
+            var f = D.createElement("iframe");
+            D.body.appendChild(f);
+            f.src = "data:" + strMimeType + "," + encodeURIComponent(strData);
+
+            setTimeout(function () {
+                D.body.removeChild(f);
+            }, 333);
+            return true;
+        } /* end browserDownload() */
+
+    </script>
+</head>
+<body>
+    <button id="refreshModeButton" class="InfoButton" onclick="ToggleRefreshMode();">Change Refresh Mode</button>
+    <button id="refreshActionButton" class="InfoButton" onclick="ManualRefresh();">Refresh Now</button>
+    <button id="configureButton" class="InfoButton" onclick="ConfigureReader();">Configure</button>
+    <button id="downloadButton" class="InfoButton" onclick="DownloadStream();">Download Stream</button>
+    <button id="DeleteStreamButton" class="InfoButton" onclick="DeleteStream();">Delete Stream</button>
+    <table border="0" width="100%" cellspacing="15" id="ClipTable"></table>
+</body>
+</html>

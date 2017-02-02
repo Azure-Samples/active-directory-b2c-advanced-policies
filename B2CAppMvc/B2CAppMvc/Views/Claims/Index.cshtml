@@ -1,0 +1,43 @@
+﻿@using B2CAppMvc.Properties
+@model IEnumerable<System.Security.Claims.Claim>
+@{
+    ViewBag.Title = "Claims";
+}
+<div class="jumbotron">
+    <div class="container">
+        <h1>Claims</h1>
+        <p>@string.Format("This page lists the token claims that were issued for policy '{0}' from tenant '{1}'.", User.Identity.GetAuthenticationClassReference(), Settings.Default.B2CTenant)</p>
+        <p>
+            <a class="btn btn-primary btn-lg" href="https://azure.microsoft.com/en-us/documentation/articles/active-directory-b2c-reference-tokens/" role="button" target="_blank">Learn more &raquo;</a>
+        </p>
+    </div>
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container">
+        <table class="table table-responsive table-striped">
+            <thead>
+            <tr>
+                <th>Claim type</th>
+                <th>Claim value</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.Type</td>
+                    <td>@claim.Value</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+<div class="container">
+    <footer>
+        <p>
+            &copy; 2016 Wingtip Toys &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a>
+        </p>
+    </footer>
+</div>

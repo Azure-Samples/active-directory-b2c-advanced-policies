@@ -1,0 +1,86 @@
+﻿@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { id = "editProfileForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }
+    using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logOutForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown hidden-xs">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <img alt="Picture" class="login-dropdown-toggle-picture" src="@User.Identity.GetPictureUrl()" />
+                @if (!string.IsNullOrEmpty(User.Identity.GetGamerTag()))
+                {
+                    <span>@@@User.Identity.GetGamerTag()</span>
+                }
+                else
+                {
+                    <span>@User.Identity.GetGivenName()</span>
+                }
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <div class="navbar-login">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <p class="text-center">
+                                    <img alt="Picture" class="login-dropdown-menu-picture" src="@User.Identity.GetPictureUrl()" />
+                                </p>
+                            </div>
+                            <div class="col-lg-8">
+                                <p class="login-name text-left">
+                                    <strong>@User.Identity.GetDisplayName()</strong>
+                                </p>
+                                <p class="login-emails text-left">
+                                    <small>@User.Identity.GetEmailAddress()</small>
+                                </p>
+                                <p class="login-gamer-zone text-left">
+                                    <small><span class="badge">@User.Identity.GetGamerZone()</span></small>
+                                </p>
+                                <p class="text-left">
+                                    <small>@User.Identity.GetLoyaltyNumber()</small>
+                                </p>
+                                <p class="text-left">
+                                    <a class="btn btn-primary btn-block btn-sm" href="javascript:document.getElementById('editProfileForm').submit()">Edit profile</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <div class="navbar-login navbar-login-session">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p>
+                                    <a class="btn btn-danger btn-block" href="javascript:document.getElementById('logOutForm').submit()">Log out</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="visible-xs">
+            <a href="javascript:document.getElementById('editProfileForm').submit()">Edit profile</a>
+        </li>
+        <li class="visible-xs">
+            <a href="javascript:document.getElementById('logOutForm').submit()">Log out</a>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="hidden-xs">
+            <a class="btn btn-success navbar-btn" href="@Url.Action("LogIn", "Account", new {ReturnUrl = Url.Action("Index", "Home")})">Log in</a>
+        </li>
+        <li class="visible-xs">
+            <a href="@Url.Action("LogIn", "Account", new {ReturnUrl = Url.Action("Index", "Home")})">Log in</a>
+        </li>
+    </ul>
+}

@@ -1,0 +1,91 @@
+<ClaimsProvider>
+	<!-- A short name describing the claim provider. Often the same as the technical profile if only one profile -->
+	<DisplayName>Contoso</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="SamlReflector-SR-LoA2">
+			<!-- A short name that will appear on buttons, that help identify the provider to the user. -->
+			<DisplayName>Contoso Login</DisplayName>
+			<!-- A description of the IDP that will be asserting the users identity. -->
+			<Description>Contoso.com corporate identity provider.</Description>
+			<Protocol Name="SAML2"/>
+			<Metadata>
+				<!-- DEPRECATED: Use IdpInitiatedProfileEnabled -->
+				<Item Key="TreatUnsolicitedResponseAsRequest">true</Item>
+				
+				<!-- true/false indicating that the SAML IDP-Initiated SSO profile is enabled. Default is false. -->
+				<Item Key="IdpInitiatedProfileEnabled">true</Item>
+				
+				<!-- true/false indicating that the technical profile requires requests to
+					 be signed. Default is false.-->
+				<Item Key="WantsSignedRequests">true</Item>
+				
+				<!-- true/false indicating that the technical profile must sign requests. 
+					 Requires the SamlMessageSigning crypographic key to be specified. 
+					 Default is false.-->
+				<Item Key="RequestsSigned">true</Item>
+				
+				<!-- true/false indicating that the technical profile requires responses to
+					 be signed. Default is false. -->
+				<Item Key="WantsSignedResponses">true</Item>
+				
+				<!-- true/false indicating that the technical profile must sign responses. 
+					 Requires the SamlMessageSigning crypographic key to be specified. 
+					 Default is false. -->
+				<Item Key="ResponsesSigned">true</Item>
+
+				<!-- DEPRECATED: Use WantsEncryptedAssertions -->
+				<Item Key="AssertionsEncrypted">true</Item>
+				
+				<!-- A single value of Rsa15 or RsaOaep indicating which key algorithm to 
+					use for encrypting the key. Default is Rsa15  
+					Rsa15 - 	RSA Public Key Cryptography Standard (PKCS) Version 1.5 algorithm
+								http://www.w3.org/2001/04/xmlenc#rsa-1_5
+					RsaOaep - 	RSA Optimal Asymmetric Encryption Padding (OAEP) encryption algorithm
+								http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p
+				-->
+				<Item Key="KeyEncryptionMethod">Rsa15</Item>
+		
+				<!-- A single value of Aes256, Aes192 or Aes128 
+					indicating which key algorithm to use for encrypting the key. Aes256 is the
+					default.
+					Aes256 - 	http://www.w3.org/2001/04/xmlenc#aes256-cbc
+					Aes192 - 	http://www.w3.org/2001/04/xmlenc#aes192-cbc
+					Aes128 - 	http://www.w3.org/2001/04/xmlenc#aes128-cbc
+	
+				-->
+				<Item Key="DataEncryptionMethod">Aes256</Item>
+		
+				<!-- true/false indicating that the technical profile requires wants assertions
+					 encrypted. Requires the SamlAssertionDecryption crypographic key to be specified 
+					 for non-relying party technical profiles. Default is false.-->
+				<Item Key="WantsEncryptedAssertions">true</Item>
+								
+				<!-- true/false indicating whether detached keys should
+					 be used when encrypting the assertion. Default is false. -->
+				<Item Key="UseDetachedKeys">true</Item>
+		
+				<!-- An absolute URL pointing to a metadata endpoint from which the SAML metadata can be retrieved OR 
+					 a CDATA block containing the SAML metadata.
+				-->
+				<Item Key="PartnerEntity">https://reflector.trafficmanager.net/saml/reflector.metadata.cacheable.duration.xml</Item>
+			</Metadata>
+			<CryptographicKeys>
+				<!-- x509 Certificate with private key used for signigng SAML messages
+					such as authentication requests and response -->
+				<Key Id="SamlMessageSigning" StorageReferenceId="X509CertificateWithPrivateKey" />
+				
+				<!-- x509 Certificate with private key used for decrypting encrypted
+					 SAML assertions -->
+				<Key Id="SamlAssertionDecryption" StorageReferenceId="X509CertificateWithPrivateKey" />
+				
+				<!-- x509 Certificate with private key used for signing SAML metadata -->
+				<Key Id="MetadataSigning" StorageReferenceId="X509CertificateWithPrivateKey" />
+			</CryptographicKeys>
+			<!-- SAML does not support the input claims in authentication requests -->
+			<InputClaims />
+			<OutputClaims>
+				<OutputClaim ClaimTypeReferenceId="Email" PartnerClaimType="Email"/>
+			</OutputClaims>
+		</TechnicalProfile>
+	</TechnicalProfiles>
+</ClaimsProvider>

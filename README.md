@@ -1,10 +1,5 @@
-# active-directory-b2c-advanced-policies
-Sample policies for use with the Azure AD B2C Premium offering
-## Running this sample
-Coming soon...
-## Deploy this sample to Azure
-Coming soon...
-## About the code
-Coming soon...
-## More information
-Coming soon...
+# B2C Training tools
+
+The content in this repo is used for an Azure Active Directory B2C training. 
+
+Demo is deployed at http://b2cappmvc.azurewebsites.net

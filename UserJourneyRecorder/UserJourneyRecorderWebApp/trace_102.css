@@ -1,0 +1,184 @@
+﻿.KindColumn {
+    width: 300px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 120%;
+}
+
+.Headers {
+    background-color: #ecf9ec;
+    width: 100%;
+}
+
+.Headers_c2 {
+    padding-left: 15px;
+}
+
+.Transition {
+    width: 100%;
+}
+
+.Transition_c2 {
+    padding-left: 15px;
+}
+
+.Predicate {
+    background-color: #e5ffe5;
+    width: 100%;
+}
+
+.Predicate_c2 {
+    padding-left: 15px;
+}
+
+.Action {
+    background-color: #e5f2ff;
+    width: 100%;
+}
+
+.Action_c2 {
+    padding-left: 15px;
+}
+
+.HandlerResult {
+    background-color: #F8F8F8;
+    width: 100%;
+}
+
+.HandlerResult_c2 {
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.Complex-CLMS {
+	background-color: #ffffcc;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.newInfo, .Complex-API_SETTINGS, .Complex-API_RESULT {
+    font-family: monospace;
+    font-weight: normal;
+    color: black;
+    font-size: 80%;
+}
+
+.seenInfo {
+    font-family: monospace;
+    font-weight: normal;
+    color: black;
+    font-size: 80%;
+}
+
+.Claims {
+    font-family: monospace;
+    padding-left: 20px;
+    padding-right: 50px;
+    padding-top: 15px;
+    background-color:  #ffffff;
+    margin-bottom: 15px;
+    border-style: solid;
+    border-color: white;
+    border-width: 15px;
+}
+
+.FatalException {
+    background-color: red;
+    width: 100%;
+}
+
+.FatalException_c2 {
+    padding-left: 15px;
+}
+
+.ExceptionDetail {
+    font-style: italic;
+    color: white;
+}
+
+.Exception {
+	padding-top: 1em;
+	padding-bottom: 1em;
+    background-color: yellow;
+    width: 100%;	
+    font-style: italic;
+}
+
+.ExecutingStep {
+    background-color: #339933;
+    color: #ffffff;
+}
+
+.HiddenToken {
+    background-color: green;
+    visibility: hidden;
+}
+
+.ValidationTechnicalProfile {
+	background-color:  #E8E8E8;
+	padding: 1em;
+}
+
+.TokenButton {
+   border-top: 1px solid #b3b3b3;
+   background: black;
+   background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ebebeb));
+   background: -webkit-linear-gradient(top, #ffffff, #ebebeb);
+   background: -moz-linear-gradient(top, #ffffff, #ebebeb);
+   background: -ms-linear-gradient(top, #ffffff, #ebebeb);
+   background: -o-linear-gradient(top, #ffffff, #ebebeb);   
+   padding: 4.5px 9px;
+   -webkit-border-radius: 6px;
+   -moz-border-radius: 6px;
+   border-radius: 6px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: #175404;
+   font-size: 13px;
+   font-family: 'Lucida Grande', Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+ .TokenButton:hover {
+   border-top-color: #b3b3b3;
+   background: #e0e0e0;
+   color: #175404;
+   }
+ .TokenButton:active {
+   border-top-color: #2a3842;
+   background: #2a3842;
+   }
+
+.InfoButton {
+   border-top: 1px solid #7dbd7d;
+   background: #4fb04f;
+   background: -webkit-gradient(linear, left top, left bottom, from(#267526), to(#4fb04f));
+   background: -webkit-linear-gradient(top, #267526, #4fb04f);
+   background: -moz-linear-gradient(top, #267526, #4fb04f);
+   background: -ms-linear-gradient(top, #267526, #4fb04f);
+   background: -o-linear-gradient(top, #267526, #4fb04f);
+   padding: 4.5px 9px;
+   -webkit-border-radius: 6px;
+   -moz-border-radius: 6px;
+   border-radius: 6px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: white;
+   font-size: 13px;
+   font-family: 'Lucida Grande', Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+ .InfoButton:hover {
+   border-top-color: #339933;
+   background: #267526;
+   color: #white;
+   }
+ .InfoButton:active {
+   border-top-color: #2a3842;
+   background: #2a3842;
+   }

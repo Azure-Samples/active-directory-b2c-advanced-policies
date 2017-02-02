@@ -1,0 +1,47 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="B2CAppMvc.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="B2CTenant" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2CCharm.onmicrosoft.com</Value>
+    </Setting>
+    <Setting Name="B2CPolicy" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;b2c_1_wingtiptoyssignup&lt;/string&gt;
+  &lt;string&gt;b2c_1_passwordreset&lt;/string&gt;
+  &lt;string&gt;b2c_1_profileediting&lt;/string&gt;
+  &lt;string&gt;b2c_1a_signupwithrest&lt;/string&gt;
+  &lt;string&gt;b2c_1a_signupwithrestandidp&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="B2CMetadata" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://login.microsoftonline.com/{0}/v2.0/.well-known/openid-configuration?p={1}</Value>
+    </Setting>
+    <Setting Name="B2CClientId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">7393f3b7-7c95-490e-b854-5cae8b7d160a</Value>
+    </Setting>
+    <Setting Name="B2CClientSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Irb!S)7O9{s#3U{5</Value>
+    </Setting>
+    <Setting Name="AppRedirectUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://b2cappmvc.azurewebsites.net/</Value>
+    </Setting>
+    <Setting Name="AppName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Wingtip Toys</Value>
+    </Setting>
+    <Setting Name="Caption" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;A basic sign-up or sign-in policy for local, Facebook, Google, and Microsoft accounts&lt;/string&gt;
+  &lt;string&gt;(Hidden) A basic password reset policy for a local account&lt;/string&gt;
+  &lt;string&gt;(Hidden) A basic profile editing policy for local, Facebook, Google, and Microsoft accounts&lt;/string&gt;
+  &lt;string&gt;An advanced sign-up or sign-in policy that integrates with a REST API&lt;/string&gt;
+  &lt;string&gt;An advanced sign-up or sign-in policy that integrates with a custom identity provider&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="AddClientClaimsToPolicy" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">{"ClaimType":"Loyalty","ClaimValue":"LXXXXXX","Policy":"B2C_1A_SignupWithRest"}</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

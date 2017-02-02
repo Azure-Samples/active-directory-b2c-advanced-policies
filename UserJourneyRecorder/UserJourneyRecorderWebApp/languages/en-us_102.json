@@ -1,0 +1,126 @@
+﻿{
+    "G_StateitemKeyNames": {
+        "ORCH_CS": "Orchestration Step",
+        "RPP": "Protocol selected by the caller",
+        "RQCTX": "Request Context String",
+        "RPIPP": "Communications with the caller handled by",
+        "TAGE": "Target entity",
+        "IPP": "Claims provider protocol provider type",
+        "CMESSAGE": "Current message Id",
+        "IMESSAGE": "Id of the message initially sent by the calling application",
+        "CLIENTID": "Client Id"
+    },
+
+    "G_HandlerFriendlyNames": {
+        "Web.TPEngine.StateMachineHandlers.MessageValidationHandler": "Performing MessageValidation",
+        "Web.TPEngine.StateMachineHandlers.IsClaimsExchangeProtocolARedirectionHandler": "Initiating a claims exchange",
+        "Web.TPEngine.StateMachineHandlers.IsClaimsExchangeProtocolAServiceCallHandler": "Initiating a claims exchange",
+        "Web.TPEngine.StateMachineHandlers.PresentationTokenGenerationHandler": "Generating claims for the application",
+        "Web.TPEngine.StateMachineHandlers.OutputClaimsTransformationHandler": "Processing the exchange's output claims",
+        "Web.TPEngine.StateMachineHandlers.InputClaimsTransformationHandler": "Processing the exchange's input claims",
+        "Web.TPEngine.StateMachineHandlers.PersistedClaimsTransformationHandler": "Processing the exchange's persisted claims",
+        "Web.TPEngine.StateMachineHandlers.SendRequestHandler": "Sending the claims exchange request",
+        "Web.TPEngine.StateMachineHandlers.ValidateApiResponseHandler": "Validating journey Api response",
+        "Web.TPEngine.StateMachineHandlers.SendResponseHandler": "Sending the response to the application",
+        "Web.TPEngine.Api.ApiUIManager": "Api UI manager"
+    },
+
+    "G_HandlerDescriptions": {
+        "MessageValidationHandler": "Analyses an incoming message to ensure it is valid in the communication context",
+        "SecondHandler": "Second Description"
+    },
+
+    "G_ComplexStatebagItems": {
+        "Complex-CLMS": "Claims",
+        "Complex-API_RESULT": "Journey Api Result",
+        "Complex-API_SETTINGS": "Journey Api Settings"
+    },
+
+    "G_Resources": {
+        "AutoRefresh": "Auto Refresh",
+        "JourneySegment": "Journey Segment",
+        "Refresh": "Refresh",
+        "StreamDeletion": "Stream Deletion",
+        "DeletionSuccessful": "Deletion was successful",
+        "CorrelationId": "Correlation Id",
+        "TenantId": "Tenant Id",
+        "PolicyId": "Policy Id",
+        "UserJourneyRecorderEndpoint": "User journey recorder endpoint",
+        "Transition": "Transition",
+        "StateName": "StateName",
+        "EventName": "EventName",
+        "Predicate": "Predicate",
+        "Action": "Action",
+        "Result": "Result",
+        "UnknownRequest": "Unknown request - ",
+        "IsPreparing": "is preparing",
+        "Message": "Message",
+        "MessageDetail": "Message Detail",
+        "FatalException": "Fatal Exception",
+        "Exception":  "Exception:",
+        "Time": "Time",
+        "UnknownTrace": "Unknown Trace",
+        "ExecutingStep": "Executing Step",
+        "MessageSubmittedBy": "The message was received from {0}",
+        "TheApplication": "the calling application",
+        "AndConjunction": "and",
+        "Equals":  "equals",
+        "SkipStep":  "Skip step",
+        "DontSkipStep": "Don't skip step",
+        "IfClaimsPresent": "{0} if {1} claims are present",
+        "IfClaimsEqual": "{0} if {1} are equal",
+        "SkippingStep": "Skipping step {0}",
+        "SendingRequest": "Claims exchange target: {0}",
+        "MappingPartnerClaim": "Mapping '{0}' partner claim type to '{1}' policy claim type",
+        "InitiatingClaimsExchange": "Preparing a {0} request for {1} using the {2} technical profile and the {3}",
+        "InitiatingBackendClaimsExchange":  "Initiating a request for claims using the {0} technical profile and the {1}",
+        "IsEnabled": "is enabled",
+        "IsDisabled": "is disabled",
+        "TechnicalProfileEnabled": "Technical profile {0} {1} - configured as {2}",
+        "LogicDetail": "Logic Detail",
+        "EnabledForUserJourneysTrue":  "Technical profiles enabled that allow step {0} to proceed",
+        "EnabledForUserJourneysFalse": "Step {0} will be skipped because technical profiles are disabled",
+        "HomeRealmDiscovery":  "Technical profiles enabled that allow step {0} to proceed",
+        "PreconditionList": "Journey logic has been applied",
+        "NoClaimMappingNeeded": "No claim mapping needed for {0}",
+        "MappingFromPartnerClaimType": "Mapping partner '{0}' to policy '{1}'",
+        "MappingToPartnerClaimType": "Mapping policy '{0}' to partner '{1}'",
+        "MappingDefaultValueForClaim": "Mapping default value '{0}' to policy '{1}'",
+        "ClaimsTransformationId": "'{0}' Claims Transformation:",
+        "TransformationInputClaim":  "Input claim: policy '{0}' with value '{1}'",
+        "TransformationInputParameter":  "Input parameter: '{0}' with value '{1}'",
+        "TransformationResult":  "Output claim: 'policy {0}' with value '{1}'",
+        "OutputClaimsTransformation": "Claims mappings or transformations have been applied",
+        "GettingClaimsTransformation": "Details of logic getting claims",
+        "JoseHeader": "JOSE Header",
+        "ClaimsSet": "Claims Set",
+        "Signature": "Signature",
+        "Miscellaneous": "Miscellaneous",
+        "ApiUIManagerInfo": "The {0} UI Api was invoked",
+        "ApiDetail": "Api Detail",
+        "ProtocolProviderType":   "Validation via {0}",
+		"TechnicalProfileId":  "OperativeTechnicalProfile is {0}",
+		"ValidationRequestUrl":  "Using validation endpoint at: {0}",
+		"RequestEndpointUrl":  "Issuing request to endpoint at: {0}",
+		"ErrorResponseReceived":  "Error response received: {0}",
+        "AdditionalValidation": "Additional validation is required...",
+        "SendErrorTechnicalProfile": "An error response is being sent to the application using {0}",
+        "OAuth1RequestInfo": "Requesting OAuth1 access token using {0} from {1}",
+        "AuthorizationEndpoint": "Authorization endpoint: {0}",
+        "CallbackUri": "Callback uri: {0}",
+        "ClientId": "Client Id: {0}",
+        "Response": "Response",
+        "Request":  "Request"
+    },
+
+    "G_OrchestrationPreconditionTypes": [
+        "ClaimsExist",
+        "ClaimsEquals"
+    ],
+
+    "G_OrchestrationPreconditionActionTypes": [
+        "SkipThisOrchestrationStep"
+    ],
+
+    "G_HeadersTitle": "Journey Segment"
+}
