@@ -37,15 +37,15 @@ work on advanced policies.
 
     c.  Open Azure AD B2C
 
-        ![](media/setup_01.png)
+![](media/setup_01.png)
 
     d.  Go to the All policies blade
 
-        ![](media/setup_02.png)
+![](media/setup_02.png)
 
     e.  Confirm that the Upload Policy button is enabled.
 
-        ![](media/setup_03.png)
+![](media/setup_03.png)
 
 3.  Download the GitHub repo that contains the necessary tools (base
     policies and PowerShell commandlets)
@@ -61,7 +61,7 @@ work on advanced policies.
         *These files are marked unsecure because they are downloaded
         from the internet.*
 
-        ![](media/setup_04.png)
+![](media/setup_04.png)
 
 4.  Make sure to have the crypto keys and Facebook secret (for the
     Facebook claims provider that’s included in the starter pack).
@@ -150,15 +150,15 @@ and sign in users with this starter pack.
 
     c.  Open Azure AD B2C
 
-        ![](media/setup_05.png)
+![](media/setup_05.png)
 
     d.  Go to the All policies blade
 
-        ![](media/setup_06.png)
+![](media/setup_06.png)
 
     e.  Click on the Upload Policy button.
 
-        ![](media/setup_07.png)
+![](media/setup_07.png)
 
     f.  Upload your policies in the following order:
 
@@ -169,7 +169,7 @@ and sign in users with this starter pack.
         iii. The rest (editprofile, passwordreset, signup, signin,
             signuporsignin) – the order doesn’t matter for these ones.
 
-            ![](media/setup_08.png)
+![](media/setup_08.png)
 
 2.  Test to confirm that the policies work.
 
@@ -182,4 +182,4 @@ and sign in users with this starter pack.
     c.  In the blade that opens, click on the Run Now button and
         exercise the policy by signing in/up.
 
-        ![](media/setup_09.png)
+![](media/setup_09.png)
