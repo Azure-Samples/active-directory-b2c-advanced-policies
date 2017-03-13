@@ -54,119 +54,122 @@ add the OIDC IdP.
 1.  Open the B2C\_1A\_base.xml policy from your working directory.
 
 2.  Find the section with the &lt;ClaimsProviders&gt; and add a new
-    &lt;ClaimsProvider&gt; as follows:
+   &lt;ClaimsProvider&gt; as follows:
 
-    &lt;ClaimsProvider&gt;\
-      &lt;Domain&gt;contoso&lt;/Domain&gt;\
-      &lt;DisplayName&gt;Contoso&lt;/DisplayName&gt;\
-      &lt;TechnicalProfiles&gt;\
-        &lt;TechnicalProfile Id="Contoso"&gt;\
-          &lt;DisplayName&gt;Contoso&lt;/DisplayName&gt;\
-          &lt;Description&gt;Login with your Contoso
-    account&lt;/Description&gt;\
-          &lt;Protocol Name="OpenIdConnect"/&gt;\
-          &lt;OutputTokenFormat&gt;JWT&lt;/OutputTokenFormat&gt;
+```xml
+ 
+    <ClaimsProvider>\
+      <Domain>contoso</Domain>\
+      <DisplayName>Contoso</DisplayName>\
+      <TechnicalProfiles>\
+        <TechnicalProfile Id="Contoso">\
+          <DisplayName>Contoso</DisplayName>\
+          <Description>Login with your Contoso
+    account</Description>\
+          <Protocol Name="OpenIdConnect"/>\
+          <OutputTokenFormat>JWT</OutputTokenFormat>
 
-    &lt;Metadata&gt;\
-      &lt;Item Key="METADATA"&gt;http://www.contoso.com/identity/.well-known/openid-configuration&lt;/Item&gt;\
-      &lt;Item Key="ProviderName"&gt;https://www.contoso.com/identity&lt;/Item&gt;\
-      &lt;Item Key="client\_id"&gt;25d20e93-4cd7-43ee-a24f-03c05141639f&lt;/Item&gt;\
-      &lt;Item Key="BearerTokenTransmissionMethod"&gt;AuthorizationHeader&lt;/Item&gt;\
-      &lt;Item Key="scope"&gt;openid profile&lt;/Item&gt;\
-      &lt;Item Key="HttpBinding"&gt;POST&lt;/Item&gt;\
-      &lt;Item Key="response\_types"&gt;code&lt;/Item&gt;\
-      &lt;Item Key="IdTokenAudience"&gt;25d20e93-4cd7-43ee-a24f-03c05141639f
-    &lt;/Item&gt;\
-    &lt;/Metadata&gt;\
-          &lt;CryptographicKeys&gt;\
-            &lt;Key Id="client\_secret" StorageReferenceId="ContosoIdpOidcSecret"/&gt;\
-          &lt;/CryptographicKeys&gt;\
-          &lt;OutputClaims&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="OIDC
-    Idp" /&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given\_name"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family\_name"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="email"
-     PartnerClaimType="email"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/&gt;\
-          &lt;/OutputClaims&gt;\
-          &lt;OutputClaimsTransformations&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/&gt;\
-          &lt;/OutputClaimsTransformations&gt;\
-          &lt;UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/&gt;\
-        &lt;/TechnicalProfile&gt;\
-      &lt;/TechnicalProfiles&gt;\
-    &lt;/ClaimsProvider&gt;
+    <Metadata>\
+      <Item Key="METADATA">http://www.contoso.com/identity/.well-known/openid-configuration</Item>\
+      <Item Key="ProviderName">https://www.contoso.com/identity</Item>\
+      <Item Key="client\_id">25d20e93-4cd7-43ee-a24f-03c05141639f</Item>\
+      <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>\
+      <Item Key="scope">openid profile</Item>\
+      <Item Key="HttpBinding">POST</Item>\
+      <Item Key="response\_types">code</Item>\
+      <Item Key="IdTokenAudience">25d20e93-4cd7-43ee-a24f-03c05141639f
+    </Item>\
+    </Metadata>\
+          <CryptographicKeys>\
+            <Key Id="client\_secret" StorageReferenceId="ContosoIdpOidcSecret"/>\
+          </CryptographicKeys>\
+          <OutputClaims>\
+            <OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/>\
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="OIDC
+    Idp" />\
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given\_name"/>\
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family\_name"/>\
+            <OutputClaim ClaimTypeReferenceId="email"
+     PartnerClaimType="email"/>\
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/>\
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/>\
+          </OutputClaims>\
+          <OutputClaimsTransformations>\
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>\
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>\
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>\
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>\
+          </OutputClaimsTransformations>\
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>\
+        </TechnicalProfile>\
+      </TechnicalProfiles>\
+    </ClaimsProvider>
+```
 
 3.  Configure basic settings
 
-    a.  ClaimsProvider/Domain - Drives the value that can be passed in
+    1.  ClaimsProvider/Domain - Drives the value that can be passed in
         to
         [domain\_hint](http://www.cloudidentity.com/blog/2014/11/17/skipping-the-home-realm-discovery-page-in-azure-ad/)
         query string parameter, so make it url friendly, i.e. lowercase
         only, no spaces, only alphanumerical.
 
-    b.  ClaimsProvider/DisplayName – Currently not displayed anywhere
+    2.  ClaimsProvider/DisplayName – Currently not displayed anywhere
 
-    c.  TechnicalProfile@Id – Unique identifier for the technical
+    3.  TechnicalProfile@Id – Unique identifier for the technical
         profile, it is referenced elsewhere in the policy (see “Add the
         SAML Claims Provider to the User Journey”).
 
-    d.  TechnicalProfile/DisplayName - Displayed as the button's caption
+    4.  TechnicalProfile/DisplayName - Displayed as the button's caption
         in the sign in screen.
 
         ![](media/image1.png){width="2.2478258967629046in"
         height="0.5108038057742782in"}
 
-    e.  TechnicalProfile/Description – Currently not displayed anywhere
+    5.  TechnicalProfile/Description – Currently not displayed anywhere
 
 4.  Configure Metadata section
 
-    a.  METADATA
+    1.  METADATA
 
-    b.  ProviderName
+    2.  ProviderName
 
-    c.  client\_id
+    3.  client\_id
 
-    d.  IdTokenAudience
+    4.  IdTokenAudience
 
-    e.  i.  scope
+    5.  i.  scope
 
-        ii. HttpBinding
+        1. HttpBinding
 
-        iii. response\_types
+        2. response\_types
 
 5.  Upload Client Secret - These are the certificates used to sign the
     SAML request and message. Even though we’ve configured the Claims
     Provider to not sign these, a certificate must still be provided.
 
-    a.  Open Powershell
+    1.  Open Powershell
 
-    b.  Go to ExploreAdmin
+    2.  Go to ExploreAdmin
 
-    c.  Import-Module ExploreAdmin.dll (if it fails, it might be because
+    3.  Import-Module ExploreAdmin.dll (if it fails, it might be because
         the dll hasn’t been unblocked)
 
-    d.  Run Set-CpimKeyContainer -Tenant &lt;tenant&gt;
+    4.  Run Set-CpimKeyContainer -Tenant &lt;tenant&gt;
         -StorageReferenceId ContosoIdpOidcSecret -UnencodedAsciiKey
         &lt;client\_secret&gt;
 
-        i.  When you run the command, make sure you sign in with the
+        1.  When you run the command, make sure you sign in with the
             onmicrosoft.com account local to the tenant.
 
-        ii. It’ll ask you for MFA
+        2. It’ll ask you for MFA
 
 6.  Save your changes and upload updated policy
 
-    a.  This time, make sure you check the *Overwrite the policy if it
+    1.  This time, make sure you check the *Overwrite the policy if it
         exists* checkbox.
 
-    b.  At this point, this will not have any effect, the intent of
+    2.  At this point, this will not have any effect, the intent of
         uploading is confirming that what you’ve added thus far doesn’t
         have any issues.
 
@@ -189,16 +192,16 @@ Journey.
 4.  In the &lt;OrchestrationStep&gt; with Order=”2”, add a new
     &lt;ClaimsExchange&gt;
 
-    a.  Set the Id following the same convention as the others
+    1.  Set the Id following the same convention as the others
         *\[ClaimProviderName\]Exchange*
 
-    b.  Set the TechnicalProfileReferenceId to the same Id value for the
+    2.  Set the TechnicalProfileReferenceId to the same Id value for the
         Technial Profile you set up in the previous section.
 
 5.  In the &lt;OrchestrationStep&gt; with Order=”1”, add a new
     &lt;ClaimsProviderSelection&gt;
 
-    a.  Set the TargetClaimsExchangeId to the same Id value you set up
+    1.  Set the TargetClaimsExchangeId to the same Id value you set up
         for the ClaimsExchange in the previous step.
 
 6.  Save your changes and upload the updated policy
@@ -224,11 +227,11 @@ that occur. This should only be enabled during development.
 2.  Add the following attributes to the &lt;TrustFrameworkPolicy&gt;
     element:
 
-    a.  DeploymentMode=”Development”
+    1.  DeploymentMode=”Development”
 
-    b.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=&lt;guid&gt;"
+    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=&lt;guid&gt;"
 
-        i.  Replace &lt;guid&gt; with an actual GUID
+        3.  Replace &lt;guid&gt; with an actual GUID
 
 This will allow you to troubleshoot by going to
 https://b2crecorder.azurewebsites.net/trace\_102.html?id=&lt;guid&gt;
@@ -284,50 +287,33 @@ following XML elements:
 
 The following XML snippet illustrates how to define a claim provider:
 
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
 
-&lt;TrustFrameworkPolicy
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+    PolicySchemaVersion="0.3.0.0"
+    …>
 
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    …
 
-xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-
-PolicySchemaVersion="0.3.0.0"
-
-…&gt;
-
-…
-
-&lt;ClaimsProviders&gt;
-
-&lt;ClaimsProvider&gt;
-
-&lt;DisplayName&gt;Some Claims Provider&lt;/DisplayName&gt;
-
-&lt;TechnicalProfiles&gt;
-
-&lt;TechnicalProfile …&gt;
-
-…
-
-&lt;/TechnicalProfile&gt;
-
-…
-
-&lt;/TechnicalProfiles&gt;
-
-&lt;/ClaimsProvider&gt;
-
-…
-
-&lt;/ClaimsProviders&gt;
-
-…
-
-&lt;/TrustFrameworkPolicy&gt;
-
-[[]{#_Toc454543966 .anchor}]{#_Ref444783550 .anchor}
+    <ClaimsProviders>
+        <ClaimsProvider>
+            <DisplayName>Some Claims Provider</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile …>
+                …
+                </TechnicalProfile>
+                …
+            </TechnicalProfiles>
+        </ClaimsProvider>
+        …
+    </ClaimsProviders>
+    …
+</TrustFrameworkPolicy>
+```
 
 Technical Profile
 -----------------
@@ -365,18 +351,18 @@ For that purpose, it notably consists of:
 
 4.  Input/persisted/output claims:
 
-    a.  Mentions the list of the claims provider can expect in
+    1.  Mentions the list of the claims provider can expect in
         request/persist/respond with.
 
-    b.  And their mapping from the *PartnerClaimType* to the claim’s
+    2.  And their mapping from the *PartnerClaimType* to the claim’s
         used in the policy XML file.
 
 5.  Input/output claims transformations:
 
-    a.  Reference to the *ClaimsTransformation*’s defined in the policy
+    1.  Reference to the *ClaimsTransformation*’s defined in the policy
         XML file.
 
-    b.  Input transforms are run prior to sending the request to the
+    2.  Input transforms are run prior to sending the request to the
         provider and output transforms are run on receiving the response
         from the provider.
 
@@ -782,48 +768,30 @@ XML elements in the above table contain the following attribute:
 The following XML snippet illustrates how to define a technical profile
 for a claim provider:
 
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-
-&lt;TrustFrameworkPolicy
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-
-xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-
-PolicySchemaVersion="0.3.0.0"
-
-…&gt;
-
-…
-
-&lt;ClaimsProviders&gt;
-
-&lt;ClaimsProvider&gt;
-
-&lt;DisplayName&gt;Some Claims Provider&lt;/DisplayName&gt;
-
-&lt;TechnicalProfiles&gt;
-
-&lt;TechnicalProfile …&gt;
-
-…
-
-&lt;/TechnicalProfile&gt;
-
-…
-
-&lt;/TechnicalProfiles&gt;
-
-&lt;/ClaimsProvider&gt;
-
-…
-
-&lt;/ClaimsProviders&gt;
-
-…
-
-&lt;/TrustFrameworkPolicy&gt;
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+    PolicySchemaVersion="0.3.0.0"
+    …>
+    …
+    <ClaimsProviders>
+        <ClaimsProvider>
+            <DisplayName>Some Claims Provider</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile …>
+                    …
+                </TechnicalProfile>
+                …
+            </TechnicalProfiles>
+        </ClaimsProvider>
+        …
+    </ClaimsProviders>
+    …
+</TrustFrameworkPolicy>
+```
 
 **The next sections further detail how to specify adequate technical
 profiles depending on the nature of the claims provider.** It more
@@ -936,113 +904,43 @@ or generate new ones.
 The following XML snippet illustrates a technical profile for an OpenID
 Connect claims provider:
 
-&lt;TechnicalProfile Id="LocalAccountSignInWithEvoSts"&gt;
-
-&lt;DisplayName&gt;Local Account SignIn&lt;/DisplayName&gt;
-
-&lt;Protocol Name="OpenIdConnect" /&gt;
-
-&lt;Metadata&gt;
-
-&lt;Item Key="ProviderName"&gt;https://sts.windows.net/&lt;/Item&gt;
-
-&lt;Item
-Key="METADATA"&gt;https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration&lt;/Item&gt;
-
-&lt;Item
-Key="authorization\_endpoint"&gt;https://login.microsoftonline.com/{tenant}/oauth2/authorize&lt;/Item&gt;
-
-&lt;Item Key="response\_types"&gt;id\_token&lt;/Item&gt;
-
-&lt;Item Key="response\_mode"&gt;query&lt;/Item&gt;
-
-&lt;Item Key="scope"&gt;email openid&lt;/Item&gt;
-
-&lt;Item
-Key="client\_id"&gt;bb2a2e3a-c5e7-4f0a-88e0-8e01fd3fc1f4&lt;/Item&gt;
-
-&lt;Item
-Key="IdTokenAudience"&gt;bb2a2e3a-c5e7-4f0a-88e0-8e01fd3fc1f4&lt;/Item&gt;
-
-&lt;Item Key="UsePolicyInRedirectUri"&gt;false&lt;/Item&gt;
-
-&lt;Item Key="HttpBinding"&gt;POST&lt;/Item&gt;
-
-&lt;Item Key="LocalAccountProfile"&gt;true&lt;/Item&gt;
-
-&lt;/Metadata&gt;
-
-&lt;InputClaims&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="logonIdentifier"
-PartnerClaimType="login\_hint" /&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="nux" PartnerClaimType="nux"
-DefaultValue="1" /&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca"
-DefaultValue="1" /&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="tenantId"
-PartnerClaimType="domain\_hint"
-
-DefaultValue="{Policy:RelyingPartyTenantId}" /&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="prompt" PartnerClaimType="prompt"
-DefaultValue="{OIDC:prompt}" /&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="mkt" PartnerClaimType="mkt"
-DefaultValue="{Culture:RFC5646}" /&gt;
-
-&lt;InputClaim ClaimTypeReferenceId="lc" PartnerClaimType="lc"
-DefaultValue="{Culture:LCID}" /&gt;
-
-&lt;/InputClaims&gt;
-
-&lt;OutputClaims&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="oid"
-/&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid"
-/&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="givenName"
-PartnerClaimType="given\_name" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="surName"
-PartnerClaimType="family\_name" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="displayName"
-PartnerClaimType="name" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="userPrincipalName"
-PartnerClaimType="upn" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="authenticationSource"
-DefaultValue="evoStsAuthentication" /&gt;
-
-&lt;/OutputClaims&gt;
-
-&lt;OutputClaimsTransformations&gt;
-
-&lt;OutputClaimsTransformation
-ReferenceId="CreateSubjectClaimFromObjectID" /&gt;
-
-&lt;/OutputClaimsTransformations&gt;
-
-&lt;/TechnicalProfile&gt;
-
-[^1]: <span style="font-variant:small-caps;">OpenID Connect 1.0</span>:
-    https://msdn.microsoft.com/en-us/library/azure/dn645541.aspx
-
-[^2]: <span style="font-variant:small-caps;">The OpenID Foundation
-    Launches OpenID Connect Certification Program</span>:
-    http://openid.net/2015/04/17/openid-connect-certification-program/
-
-[^3]:  <span style="font-variant:small-caps;">OpenID
-    Certification</span>: http://openid.net/certification/
-
-[^4]: <span style="font-variant:small-caps;">OpenID Connect Discovery
-    1.0 incorporating errata set 1</span>:
-    http://openid.net/specs/openid-connect-discovery-1\_0.html
+```xml
+<TechnicalProfile Id="LocalAccountSignInWithEvoSts">
+	<DisplayName>Local Account SignIn</DisplayName>
+	<Protocol Name="OpenIdConnect" />
+	<Metadata>
+		<Item Key="ProviderName">https://sts.windows.net/</Item>
+		<Item Key="METADATA">https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration</Item>
+		<Item Key="authorization_endpoint">https://login.microsoftonline.com/{tenant}/oauth2/authorize</Item>
+		<Item Key="response_types">id_token</Item>
+		<Item Key="response_mode">query</Item>
+		<Item Key="scope">email openid</Item>
+		<Item Key="client_id">bb2a2e3a-c5e7-4f0a-88e0-8e01fd3fc1f4</Item>
+		<Item Key="IdTokenAudience">bb2a2e3a-c5e7-4f0a-88e0-8e01fd3fc1f4</Item>
+		<Item Key="UsePolicyInRedirectUri">false</Item>
+		<Item Key="HttpBinding">POST</Item>
+		<Item Key="LocalAccountProfile">true</Item>
+	</Metadata>
+	<InputClaims>
+		<InputClaim ClaimTypeReferenceId="logonIdentifier"PartnerClaimType="login_hint" />
+		<InputClaim ClaimTypeReferenceId="nux" PartnerClaimType="nux"DefaultValue="1" />
+		<InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca"DefaultValue="1" />
+		<InputClaim ClaimTypeReferenceId="tenantId"PartnerClaimType="domain_hint"DefaultValue="{Policy:RelyingPartyTenantId}" />
+		<InputClaim ClaimTypeReferenceId="prompt" PartnerClaimType="prompt"DefaultValue="{OIDC:prompt}" />
+		<InputClaim ClaimTypeReferenceId="mkt" PartnerClaimType="mkt"DefaultValue="{Culture:RFC5646}" />
+		<InputClaim ClaimTypeReferenceId="lc" PartnerClaimType="lc"DefaultValue="{Culture:LCID}" />
+	</InputClaims>
+	<OutputClaims>
+		<OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="oid"/>
+		<OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid"/>
+		<OutputClaim ClaimTypeReferenceId="givenName"PartnerClaimType="given_name" />
+		<OutputClaim ClaimTypeReferenceId="surName"PartnerClaimType="family_name" />
+		<OutputClaim ClaimTypeReferenceId="displayName"PartnerClaimType="name" />
+		<OutputClaim ClaimTypeReferenceId="userPrincipalName"PartnerClaimType="upn" />
+		<OutputClaim ClaimTypeReferenceId="authenticationSource"DefaultValue="evoStsAuthentication" />
+	</OutputClaims>
+	<OutputClaimsTransformations>
+		<OutputClaimsTransformationReferenceId="CreateSubjectClaimFromObjectID" />
+	</OutputClaimsTransformations>
+</TechnicalProfile>
+```
