@@ -56,55 +56,50 @@ add the OIDC IdP.
 2.  Find the section with the &lt;ClaimsProviders&gt; and add a new
    &lt;ClaimsProvider&gt; as follows:
 
-```xml
- 
-    <ClaimsProvider>\
-      <Domain>contoso</Domain>\
-      <DisplayName>Contoso</DisplayName>\
-      <TechnicalProfiles>\
-        <TechnicalProfile Id="Contoso">\
-          <DisplayName>Contoso</DisplayName>\
-          <Description>Login with your Contoso
-    account</Description>\
-          <Protocol Name="OpenIdConnect"/>\
-          <OutputTokenFormat>JWT</OutputTokenFormat>
-
-    <Metadata>\
-      <Item Key="METADATA">http://www.contoso.com/identity/.well-known/openid-configuration</Item>\
-      <Item Key="ProviderName">https://www.contoso.com/identity</Item>\
-      <Item Key="client\_id">25d20e93-4cd7-43ee-a24f-03c05141639f</Item>\
-      <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>\
-      <Item Key="scope">openid profile</Item>\
-      <Item Key="HttpBinding">POST</Item>\
-      <Item Key="response\_types">code</Item>\
-      <Item Key="IdTokenAudience">25d20e93-4cd7-43ee-a24f-03c05141639f
-    </Item>\
-    </Metadata>\
-          <CryptographicKeys>\
-            <Key Id="client\_secret" StorageReferenceId="ContosoIdpOidcSecret"/>\
-          </CryptographicKeys>\
-          <OutputClaims>\
-            <OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/>\
-            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="OIDC
-    Idp" />\
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given\_name"/>\
-            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family\_name"/>\
-            <OutputClaim ClaimTypeReferenceId="email"
-     PartnerClaimType="email"/>\
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/>\
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/>\
-          </OutputClaims>\
-          <OutputClaimsTransformations>\
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>\
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>\
-            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>\
-            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>\
-          </OutputClaimsTransformations>\
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>\
-        </TechnicalProfile>\
-      </TechnicalProfiles>\
-    </ClaimsProvider>
-```
+   ```xml
+<ClaimsProvider>
+	<Domain>contoso</Domain>
+	<DisplayName>Contoso</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="Contoso">
+			<DisplayName>Contoso</DisplayName>
+			<Description>Login with your Contoso account</Description>
+			<Protocol Name="OpenIdConnect"/>
+			<OutputTokenFormat>JWT</OutputTokenFormat>
+			<Metadata>
+				<Item Key="METADATA">http://www.contoso.com/identity/.well-known/openid-configuration</Item>
+				<Item Key="ProviderName">https://www.contoso.com/identity</Item>
+				<Item Key="client_id">25d20e93-4cd7-43ee-a24f-03c05141639f</Item>
+				<Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+				<Item Key="scope">openid profile</Item>
+				<Item Key="HttpBinding">POST</Item>
+				<Item Key="response_types">code</Item>
+				<Item Key="IdTokenAudience">25d20e93-4cd7-43ee-a24f-03c05141639f
+				</Item>
+			</Metadata>
+			<CryptographicKeys>
+				<Key Id="client_secret" StorageReferenceId="ContosoIdpOidcSecret"/>
+			</CryptographicKeys>
+			<OutputClaims>
+				<OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/>
+				<OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="OIDCIdp" />
+				<OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name"/>
+				<OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name"/>
+				<OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email"/>
+				<OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/>
+				<OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/>
+			</OutputClaims>
+			<OutputClaimsTransformations>
+				<OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>
+				<OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>
+				<OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>
+				<OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>
+			</OutputClaimsTransformations>
+			<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+		</TechnicalProfile>
+	</TechnicalProfiles>
+</ClaimsProvider>
+   ```
 
 3.  Configure basic settings
 
