@@ -133,7 +133,7 @@ add the OIDC IdP.
 
     4.  IdTokenAudience
 
-    5.  i.  scope
+    5.  scope
 
         1. HttpBinding
 
