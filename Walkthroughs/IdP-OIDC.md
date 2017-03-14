@@ -252,36 +252,21 @@ is optional.
 
 This element contains the following XML element:
 
-  XML element        Occurrences   Description
-  ------------------ ------------- ------------------------------------------------------------------------------------------------------------------------------
-  *ClaimsProvider*   1:n           Declare an accredited claims provider that can be leveraged within the community of interested in the various user journeys.
+|XML element|Occurrences|Description|
+|------------------|-------------|-------------------------------|
+| *ClaimsProvider*|1:n|Declare an accredited claims provider that can be leveraged within the community of interested in the various user journeys.|
 
 The *ClaimsProvider* XML elements represents a claims provider, along
 with its supported technical profiles. Such an element contains the
 following XML elements:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  XML element           Occurrences   Description
-  --------------------- ------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *Domain*              0:1           Specify The human understandable domain name for the claim provider.
-                                      
-                                      Type: String
-
-  *DisplayName*         0:1           Specify the human understandable name of the claims provider that can be displayed to the users.
-                                      
-                                      Type: String
-
-  *TechnicalProfiles*   1:1           Specify a list of technical profiles supported by the claim provider.
-                                      
-                                      Every claims provider must have one or more technical profiles which determines the end points and the protocols needed to communicate with that claims provider. In fact, in Azure AD B2C Premium, it is the technical profile that is referenced elsewhere for communication with a particular claims provider.
-                                      
-                                      A claims provider can have multiple technical profiles for various reasons. For example, multiple technical profiles may be defined because the considered claims provider supports multiple protocols, various endpoints with different capabilities, or releases different claims at different assurance levels. It may be acceptable to release sensitive claims in one user journey, but not in another one.
-                                      
-                                      See next section(s).
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|XML element|Occurrences|Description|
+|------------------|-------------|-------------------------------|
+|*Domain*|0:1|Specify The human understandable domain name for the claim provider.<br>Type: String|                                     
+|*DisplayName*|0:1|Specify the human understandable name of the claims provider that can be displayed to the users. <br>Type: String|
+|*TechnicalProfiles*|1:1|Specify a list of technical profiles supported by the claim provider.<br>Every claims provider must have one or more technical profiles which determines the end points and the protocols needed to communicate with that claims provider. In fact, in Azure AD B2C Premium, it is the technical profile that is referenced elsewhere for communication with a particular claims provider.<br>A claims provider can have multiple technical profiles for various reasons. For example, multiple technical profiles may be defined because the considered claims provider supports multiple protocols, various endpoints with different capabilities, or releases different claims at different assurance levels. It may be acceptable to release sensitive claims in one user journey, but not in another one.<br>See next section(s).|
 
 The following XML snippet illustrates how to define a claim provider:
-
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -370,395 +355,211 @@ contact Azure AD B2C Premium services.
 The *TechnicalProfiles* section of the above *ClaimsProviders* XML
 element contains the following XML element:
 
-  XML element          Occurrences   Description
-  -------------------- ------------- -------------------------------------------------------------
-  *TechnicalProfile*   0:n           Define a technical profile supported by the claim provider.
+|XML element|Occurrences|Description|
+|--------------------|-------------|-----------------------------|
+|*TechnicalProfile*|0:n|Define a technical profile supported by the claim provider.|
 
 Each *TechnicalProfile* XML element contains the following attribute:
 
-  Attribute   Required   Description
-  ----------- ---------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *Id*        True       Specify a machine understandable identifier that is used to uniquely identify a particular technical profile, and reference it from other XML elements in the policy XML file, for example *OrchestrationSteps* and *InputTokenSources.*
+|Attribute|Required|Description|
+|-----------|----------|-----------------------------------|
+|*Id*|True|Specify a machine understandable identifier that is used to uniquely identify a particular technical profile, and reference it from other XML elements in the policy XML file, for example *OrchestrationSteps* and *InputTokenSources.*|
 
 Along with the following XML elements:
 
-  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  XML element                                 Occurrences   Description
-  ------------------------------------------- ------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *Domain*                                    0:1           Specify the he human understandable domain name for the technical profile.
-                                                            
-                                                            Type: String
+|XML element|Occurrences|Description|
+|------------------|-------------|-------------------|
+|*Domain*|0:1|Specify the he human understandable domain name for the technical profile.<br>Type: String|
+|*DisplayName*|0:1|Specify the human understandable name of the technical profile that can be displayed to the users.<br>Type: String|
+|*Description*|0:1|Specify a human understandable description of the technical profile that can be displayed to the users.<br>Type: String|
+|*Protocol*|0:1|Specify the protocol used for the federation.|
+|*InputTokenFormat*|0:1|Specify the format of the input token.<br>Type: String (enumeration)<br>Value: one of the types as per *TokenFormat* enumeration in the Azure AD B2C Premium XML schema:<br>-   **JSON**.<br>-   **JWT**. JSON Web Token as per IETF specification.<br>-   **SAML11**. SAML 1.1 security token as per OASIS specification.<br>-   **SAML2**. SAML 2.0 security token as per OASIS specification.<br>-   **CpimUnsigned**.|
+|*OutputTokenFormat*|0:1|Specify the format of the output token.<br>Type: String (enumeration)<br>Value: one of the types as per *TokenFormat* enumeration in the Azure AD B2C Premium XML schema. See above.|
+|*AssuranceLevelOfOutputClaims*|0:1|List the assurance level of the claims that are retrieved from the technical profile.<br>Type: String|
+|*RequiredAssuranceLevelsOfInputClaims*|0:1|Lists the assurance levels that a claim must have in order for it to be used as an input claim to the technical profile.<br>Type: String|
+|*SubjectAuthenticationRequirements*|0:1|Specify the requirements regarding the conscious and active participation of the subject in authentication.|
+|*Metadata*|0:1|Specify the metadata utilized by the protocol for communicating with the endpoint in the course of a transaction to plumb “on the wire” interoperability between Azure AD B2C Premium and other community participants.<br>Type: collection of *Item* of key/value pairs.|
+|*CryptographicKeys*|0:1|Specify a list of cryptographic keys used in this technical profile.<br>For additional information, see section § *Managing your key containers for Trust Framework (policies)* in the third part of this series of document.|
+|*Suppressions*|0:1|Specify a list of suppressions supported by the protocol.<br>Type: String|
+|*PreferredBinding*|0:1|If the protocol supports multiple bindings, represent binding preferred by the protocol, for example HTTP POST or HTTP GET in the case of SAML 2.0<br>Type: String|
+|*IncludeInSSO*|0:1|Indicate whether usage of this technical profile should apply single sign-on (SSO) behavior for the session and instead require explicit interaction.<br>**To be deprecated in favor of *UseTechnicalProfileForSessionManagement* that allows a more granular control on SSO behavior**.|
+|*InputTokenSources*|0:1|Represent the list of technical profiles of the claims providers from which the original tokens are to be sent. Azure AD B2C Premium can indeed send the original token from one claims provider to another claims provider.
+|*InputClaimsTransformations*|0:1|Specify an optional list of references to claims transformations that should be executed before any claims are sent to the claims provider or the relying party.<br>Each of these elements contains reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section.|
+|*InputClaims*|0:1|Specify an optional list of the claim types that are taken as input in the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section.|
+|*PersistedClaims*|0:1|Specify an optional list of the claim types that are persisted by the claims provider that relates to the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section.|
+|*OutputClaims*|0:1|Specify an optional list of the claim types that are taken as output in the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section.|
+|*OutputClaimsTransformations*|0:1|Specify an optional list of references to claims transformations that should be executed after claims are received from the claims provider.<br>Each of these elements contains reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section.|
+|*ValidationTechnicalProfiles *|0:n|Specify a list of other technical profiles that the technical profile uses for validation purposes.|
+|*SubjectNamingInfo*|0:1|Control the production of the subject name in tokens (e.g. SAML) where subject name is specified separately from claims.|
+|*SubjectAuthenticationRequirements*|0:1|Specify the requirements regarding the conscious and active participation of the subject in authentication|
+|*Extensions*|0:1|Allow any xml from any namespace outside of the document namespaces to be included in the element. This represents an extension point for elements as its name indicates.|
+|*IncludeClaimsFromTechnicalProfile*|0:1|Indicate a machine understandable identifier that is used to uniquely identify a different technical profile. All input and output claims from referenced technical profile will be added to this technical profile. Referenced technical profile must be defined in the same policy XML file.<br>Type: String|
+|*IncludeTechnicalProfile*|0:1|Indicate a machine understandable identifier that is used to uniquely identify a different technical profile. All data from referenced technical profile will be added to this technical profile. Referenced technical profile must exist in the same policy XML file.|
+|*UseTechnicalProfileForSessionManagement*|0:1|Indicate a machine understandable identifier to uniquely identify a different technical profile to be used for session management.|
+|*EnableForUserJourney*|0:1|Specify if the technical user profile is enable for a user journey. if the technical profile should be used within a user journey, this includes *ClaimProviderSelections*. If this value is set to **true**, it will disable the selection.<br> Value: one of the following values as per *EnabledForUserJourneysValues* enumeration in the Azure AD B2C Premium XML schema:<br>-   **true**. Execute the technical profile.<br>-   **false**. Always skip the technical profile.<br>-   **OnClaimsExistence**. Only execute the technical profile if the claim specified in the technical profile's metadata is present in the user journey storage.<br>-   **Always**. (default) Execute the technical profile.<br>-   **Never**. Always skip the technical profile.|
 
-  *DisplayName*                               0:1           Specify the human understandable name of the technical profile that can be displayed to the users.
-                                                            
-                                                            Type: String
-
-  *Description*                               0:1           Specify a human understandable description of the technical profile that can be displayed to the users.
-                                                            
-                                                            Type: String
-
-  *Protocol*                                  0:1           Specify the protocol used for the federation.
-
-  *InputTokenFormat*                          0:1           Specify the format of the input token.
-                                                            
-                                                            Type: String (enumeration)
-                                                            
-                                                            Value: one of the types as per *TokenFormat* enumeration in the Azure AD B2C Premium XML schema:
-                                                            
-                                                            -   **JSON**.
-                                                            
-                                                            -   **JWT**. JSON Web Token as per IETF specification.
-                                                            
-                                                            -   **SAML11**. SAML 1.1 security token as per OASIS specification.
-                                                            
-                                                            -   **SAML2**. SAML 2.0 security token as per OASIS specification.
-                                                            
-                                                            -   **CpimUnsigned**.
-                                                            
-
-  *OutputTokenFormat*                         0:1           Specify the format of the output token.
-                                                            
-                                                            Type: String (enumeration)
-                                                            
-                                                            Value: one of the types as per *TokenFormat* enumeration in the Azure AD B2C Premium XML schema. See above.
-
-  *AssuranceLevelOfOutputClaims*              0:1           List the assurance level of the claims that are retrieved from the technical profile.
-                                                            
-                                                            Type: String
-
-  *RequiredAssuranceLevelsOfInputClaims*      0:1           Lists the assurance levels that a claim must have in order for it to be used as an input claim to the technical profile.
-                                                            
-                                                            Type: String
-
-  *SubjectAuthenticationRequirements*         0:1           Specify the requirements regarding the conscious and active participation of the subject in authentication.
-
-  *Metadata*                                  0:1           Specify the metadata utilized by the protocol for communicating with the endpoint in the course of a transaction to plumb “on the wire” interoperability between Azure AD B2C Premium and other community participants.
-                                                            
-                                                            Type: collection of *Item* of key/value pairs.
-
-  *CryptographicKeys*                         0:1           Specify a list of cryptographic keys used in this technical profile.
-                                                            
-                                                            For additional information, see section § *Managing your key containers for Trust Framework (policies)* in the third part of this series of document.
-
-  *Suppressions*                              0:1           Specify a list of suppressions supported by the protocol.
-                                                            
-                                                            Type: String
-
-  *PreferredBinding*                          0:1           If the protocol supports multiple bindings, represent binding preferred by the protocol, for example HTTP POST or HTTP GET in the case of SAML 2.0
-                                                            
-                                                            Type: String
-
-  *IncludeInSSO*                              0:1           Indicate whether usage of this technical profile should apply single sign-on (SSO) behavior for the session and instead require explicit interaction.
-                                                            
-                                                            **To be deprecated in favor of *UseTechnicalProfileForSessionManagement* that allows a more granular control on SSO behavior**.
-
-  *InputTokenSources*                         0:1           Represent the list of technical profiles of the claims providers from which the original tokens are to be sent. Azure AD B2C Premium can indeed send the original token from one claims provider to another claims provider.
-
-  *InputClaimsTransformations*                0:1           Specify an optional list of references to claims transformations that should be executed before any claims are sent to the claims provider or the relying party.
-                                                            
-                                                            Each of these elements contains reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section.
-
-  *InputClaims*                               0:1           Specify an optional list of the claim types that are taken as input in the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section.
-
-  *PersistedClaims*                           0:1           Specify an optional list of the claim types that are persisted by the claims provider that relates to the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section.
-
-  *OutputClaims*                              0:1           Specify an optional list of the claim types that are taken as output in the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section.
-
-  *OutputClaimsTransformations*               0:1           Specify an optional list of references to claims transformations that should be executed after claims are received from the claims provider.
-                                                            
-                                                            Each of these elements contains reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section.
-
-  *ValidationTechnicalProfiles *              0:n           Specify a list of other technical profiles that the technical profile uses for validation purposes.
-
-  *SubjectNamingInfo*                         0:1           Control the production of the subject name in tokens (e.g. SAML) where subject name is specified separately from claims.
-
-  *SubjectAuthenticationRequirements*         0:1           Specify the requirements regarding the conscious and active participation of the subject in authentication
-
-  *Extensions*                                0:1           Allow any xml from any namespace outside of the document namespaces to be included in the element. This represents an extension point for elements as its name indicates.
-
-  *IncludeClaimsFromTechnicalProfile*         0:1           Indicate a machine understandable identifier that is used to uniquely identify a different technical profile. All input and output claims from referenced technical profile will be added to this technical profile. Referenced technical profile must be defined in the same policy XML file.
-                                                            
-                                                            Type: String
-
-  *IncludeTechnicalProfile*                   0:1           Indicate a machine understandable identifier that is used to uniquely identify a different technical profile. All data from referenced technical profile will be added to this technical profile. Referenced technical profile must exist in the same policy XML file.
-
-  *UseTechnicalProfileForSessionManagement*   0:1           Indicate a machine understandable identifier to uniquely identify a different technical profile to be used for session management.
-
-  *EnableForUserJourney*                      0:1           Specify if the technical user profile is enable for a user journey. if the technical profile should be used within a user journey, this includes *ClaimProviderSelections*. If this value is set to **true**, it will disable the selection.
-                                                            
-                                                            Value: one of the following values as per *EnabledForUserJourneysValues* enumeration in the Azure AD B2C Premium XML schema:
-                                                            
-                                                            -   **true**. Execute the technical profile.
-                                                            
-                                                            -   **false**. Always skip the technical profile.
-                                                            
-                                                            -   **OnClaimsExistence**. Only execute the technical profile if the claim specified in the technical profile's metadata is present in the user journey storage.
-                                                            
-                                                            -   **Always**. (default) Execute the technical profile.
-                                                            
-                                                            -   **Never**. Always skip the technical profile.
-                                                            
-  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 The *Protocol* XML element in the above table contains the following
 attributes:
 
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute   Required   Description
-  ----------- ---------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *Name*      True       Specify the name of a valid protocol supported by Azure AD B2C Premium that is used as part of the technical profile.
-                         
-                         Type: String (enumeration)
-                         
-                         Value: one of the following types as per *ProtocolName* enumeration in the Azure AD B2C Premium XML schema:
-                         
-                         -   **None**.
-                         
-                         -   **OAuth1**. OAuth 1.0 protocol standard as per IETF specification.
-                         
-                         -   **OAuth2**. OAuth 2.0 protocol standard as per IETF specification.
-                         
-                         -   **SAML2**. SAML 2.0 protocol standard as per OASIS specification.
-                         
-                         -   **OpenIdConnect**. OpenID Connect 1.0 protocol standard as per OpenID foundation specification.
-                         
-                         -   **WsFed**. WS-Federation (WS-Fed) 1.2 protocol standard as per OASIS specification.
-                         
-                         -   **WsTrust**. WS-Trust 1.3 protocol standard as per OASIS specification.
-                         
-                         -   **Proprietary**. For a RESTful based provider.
-                         
-
-  *Handler*   False      Specify the fully-qualified name of the assembly that will be used by Azure AD B2C Premium to determine the protocol handler if the protocol name is set to "Proprietary". **It is invalid to provide this attribute with any other protocol name.**
-                         
-                         Type: String
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|-----------|----------|--------------------------|
+|*Name*|True|Specify the name of a valid protocol supported by Azure AD B2C Premium that is used as part of the technical profile.<br>Type: String (enumeration)<br>Value: one of the following types as per *ProtocolName* enumeration in the Azure AD B2C Premium XML schema:<br>-   **None**.<br>-   **OAuth1**. OAuth 1.0 protocol standard as per IETF specification.<br>-   **OAuth2**. OAuth 2.0 protocol standard as per IETF specification.<br>-   **SAML2**. SAML 2.0 protocol standard as per OASIS specification.<br>-   **OpenIdConnect**. OpenID Connect 1.0 protocol standard as per OpenID foundation specification.<br>-   **WsFed**. WS-Federation (WS-Fed) 1.2 protocol standard as per OASIS specification.<br>-   **WsTrust**. WS-Trust 1.3 protocol standard as per OASIS specification.<br>-   **Proprietary**. For a RESTful based provider.|
+|*Handler*|False|Specify the fully-qualified name of the assembly that will be used by Azure AD B2C Premium to determine the protocol handler if the protocol name is set to "Proprietary". **It is invalid to provide this attribute with any other protocol name.**<br>Type: String|
 
 The *RequiredAssuranceLevelsOfInputClaims* XML element in the above
 table contains the following XML element:
 
-  XML element                             Occurrences   Description
-  --------------------------------------- ------------- -----------------------------------------------------------------------------------------------------------------------
-  *RequiredAssuranceLevelOfInputClaims*   0:n           List an assurance level that a claim must have in order for it to be used as an input claim to the technical profile.
+|XML element|Occurrences|Description|
+|-----------|-----------|-----------|
+|*RequiredAssuranceLevelOfInputClaims*|0:n|List an assurance level that a claim must have in order for it to be used as an input claim to the technical profile.|
 
 The *SubjectAuthenticationRequirements* XML element in the above table
 contains the following XML attributes:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                      Required   Description
-  ------------------------------ ---------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *TimeToLive*                   True       Specify The maximum number of minutes cached credentials can be used following an active authentication by the subject.
-                                            
-                                            Type: Integer
 
-  *ResetExpiryWhenTokenIssued*   False      If **true** then whenever a token is issued (even using a cached credential), set the expiry time to the current time plus the TimeToLive value. Default is **false**.
-                                            
-                                            Type: Boolean
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*TimeToLive*|True|Specify The maximum number of minutes cached credentials can be used following an active authentication by the subject.<br>Type: Integer|
+|*ResetExpiryWhenTokenIssued*|False|If **true** then whenever a token is issued (even using a cached credential), set the expiry time to the current time plus the TimeToLive value. Default is **false**.<br>Type: Boolean|
 
 The *CryptographicKeys* XML element in the above table contains the
 following XML element:
 
-  XML element   Occurrences   Description
-  ------------- ------------- ------------------------------------------------------------
-  *Key*         0:n           Define a cryptographic key used in this technical profile.
+|XML element|Occurrences|Description|
+|-------------|-------------|-------------------------|
+|*Key*|0:n|Define a cryptographic key used in this technical profile.|
 
 Each *Key* XML element contains in turn the following attribute:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute              Required   Description
-  ---------------------- ---------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *Id*                   True       Specify a machine understandable identifier that is used to uniquely identify a particular key (pair), and reference it from other XML elements in the policy XML file.
-                                    
-                                    Type: String
-
-  *StorageReferenceId*   True       Specify a machine understandable identifier that is used to uniquely identify a particular storage key container, and reference it from other XML elements in the policy XML file. For additional information, see section § *Managing your key containers for Trust Framework (policies)* in third part of this series of document.
-                                    
-                                    Type: String
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|----------|-------------------------------|
+|*Id*|True|Specify a machine understandable identifier that is used to uniquely identify a particular key (pair), and reference it from other XML elements in the policy XML file.<br>Type: String|
+|*StorageReferenceId*|True|Specify a machine understandable identifier that is used to uniquely identify a particular storage key container, and reference it from other XML elements in the policy XML file. For additional information, see section § *Managing your key containers for Trust Framework (policies)* in third part of this series of document.<br>Type: String|
 
 The *InputTokenSources* XML elements contain the following XML element:
 
-  XML element          Occurrences   Description
-  -------------------- ------------- ------------------------------------------------------------------------------------------
-  *TechnicalProfile*   1:n           Specify a source for that can be the input assertions for the current technical profile.
+|XML element|Occurrences|Description|
+|--------------|---------|---------------------------------------------|
+|*TechnicalProfile*|1:n|Specify a source for that can be the input assertions for the current technical profile.
 
 Each *TechnicalProfile* XML element contains the following attribute:
 
-  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute   Required   Description
-  ----------- ---------- -----------------------------------------------------------------------------------------------------------------------------------------------------
-  *Id*        True       Specify a reference to a machine understandable identifier that is used to uniquely identify a particular technical profile in the policy XML file.
-                         
-                         Type: String
-  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|-------|-----|-------------------------|
+|*Id*|True|Specify a reference to a machine understandable identifier that is used to uniquely identify a particular technical profile in the policy XML file.<br>Type: String|
 
 Each *InputClaim* XML element contains the following attribute:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                Required   Description
-  ------------------------ ---------- ------------------------------------------------------------------------------------------------------------
-  *ClaimTypeReferenceId*   True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                      
-                                      Type: String
-  ------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|------------------|------|------------------------------|
+|*ClaimTypeReferenceId*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br> Type: String|
 
 The *InputClaimsTransformations* XML elements contain the following XML
 element:
 
-  XML element                   Occurrences   Description
-  ----------------------------- ------------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *InputClaimsTransformation*   0:n           Specify a claims transformation that should be executed before any claims are sent to the claims provider or the relying party. A claims transformation can indeed be used to modify existing *ClaimsSchema* claims or generate new ones.
+|XML element|Occurrences|Description|
+|--------------------------|---------|-------------------------|
+|*InputClaimsTransformation*|0:n|Specify a claims transformation that should be executed before any claims are sent to the claims provider or the relying party. A claims transformation can indeed be used to modify existing *ClaimsSchema* claims or generate new ones.|
 
 Each *InputClaimsTransformation* XML element contains the following
 attribute:
 
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute       Required   Description
-  --------------- ---------- --------------------------------------------------------------------------------------------------------------------------------
-  *ReferenceId*   True       Specify a reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section in the policy XML file.
-                             
-                             Type: String
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|-------------|-----|----------------------------|
+|*ReferenceId*|True|Specify a reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section in the policy XML file.<br> Type: String|
 
 The *InputClaims* XML elements contain the following XML element:
 
-  XML element    Occurrences   Description
-  -------------- ------------- --------------------------------- --
-  *InputClaim*   0:n           Specify an expected claim type.   
+|XML element|Occurrences|Description|
+|------------|----------|------------------------|
+|*InputClaim*|0:n|Specify an expected claim type.|  
 
 Each *InputClaim* XML element contains the following attribute:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                Required   Description
-  ------------------------ ---------- ------------------------------------------------------------------------------------------------------------
-  *ClaimTypeReferenceId*   True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                      
-                                      Type: String
-  ------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|-----------------------|-------|---------------------------------------|
+|*ClaimTypeReferenceId*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br>Type: String|
 
-the *PersistedClaims* XML elements contain the following XML element:
+The *PersistedClaims* XML elements contain the following XML element:
 
-  XML element        Occurrences   Description
-  ------------------ ------------- -------------------------------------------------------------------------------------------------------------------------------------
-  *PersistedClaim*   0:n           Specify an expected claim type. Claim mappings are used to determine the provider claim type before sending to the claims provider.
+|XML element|Occurrences|Description|
+|-------------|----------|-------------------------------------|
+|*PersistedClaim*|0:n|Specify an expected claim type. Claim mappings are used to determine the provider claim type before sending to the claims provider.|
 
 Each *PersistedClaim* XML element contains the following attributes:
 
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                Required   Description
-  ------------------------ ---------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *ClaimTypeReferenceId*   True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                      
-                                      Type: String
-
-  *DefaultValue *          False      Specify a default value to create a claim if the claim indicated by *ClaimTypeReferenceId* does not exist so that the resulting claim can be used as an *InputClaim* by the technical profile.
-                                      
-                                      Type: String
-
-  *PartnerClaimType*       False      Identify the *ClaimType* of the external partner that the specified policy claim type maps to. If the *PartnerClaimType* attribute is not specified, then the specified policy claim type is mapped to the partner claim type of the same name.
-                                      
-                                      Type: String
-
-  *OverwriteIfExists*      False      Provides an optional property to the claims provider indicating whether the claim can be overwritten in the claims provider records if the claim provider supports overwriting.
-                                      
-                                      Type: true or false
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|-------------------|------|---------------------|
+|*ClaimTypeReferenceId*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br>Type: String|
+|*DefaultValue*|False|Specify a default value to create a claim if the claim indicated by *ClaimTypeReferenceId* does not exist so that the resulting claim can be used as an *InputClaim* by the technical profile.<br>Type: String|
+|*PartnerClaimType*|False|Identify the *ClaimType* of the external partner that the specified policy claim type maps to. If the *PartnerClaimType* attribute is not specified, then the specified policy claim type is mapped to the partner claim type of the same name.<br>Type: String|
+|*OverwriteIfExists*|False|Provides an optional property to the claims provider indicating whether the claim can be overwritten in the claims provider records if the claim provider supports overwriting.<br>Type: true or false|
 
 Eventually, the *OutputClaims* XML elements contain the following XML
 element:
 
-  XML element     Occurrences   Description
-  --------------- ------------- ---------------------------------
-  *OutputClaim*   0:n           Specify an expected claim type.
+|XML element|Occurrences|Description|
+|----------|--------|--------------------------------|
+|*OutputClaim*|0:n|Specify an expected claim type.|
 
 Each *OutputClaim* XML element contains the following attributes:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                Required   Description
-  ------------------------ ---------- ------------------------------------------------------------------------------------------------------------
-  *ClaimTypeReferenceId*   True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                      
-                                      Type: String
+|Attribute|Required|Description|
+|-------------|--------|-------------------------------------|
+|*ClaimTypeReferenceId*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br>Type: String|
+|*DefaultValue*|False|Specify a default value if not set.<br>Type: String|
+|*PartnerClaimType*|False|Specify the partner claim type.<br>Type: String|
+|*Required*|False|Specify this claim is required.<br>Type: String|
 
-  *DefaultValue *          False      Specify a default value if not set.
-                                      
-                                      Type: String
-
-  *PartnerClaimType*       False      Specify the partner claim type.
-                                      
-                                      Type: String
-
-  *Required*               False      Specify this claim is required.
-                                      
-                                      Type: String
-  ------------------------------------------------------------------------------------------------------------------------------------------------
 
 The *OutputClaimsTransformations* XML elements contain the following XML
 element:
 
-  XML element                    Occurrences   Description
-  ------------------------------ ------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *OutputClaimsTransformation*   0:n           Specify a claims transformation that should be executed after claims are received from the claims provider. A claims transformation can indeed be used to modify existing *ClaimsSchema* claims or generate new ones.
+|XML element|Occurrences|Description|
+|------------------------|----------|----------------------------------|
+|*OutputClaimsTransformation*|0:n|Specify a claims transformation that should be executed after claims are received from the claims provider. A claims transformation can indeed be used to modify existing *ClaimsSchema* claims or generate new ones.|
 
 Each *OutputClaimsTransformation* XML element contains the following
 attribute:
 
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute       Required   Description
-  --------------- ---------- --------------------------------------------------------------------------------------------------------------------------------
-  *ReferenceId*   True       Specify a reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section in the policy XML file.
-                             
-                             Type: String
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+|Attribute|Required|Description|
+|------------|------|----------------------------|
+|*ReferenceId*|True|Specify a reference to a *ClaimsTransformation* already defined in the *ClaimsTransformations* section in the policy XML file.<br>Type: String|
+
 
 The *ValidationTechnicalProfiles* XML element in the above table
 contains the following XML element:
 
-  XML element                    Occurrences   Description
-  ------------------------------ ------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *ValidationTechnicalProfile*   1:n           Define a to be used for validating some or all of the output claims of the referencing technical profile. Therefore, all the input claims of the referenced technical profile must appear in the output claims of the referencing technical profile.
+|XML element|Occurrences|Description|
+|----------------------------|----------|------------------------|
+|*ValidationTechnicalProfile*|1:n|Define a to be used for validating some or all of the output claims of the referencing technical profile. Therefore, all the input claims of the referenced technical profile must appear in the output claims of the referencing technical profile.|
 
 *ValidationTechnicalProfile* and *IncludeTechnicalProfile* XML elements
 contain in turn the following attributes:
 
-  Attribute       Required   Description
-  --------------- ---------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *ReferenceId*   True       Specify a reference to a machine understandable identifier that is used to uniquely identify a particular technical profile already defined in the policy XML file.
+|Attribute|Required|Description|
+|-------------|------|---------------------------------------|
+|*ReferenceId*|True|Specify a reference to a machine understandable identifier that is used to uniquely identify a particular technical profile already defined in the policy XML file.|
 
 The *SubjectNamingInfo* XML element in the above table contains the
 following attributes:
 
-  -------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute           Required   Description
-  ------------------- ---------- ------------------------------------------------------------------------------------------------------------
-  *ClaimType*         True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                 
-                                 Type: String
-
-  *NameQualifier*     False      Provide a description
-                                 
-                                 Type: String
-
-  *SPNameQualifier*   False      Provide a description
-                                 
-                                 Type: String
-
-  *Format*            False      Provide a description
-                                 
-                                 Type: String
-
-  *SPProvidedID*      False      Provide a description
-                                 
-                                 Type: String
-  -------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|-------------------|----------|---------------------|
+|*ClaimType*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br>Type: String|
+|*NameQualifier*|False|Provide a description<br>Type: String|
+|*SPNameQualifier*|False|Provide a description<br> Type: String|
+|*Format*|False|Provide a description<br>Type: String|
+|*SPProvidedID*|False|Provide a description<br>Type: String|
 
 *IncludeTechnicalProfile* and *UseTechnicalProfileForSessionManagement*
 XML elements in the above table contain the following attribute:
 
-  Attribute       Required   Description
-  --------------- ---------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *ReferenceId*   True       Specify a reference to a machine understandable identifier that is used to uniquely identify a particular technical profile already defined in the policy XML file.
+|Attribute|Required|Description|
+|--------------|---------|----------------------|
+|*ReferenceId*|True|Specify a reference to a machine understandable identifier that is used to uniquely identify a particular technical profile already defined in the policy XML file.|
 
 The following XML snippet illustrates how to define a technical profile
 for a claim provider:
@@ -842,41 +643,20 @@ Premium XML schema.
 
 The following keys must or may be present in the *Metadata* XML element:
 
-  -----------------------------------------------------------------------------------------------------------------------------------
-  Key                       Required   Description
-  ------------------------- ---------- ----------------------------------------------------------------------------------------------
-  client\_id                False      Specify the identifier attributed by the OpenID Connect provider.
-
-  IdTokenAudience           False      Specify the audience of the id token.
-
-  ProviderName              True       Specify the name of the OpenID Connect provider.
-
-  METADATA                  False      Specify the JSON configuration document as per OpenID Connect Discovery specification.
-
-  authorization\_endpoint   True       Indicate the URL of the authorization endpoint as per OpenID Connect Core 1.0 specification.
-
-  redirect\_uri             False      Indicate the redirection point URL as per OpenID Connect Core 1.0 specification.
-
-  response\_types           False      Specify the response type as per OpenID Connect Core 1.0 specification.
-                                       
-                                       Value: id\_token, code or token
-
-  response\_mode            False      Specify the response mode.
-                                       
-                                       Value: query
-
-  scope                     False      Specify the scope of the access request as per OpenID Connect Core 1.0 specification.
-
-  issuer                    False      Specify the issuer of the access request as per OpenID Connect Core 1.0 specification.
-
-  HttpBinding               False      Specify the expected HTTP binding.
-                                       
-                                       Value: **GET** or **POST**
-
-  LocalAccountProfile       False      TBD.
-                                       
-                                       Value: true or false
-  -----------------------------------------------------------------------------------------------------------------------------------
+|Key|Required|Description|
+|-------------------------|----------|-------------------------------------|
+|client\_id|False|Specify the identifier attributed by the OpenID Connect provider.|
+|IdTokenAudience|False|Specify the audience of the id token.|
+|ProviderName|True|Specify the name of the OpenID Connect provider.|
+|METADATA|False|Specify the JSON configuration document as per OpenID Connect Discovery specification.|
+|authorization_endpoint|True|Indicate the URL of the authorization endpoint as per OpenID Connect Core 1.0 specification.|
+|redirect_uri|False|Indicate the redirection point URL as per OpenID Connect Core 1.0 specification.|
+|response_types|False|Specify the response type as per OpenID Connect Core 1.0 specification.<br>Value: id\_token, code or token|
+|response_mode|False|Specify the response mode.<br>Value: query|
+|scope|False|Specify the scope of the access request as per OpenID Connect Core 1.0 specification.|
+|issuer|False|Specify the issuer of the access request as per OpenID Connect Core 1.0 specification.|
+|HttpBinding|False|Specify the expected HTTP binding.|<br>Value: **GET** or **POST**|
+|LocalAccountProfile|False|TBD.<br>Value: true or false|
 
 The *InputClaimsTransformations* XML element is absent.
 
