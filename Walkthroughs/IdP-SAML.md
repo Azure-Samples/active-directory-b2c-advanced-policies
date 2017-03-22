@@ -37,11 +37,11 @@ IdP has different steps to do so, look at your IdPs documentation for
 guidance on how to do so. You will be required to provide the following
 data points:
 
--   **Identifier / Entity Id: **
+-   **Identifier / Entity Id:**
 
     https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\_base
 
--   **Reply URL / Assertion Consumer Service (ACS) URL: **
+-   **Reply URL / Assertion Consumer Service (ACS) URL:**
 
     https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\_base/samlp/sso/assertionconsumer
 
@@ -68,28 +68,24 @@ add the SAML IdP.
       <TechnicalProfiles>
         <TechnicalProfile Id="Contoso">
           <DisplayName>Contoso</DisplayName>
-          <Description>Login with your Contoso
-    account</Description>
+          <Description>Login with your Contoso account</Description>
           <Protocol Name="SAML2"/>
           <Metadata>
             <Item Key="RequestsSigned">false</Item>
             <Item Key="WantsEncryptedAssertions">false</Item>
             <Item Key="PartnerEntity">
-    <![CDATA[ <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.com" validUntil="2026-10-05T23:57:13.854Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIErDCCA….qY9SjVXdu7zy8tZ+LqnwFSYIJ4VkE9UR1vvvnzO</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.com/idp/endpoint/HttpPost"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://contoso.com/idp/endpoint/HttpRedirect"/></md:IDPSSODescriptor></md:EntityDescriptor>]]>        </Item>
+    <![CDATA[ <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.com" validUntil="2026-10-05T23:57:13.854Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIErDCCA….qY9SjVXdu7zy8tZ+LqnwFSYIJ4VkE9UR1vvvnzO</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.com/idp/endpoint/HttpPost"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://contoso.com/idp/endpoint/HttpRedirect"/></md:IDPSSODescriptor></md:EntityDescriptor>]]></Item>
           </Metadata>       
           <CryptographicKeys>
             <Key Id="SamlAssertionSigning" StorageReferenceId="ContosoIdpSamlCert"/>
-            <Key Id="SamlMessageSigning" StorageReferenceId="
-    ContosoIdpSamlCert "/>
+            <Key Id="SamlMessageSigning" StorageReferenceId="ContosoIdpSamlCert "/>
           </CryptographicKeys>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/>
-            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="SAML
-    Idp" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="SAML Idp" />
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name"/>
             <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name"/>
-            <OutputClaim ClaimTypeReferenceId="email"
-     PartnerClaimType="email"/>
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email"/>
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/>
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/>
           </OutputClaims>
@@ -110,7 +106,7 @@ add the SAML IdP.
 
     1.  ClaimsProvider/Domain - Drives the value that can be passed in
         to
-        [domain\hint](http://www.cloudidentity.com/blog/2014/11/17/skipping-the-home-realm-discovery-page-in-azure-ad/)
+        [domain_hint](http://www.cloudidentity.com/blog/2014/11/17/skipping-the-home-realm-discovery-page-in-azure-ad/)
         query string parameter, so make it url friendly, i.e. lowercase
         only, no spaces, only alphanumerical.
 
@@ -130,8 +126,7 @@ add the SAML IdP.
 4.  Configure Metadata section
 
     1.  PartnerEntity – Either the URL to the metadata endpoint or the
-        metadata itself encapsulated by <!\[CDATA\[ *…metadata…*
-        \]\]\>;
+        metadata itself encapsulated by <!\[CDATA\[ *…metadata…* \]\]\>;
 
     2.  Configure OutputClaims - Map each of the claims in this section
         to a claim in the SAML token response.
@@ -146,9 +141,7 @@ add the SAML IdP.
     request and message. Even though we’ve configured the Claims
     Provider to not sign these, a certificate must still be provided.
 
-    1.  (If you don’t have a cert already) Create the cert using
-        makecert
-        (http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
+    1.  (If you don’t have a cert already) [Create the cert using makecert](http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
 
         1.  makecert -r -pe -n "CN=idpsaml.yourtenant.onmicrosoft.com"
             -a sha256 -sky signature -len 2048 -e 12/21/2018 -sr
