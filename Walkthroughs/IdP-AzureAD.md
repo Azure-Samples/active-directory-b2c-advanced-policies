@@ -54,7 +54,7 @@ Walkthrough
 Setup
 -----
 
-Make sure you first complete the Basic Setup tutorial.
+Make sure you first complete the [Basic Setup tutorial](BasicSetup.md).
 
 Register the App in Azure AD
 ----------------------------
@@ -77,10 +77,9 @@ Register the App in Azure AD
 Create the Azure AD Claims Provider
 -----------------------------------
 
-First go through the “Create the OIDC Claims Provider” section in the
-generic OIDC Idp tutorial, but skip the “Configure Metadata” step,
-you’ll be configuring that differently depending of what kind of setup
-do you want. See the sections below for more details on each setup.
+Go through the [“Create the OIDC Claims Provider” section in the generic OIDC Idp tutorial](IdP-OIDC.md#create-the-oidc-claims-provider).
+**IMPORTANT**: Skip the “Configure Metadata” step, you’ll be configuring that differently 
+depending of what kind of Azure AD setup do you want. 
 
 ### Azure AD v1 – Single tenant \*RECOMMENDED\*
 
@@ -188,5 +187,5 @@ do you want. See the sections below for more details on each setup.
 Add the Azure AD Claims Provider to User Journey(s)
 ---------------------------------------------------
 
-Configure this as per the “Add the OIDC Claims Provider to User
-Journey(s)” section in the generic OIDC Idp tutorial.          
+Configure this as per the [“Add the OIDC Claims Provider to User
+Journey(s)” section in the generic OIDC Idp tutorial](IdP-OIDC.md#add-the-oidc-claims-provider-to-user-journeys).          
