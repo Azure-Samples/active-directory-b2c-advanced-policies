@@ -39,7 +39,7 @@ data points:
 
 -   **Reply URL / Redirect URI: **
 
-    https://login.microsoftonline.com/te/*&lt;tenantName&gt;*.onmicrosoft.com/oauth2/authresp
+    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/oauth2/authresp
 
 Create the OIDC Claims Provider
 -------------------------------
@@ -118,8 +118,7 @@ add the OIDC IdP.
     4.  TechnicalProfile/DisplayName - Displayed as the button's caption
         in the sign in screen.
 
-        ![](media/image1.png){width="2.2478258967629046in"
-        height="0.5108038057742782in"}
+        ![](media/idpoidc01.png)
 
     5.  TechnicalProfile/Description – Currently not displayed anywhere
 
@@ -224,12 +223,12 @@ that occur. This should only be enabled during development.
 
     1.  DeploymentMode=”Development”
 
-    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=&lt;guid&gt;"
+    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=<guid\>"
 
         3.  Replace &lt;guid&gt; with an actual GUID
 
 This will allow you to troubleshoot by going to
-https://b2crecorder.azurewebsites.net/trace\_102.html?id=&lt;guid&gt;
+https://b2crecorder.azurewebsites.net/trace\_102.html?id=<guid\>
 
 Policy Reference
 ================
@@ -237,8 +236,7 @@ Policy Reference
 Claims Provider
 ---------------
 
-![](media/image2.png){width="3.688976377952756in"
-height="2.4763779527559056in"}
+![](media/idpoidc02.png)
 
 Identity providers, attribute providers, attribute verifiers, directory
 provider, MFA provider, self-asserted attribute provider, etc. are all
