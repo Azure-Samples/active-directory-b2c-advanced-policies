@@ -78,7 +78,8 @@ Create the Azure AD Claims Provider
 -----------------------------------
 
 Go through the [“Create the OIDC Claims Provider” section in the generic OIDC Idp tutorial](IdP-OIDC.md#create-the-oidc-claims-provider).
-**IMPORTANT**: Skip the “Configure Metadata” step, you’ll be configuring that differently 
+
+> **IMPORTANT**: Skip the “Configure Metadata” step, you’ll be configuring that differently 
 depending of what kind of Azure AD setup do you want. 
 
 ### Azure AD v1 – Single tenant \*RECOMMENDED\*
