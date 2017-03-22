@@ -27,7 +27,7 @@ Walkthrough
 Setup
 -----
 
-Make sure you first complete the Basic Setup tutorial.
+Make sure you first complete the [Basic Setup tutorial](BasicSetup.md).
 
 Create the SAML Relaying Party / App in the SAML IdP
 ----------------------------------------------------
@@ -39,11 +39,11 @@ data points:
 
 -   **Identifier / Entity Id: **
 
-    https://login.microsoftonline.com/te/*&lt;tenantName&gt;.*onmicrosoft.com/B2C\_1A\_base
+    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\_base
 
 -   **Reply URL / Assertion Consumer Service (ACS) URL: **
 
-    https://login.microsoftonline.com/te/*&lt;tenantName&gt;*.onmicrosoft.com/B2C\_1A\_base/samlp/sso/assertionconsumer
+    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\_base/samlp/sso/assertionconsumer
 
 Create the SAML Claims Provider
 -------------------------------
@@ -55,134 +55,137 @@ add the SAML IdP.
 > contains more details around each of the XML elements referenced in
 > this section.*
 
-1.  Open the B2C\_1A\_base.xml policy from your working directory.
+1.  Open the B2C_1A_base.xml policy from your working directory.
 
-2.  Find the section with the &lt;ClaimsProviders&gt; and add a new
-    &lt;ClaimsProvider&gt; as follows:
+2.  Find the section with the &lt;ClaimsProviders&gt; and add a new &lt;ClaimsProvider&gt; as follows:
 
-    &lt;ClaimsProvider&gt;\
-      &lt;Domain&gt;contoso&lt;/Domain&gt;\
-      &lt;DisplayName&gt;Contoso&lt;/DisplayName&gt;\
-      &lt;TechnicalProfiles&gt;\
-        &lt;TechnicalProfile Id="Contoso"&gt;\
-          &lt;DisplayName&gt;Contoso&lt;/DisplayName&gt;\
-          &lt;Description&gt;Login with your Contoso
-    account&lt;/Description&gt;\
-          &lt;Protocol Name="SAML2"/&gt;\
-          &lt;Metadata&gt;\
-            &lt;Item Key="RequestsSigned"&gt;false&lt;/Item&gt;\
-            &lt;Item Key="WantsEncryptedAssertions"&gt;false&lt;/Item&gt;\
-            &lt;Item Key="PartnerEntity"&gt;\
-    &lt;!\[CDATA\[ &lt;md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.com" validUntil="2026-10-05T23:57:13.854Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig\#"&gt;&lt;md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"&gt;&lt;md:KeyDescriptor use="signing"&gt;&lt;ds:KeyInfo&gt;&lt;ds:X509Data&gt;&lt;ds:X509Certificate&gt;MIIErDCCA….qY9SjVXdu7zy8tZ+LqnwFSYIJ4VkE9UR1vvvnzO&lt;/ds:X509Certificate&gt;&lt;/ds:X509Data&gt;&lt;/ds:KeyInfo&gt;&lt;/md:KeyDescriptor&gt;&lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified&lt;/md:NameIDFormat&gt;&lt;md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.com/idp/endpoint/HttpPost"/&gt;&lt;md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://contoso.com/idp/endpoint/HttpRedirect"/&gt;&lt;/md:IDPSSODescriptor&gt;&lt;/md:EntityDescriptor&gt;\]\]&gt;        &lt;/Item&gt;\
-          &lt;/Metadata&gt;       \
-          &lt;CryptographicKeys&gt;\
-            &lt;Key Id="SamlAssertionSigning" StorageReferenceId="ContosoIdpSamlCert"/&gt;\
-            &lt;Key Id="SamlMessageSigning" StorageReferenceId="
-    ContosoIdpSamlCert "/&gt;\
-          &lt;/CryptographicKeys&gt;\
-          &lt;OutputClaims&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="SAML
-    Idp" /&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given\_name"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family\_name"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="email"
-     PartnerClaimType="email"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/&gt;\
-            &lt;OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/&gt;\
-          &lt;/OutputClaims&gt;\
-          &lt;OutputClaimsTransformations&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/&gt;\
-            &lt;OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/&gt;\
-          &lt;/OutputClaimsTransformations&gt;\
-          &lt;UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/&gt;\
-        &lt;/TechnicalProfile&gt;\
-      &lt;/TechnicalProfiles&gt;\
-    &lt;/ClaimsProvider&gt;
+
+```xml
+
+    <ClaimsProvider>
+      <Domain>contoso</Domain>
+      <DisplayName>Contoso</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Contoso">
+          <DisplayName>Contoso</DisplayName>
+          <Description>Login with your Contoso
+    account</Description>
+          <Protocol Name="SAML2"/>
+          <Metadata>
+            <Item Key="RequestsSigned">false</Item>
+            <Item Key="WantsEncryptedAssertions">false</Item>
+            <Item Key="PartnerEntity">
+    <![CDATA[ <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.com" validUntil="2026-10-05T23:57:13.854Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIErDCCA….qY9SjVXdu7zy8tZ+LqnwFSYIJ4VkE9UR1vvvnzO</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.com/idp/endpoint/HttpPost"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://contoso.com/idp/endpoint/HttpRedirect"/></md:IDPSSODescriptor></md:EntityDescriptor>]]>        </Item>
+          </Metadata>       
+          <CryptographicKeys>
+            <Key Id="SamlAssertionSigning" StorageReferenceId="ContosoIdpSamlCert"/>
+            <Key Id="SamlMessageSigning" StorageReferenceId="
+    ContosoIdpSamlCert "/>
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="userId"/>
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="SAML
+    Idp" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name"/>
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name"/>
+            <OutputClaim ClaimTypeReferenceId="email"
+     PartnerClaimType="email"/>
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/>
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp"/>
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+```
 
 3.  Configure basic settings
 
-    a.  ClaimsProvider/Domain - Drives the value that can be passed in
+    1.  ClaimsProvider/Domain - Drives the value that can be passed in
         to
-        [domain\_hint](http://www.cloudidentity.com/blog/2014/11/17/skipping-the-home-realm-discovery-page-in-azure-ad/)
+        [domain\hint](http://www.cloudidentity.com/blog/2014/11/17/skipping-the-home-realm-discovery-page-in-azure-ad/)
         query string parameter, so make it url friendly, i.e. lowercase
         only, no spaces, only alphanumerical.
 
-    b.  ClaimsProvider/DisplayName – Currently not displayed anywhere
+    2.  ClaimsProvider/DisplayName – Currently not displayed anywhere
 
-    c.  TechnicalProfile@Id – Unique identifier for the technical
+    3.  TechnicalProfile@Id – Unique identifier for the technical
         profile, it is referenced elsewhere in the policy (see “Add the
         SAML Claims Provider to the User Journey”).
 
-    d.  TechnicalProfile/DisplayName - Displayed as the button's caption
+    4.  TechnicalProfile/DisplayName - Displayed as the button's caption
         in the sign in screen.
 
-        ![](media/image1.png){width="2.2478258967629046in"
-        height="0.5108038057742782in"}
+        ![](media/idpsaml01.png)
 
-    e.  TechnicalProfile/Description – Currently not displayed anywhere
+    5.  TechnicalProfile/Description – Currently not displayed anywhere
 
 4.  Configure Metadata section
 
-    a.  PartnerEntity – Either the URL to the metadata endpoint or the
-        metadata itself encapsulated by &lt;!\[CDATA\[ *…metadata…*
-        \]\]&gt;
+    1.  PartnerEntity – Either the URL to the metadata endpoint or the
+        metadata itself encapsulated by <!\[CDATA\[ *…metadata…*
+        \]\]\>;
 
-    b.  Configure OutputClaims - Map each of the claims in this section
+    2.  Configure OutputClaims - Map each of the claims in this section
         to a claim in the SAML token response.
 
-        i.  ClaimTypeReferenceId is the name of the property in B2C, do
+        1.  ClaimTypeReferenceId is the name of the property in B2C, do
             not tweak these.
 
-        ii. For each of those, set either the DefaultValue or the
+        2. For each of those, set either the DefaultValue or the
             PartnerClaimType.
 
 5.  Upload Certs - These are the certificates used to sign the SAML
     request and message. Even though we’ve configured the Claims
     Provider to not sign these, a certificate must still be provided.
 
-    a.  (If you don’t have a cert already) Create the cert using
+    1.  (If you don’t have a cert already) Create the cert using
         makecert
         (http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
 
-        i.  makecert -r -pe -n "CN=idpsaml.yourtenant.onmicrosoft.com"
+        1.  makecert -r -pe -n "CN=idpsaml.yourtenant.onmicrosoft.com"
             -a sha256 -sky signature -len 2048 -e 12/21/2018 -sr
             CurrentUser -ss My ContosoIdpSamlCert.cer
 
-        ii. Go to cert store “Manage User Certificates” &gt; Current
+        2. Go to cert store “Manage User Certificates” &gt; Current
             User &gt; Personal &gt; Certificates &gt;
             idpsaml.yourtenant.onmicrosoft.com
 
-        iii. Right click &gt; All Tasks &gt; Export
+        3. Right click &gt; All Tasks &gt; Export
 
-        iv. Yes, export the private key
+        4. Yes, export the private key
 
-        v.  Defaults (PFX and first checkbox)
+        5.  Defaults (PFX and first checkbox)
 
-    b.  Open Powershell
+    2.  Open Powershell
 
-    c.  Go to ExploreAdmin
+    3.  Go to ExploreAdmin
 
-    d.  Import-Module ExploreAdmin.dll (if it fails, it might be because
+    4.  Import-Module ExploreAdmin.dll (if it fails, it might be because
         the dll hasn’t been unblocked)
 
-    e.  Run New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
+    5.  Run New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
         -CertificateId ContosoIdpSamlCert -CertificateFileName path
         -CertificatePassword password
 
-        i.  When you run the command, make sure you sign in with the
+        1.  When you run the command, make sure you sign in with the
             onmicrosoft.com account local to the tenant.
 
-        ii. It’ll ask you for MFA
+        2. It’ll ask you for MFA
 
 6.  Save your changes and upload updated policy
 
-    a.  This time, make sure you check the *Overwrite the policy if it
+    1.  This time, make sure you check the *Overwrite the policy if it
         exists* checkbox.
 
-    b.  At this point, this will not have any effect, the intent of
+    2.  At this point, this will not have any effect, the intent of
         uploading is confirming that what you’ve added thus far doesn’t
         have any issues.
 
@@ -205,16 +208,16 @@ Journey.
 4.  In the &lt;OrchestrationStep&gt; with Order=”2”, add a new
     &lt;ClaimsExchange&gt;
 
-    a.  Set the Id following the same convention as the others
+    1.  Set the Id following the same convention as the others
         *\[ClaimProviderName\]Exchange*
 
-    b.  Set the TechnicalProfileReferenceId to the same Id value for the
+    2.  Set the TechnicalProfileReferenceId to the same Id value for the
         Technial Profile you set up in the previous section.
 
 5.  In the &lt;OrchestrationStep&gt; with Order=”1”, add a new
     &lt;ClaimsProviderSelection&gt;
 
-    a.  Set the TargetClaimsExchangeId to the same Id value you set up
+    1.  Set the TargetClaimsExchangeId to the same Id value you set up
         for the ClaimsExchange in the previous step.
 
 6.  Save your changes and upload the updated policy
@@ -240,14 +243,14 @@ that occur. This should only be enabled during development.
 2.  Add the following attributes to the &lt;TrustFrameworkPolicy&gt;
     element:
 
-    a.  DeploymentMode=”Development”
+    1.  DeploymentMode=”Development”
 
-    b.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=&lt;guid&gt;"
+    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=<guid\>"
 
-        i.  Replace &lt;guid&gt; with an actual GUID
+        1.  Replace &lt;guid&gt; with an actual GUID
 
 This will allow you to troubleshoot by going to
-https://b2crecorder.azurewebsites.net/trace\_102.html?id=&lt;guid&gt;
+https://b2crecorder.azurewebsites.net/trace\_102.html?id=<guid\>
 
 Policy Reference
 ================
@@ -255,8 +258,7 @@ Policy Reference
 Claims Provider
 ---------------
 
-![](media/image2.png){width="3.688976377952756in"
-height="2.4763779527559056in"}
+![](media/idpsaml02.png)
 
 Identity providers, attribute providers, attribute verifiers, directory
 provider, MFA provider, self-asserted attribute provider, etc. are all
@@ -300,50 +302,27 @@ following XML elements:
 
 The following XML snippet illustrates how to define a claim provider:
 
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
+```xml
+<?xml version="1.0" encoding="utf-8"?>
 
-&lt;TrustFrameworkPolicy
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-
-xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-
-PolicySchemaVersion="0.3.0.0"
-
-…&gt;
-
-…
-
-&lt;ClaimsProviders&gt;
-
-&lt;ClaimsProvider&gt;
-
-&lt;DisplayName&gt;Some Claims Provider&lt;/DisplayName&gt;
-
-&lt;TechnicalProfiles&gt;
-
-&lt;TechnicalProfile …&gt;
-
-…
-
-&lt;/TechnicalProfile&gt;
-
-…
-
-&lt;/TechnicalProfiles&gt;
-
-&lt;/ClaimsProvider&gt;
-
-…
-
-&lt;/ClaimsProviders&gt;
-
-…
-
-&lt;/TrustFrameworkPolicy&gt;
-
-[[]{#_Toc454543966 .anchor}]{#_Ref444783550 .anchor}
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" …>
+  …
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Some Claims Provider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile …>
+          …
+        </TechnicalProfile>
+        …
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    …
+  </ClaimsProviders>
+  …
+</TrustFrameworkPolicy>
+```
 
 Technical Profile
 -----------------
@@ -405,9 +384,9 @@ contact Azure AD B2C Premium services.
 The *TechnicalProfiles* section of the above *ClaimsProviders* XML
 element contains the following XML element:
 
-  XML element          Occurrences   Description
-  -------------------- ------------- -------------------------------------------------------------
-  *TechnicalProfile*   0:n           Define a technical profile supported by the claim provider.
+|XML element|Occurrences|Description|
+|-----------|--------|--------------------------------------|
+|*TechnicalProfile*|0:n|Define a technical profile supported by the claim provider.|
 
 Each *TechnicalProfile* XML element contains the following attribute:
 
@@ -798,48 +777,26 @@ XML elements in the above table contain the following attribute:
 The following XML snippet illustrates how to define a technical profile
 for a claim provider:
 
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-
-&lt;TrustFrameworkPolicy
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-
-xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-
-PolicySchemaVersion="0.3.0.0"
-
-…&gt;
-
-…
-
-&lt;ClaimsProviders&gt;
-
-&lt;ClaimsProvider&gt;
-
-&lt;DisplayName&gt;Some Claims Provider&lt;/DisplayName&gt;
-
-&lt;TechnicalProfiles&gt;
-
-&lt;TechnicalProfile …&gt;
-
-…
-
-&lt;/TechnicalProfile&gt;
-
-…
-
-&lt;/TechnicalProfiles&gt;
-
-&lt;/ClaimsProvider&gt;
-
-…
-
-&lt;/ClaimsProviders&gt;
-
-…
-
-&lt;/TrustFrameworkPolicy&gt;
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" …>
+  …
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Some Claims Provider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile …>
+          …
+        </TechnicalProfile>
+        …
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    …
+  </ClaimsProviders>
+  …
+</TrustFrameworkPolicy>
+```
 
 **The next sections further detail how to specify adequate technical
 profiles depending on the nature of the claims provider.** It more
@@ -869,26 +826,26 @@ If you’re not familiar with all of these concepts, the critical aspects
 of SAML 2.0 are covered in detail in the following four normative
 documents:
 
-1.  [<span style="font-variant:small-caps;">Assertions and Protocols for
+1.  [Assertions and Protocols for
     the OASIS Security Assertion Markup Language
-    (SAML) V2.0</span>](http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf)[^1]
+    (SAML) V2.0](http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf)[^1]
     (SAMLCore), the core specification.
 
-2.  [<span style="font-variant:small-caps;">Bindings for the OASIS
+2.  [Bindings for the OASIS
     Security Assertion Markup Language
-    (SAML) V2.0</span>](http://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf)[^2]
+    (SAML) V2.0](http://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf)[^2]
     (SAMLBind), which maps the SAML messages onto the standard messaging
     or communication protocols.
 
-3.  [<span style="font-variant:small-caps;">Profiles for the OASIS
+3.  [Profiles for the OASIS
     Security Assertion Markup Language
-    (SAML) V2.0</span>](http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf)[^3]
+    (SAML) V2.0](http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf)[^3]
     (SAMLProf), the use cases or the “*How-to*” in regards to the use of
     SAML in various situations.
 
-4.  And [<span style="font-variant:small-caps;">Conformance Requirements
+4.  And [Conformance Requirements
     for the OASIS Security Assertion Markup Language
-    (SAML) V2.0</span>](http://docs.oasis-open.org/security/saml/v2.0/saml-conformance-2.0-os.pdf)[^4]
+    (SAML) V2.0](http://docs.oasis-open.org/security/saml/v2.0/saml-conformance-2.0-os.pdf)[^4]
     (SAMLConform), the operational modes for the SAML 2.0
     implementations.
 
@@ -1035,205 +992,33 @@ claims, or generate new ones.
 The following XML snippet illustrates a technical profile for a SAML 2.0
 claims provider:
 
-&lt;TechnicalProfile Id="IdP-SAML2-Outbound"&gt;
-
-&lt;DisplayName&gt;Foo IdP&lt;/DisplayName&gt;
-
-&lt;Description&gt;Some suitable description for foo
-IdP&lt;/Description&gt;
-
-&lt;Protocol Name="SAML2" /&gt;
-
-&lt;Metadata&gt;
-
-&lt;Item Key="WantsSignedAssertions"&gt;false&lt;/Item&gt;
-
-&lt;Item Key="TreatUnsolicitedResponseAsRequest"&gt;true&lt;/Item&gt;
-
-&lt;Item Key="ResponsesSigned"&gt;false&lt;/Item&gt;
-
-&lt;Item
-Key="IssuerUri"&gt;https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C\_1A\_casinitiated&lt;/Item&gt;
-
-&lt;Item Key="PartnerEntity"&gt;
-
-&lt;!\[CDATA\[
-
-&lt;md:EntityDescriptor entityID="https://web.dev1.foo.com/saml20"
-
-xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"&gt;
-
-&lt;md:IDPSSODescriptor WantAuthnRequestsSigned="true"
-
-protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"&gt;
-
-&lt;md:KeyDescriptor use="signing"&gt;
-
-&lt;KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig\#"&gt;
-
-&lt;X509Data&gt;
-
-&lt;X509Certificate&gt;MIIF1DCCA7ygAwIBAgIHC4Dr2wGTODMA…15lH8uDLHNp/ctEQ=&lt;/X509Certificate&gt;
-
-&lt;/X509Data&gt;
-
-&lt;/KeyInfo&gt;
-
-&lt;/md:KeyDescriptor&gt;
-
-&lt;md:KeyDescriptor use="encryption"&gt;
-
-&lt;KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig\#"&gt;
-
-&lt;X509Data&gt;
-
-&lt;X509Certificate&gt;MIIF0jCCA7qgAwIBAgIHC4D4+…P4V2neBrOzAQWFo&lt;/X509Certificate&gt;
-
-&lt;/X509Data&gt;
-
-&lt;/KeyInfo&gt;
-
-&lt;md:EncryptionMethod
-Algorithm="http://www.w3.org/2001/04/xmlenc\#rsa-1\_5"/&gt;
-
-&lt;/md:KeyDescriptor&gt;
-
-&lt;md:ArtifactResolutionService
-Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-
-Location="https://web.dev1.foo.com/saml20/soap"
-
-index="0"
-
-isDefault="true"/&gt;
-
-&lt;md:SingleLogoutService
-Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-
-Location="https://web.dev1.foo.com/saml20/slo"/&gt;
-
-&lt;md:SingleLogoutService
-Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-
-Location="https://web.dev1.foo.com/saml20/slo"/&gt;
-
-&lt;md:SingleLogoutService
-Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-
-Location="https://web.dev1.foo.com/saml20/soap"/&gt;
-
-&lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:2.0:nameid-format:persistent&lt;/md:NameIDFormat&gt;
-
-&lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:2.0:nameid-format:transient&lt;/md:NameIDFormat&gt;
-
-&lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress&lt;/md:NameIDFormat&gt;
-
-&lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:2.0:nameid-format:encrypted&lt;/md:NameIDFormat&gt;
-
-&lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified&lt;/md:NameIDFormat&gt;
-
-&lt;md:SingleSignOnService
-Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-
-Location="https://web.dev1.foo.com/saml20/login"/&gt;
-
-&lt;md:SingleSignOnService
-Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-
-Location="https://web.dev1.foo.com/saml20/login"/&gt;
-
-&lt;/md:IDPSSODescriptor&gt;
-
-&lt;md:Organization&gt;
-
-&lt;md:OrganizationName xml:lang="en"&gt;Foo
-Inc.&lt;/md:OrganizationName&gt;
-
-&lt;md:OrganizationDisplayName xml:lang="en"&gt;Foo
-Inc.&lt;/md:OrganizationDisplayName&gt;
-
-&lt;md:OrganizationURL xml:lang="en"/&gt;
-
-&lt;/md:Organization&gt;
-
-&lt;md:ContactPerson contactType="technical"&gt;
-
-&lt;md:Company&gt;Foo Inc.&lt;/md:Company&gt;
-
-&lt;md:GivenName&gt;John&lt;/md:GivenName&gt;
-
-&lt;md:SurName&gt;Doe&lt;/md:SurName&gt;
-
-&lt;md:EmailAddress&gt;john.doe@foo.com&lt;/md:EmailAddress&gt;
-
-&lt;md:TelephoneNumber&gt;4254166431&lt;/md:TelephoneNumber&gt;
-
-&lt;/md:ContactPerson&gt;
-
-&lt;/md:EntityDescriptor&gt;
-
-\]\]&gt;
-
-&lt;/Item&gt;
-
-&lt;/Metadata&gt;
-
-&lt;InputClaims /&gt;
-
-&lt;OutputClaims&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AccessLevel"
-PartnerClaimType="accessLevel" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AddressCity"
-PartnerClaimType="city" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="GivenName" PartnerClaimType="cn"
-/&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="Email" PartnerClaimType="email"
-/&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="Gender" PartnerClaimType="gender"
-/&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="MiddleName"
-PartnerClaimType="middleName" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AddressZip"
-PartnerClaimType="postalCode" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="SurName" PartnerClaimType="sn"
-/&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AddressState"
-PartnerClaimType="stateCode" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AddressLine2"
-PartnerClaimType="streetAddressLine2" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AddressLine1"
-PartnerClaimType="streetAddressLine1" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="UserId"
-PartnerClaimType="assertionSubjectName" /&gt; 
-
-&lt;/OutputClaims&gt;
-
-&lt;/TechnicalProfile&gt;
-
-[^1]: <span style="font-variant:small-caps;">Assertions and Protocols
-    for the OASIS Security Assertion Markup Language (SAML) V2.0</span>:
-    http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf
-
-[^2]: <span style="font-variant:small-caps;">Bindings for the OASIS
-    Security Assertion Markup Language (SAML) V2.0</span>:
-    http://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf
-
-[^3]: <span style="font-variant:small-caps;">Profiles for the OASIS
-    Security Assertion Markup Language (SAML) V2.0</span>:
-    http://docs.oasis-open.org/security/saml/v2.0/saml-profiles-2.0-os.pdf
-
-[^4]: <span style="font-variant:small-caps;">Conformance Requirements
-    for the OASIS Security Assertion Markup Language (SAML) V2.0</span>:
-    http://docs.oasis-open.org/security/saml/v2.0/saml-conformance-2.0-os.pdf
+```xml
+<TechnicalProfile Id="IdP-SAML2-Outbound">
+    <DisplayName>Foo IdP</DisplayName>
+    <Description>Some suitable description for foo
+IdP</Description>
+    <Protocol Name="SAML2" />
+    <Metadata>
+        <Item Key="WantsSignedAssertions">false</Item>
+        <Item Key="TreatUnsolicitedResponseAsRequest">true</Item>
+        <Item Key="ResponsesSigned">false</Item>
+        <Item Key="IssuerUri">https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C\_1A\_casinitiated</Item>
+        <Item Key="PartnerEntity"><!\[CDATA\[<md:EntityDescriptor entityID="https://web.dev1.foo.com/saml20" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"><md:IDPSSODescriptor WantAuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="signing"><KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig\#"><X509Data><X509Certificate>MIIF1DCCA7ygAwIBAgIHC4Dr2wGTODMA…15lH8uDLHNp/ctEQ=</X509Certificate></X509Data></KeyInfo></md:KeyDescriptor><md:KeyDescriptor use="encryption"><KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig\#"><X509Data><X509Certificate>MIIF0jCCA7qgAwIBAgIHC4D4+…P4V2neBrOzAQWFo</X509Certificate></X509Data></KeyInfo><md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc\#rsa-1\_5"/></md:KeyDescriptor><md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://web.dev1.foo.com/saml20/soap" index="0" isDefault="true"/><md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://web.dev1.foo.com/saml20/slo"/><md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://web.dev1.foo.com/saml20/slo"/><md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://web.dev1.foo.com/saml20/soap"/><md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:encrypted</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://web.dev1.foo.com/saml20/login"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://web.dev1.foo.com/saml20/login"/></md:IDPSSODescriptor><md:Organization><md:OrganizationName xml:lang="en">Foo Inc.</md:OrganizationName><md:OrganizationDisplayName xml:lang="en">Foo Inc.</md:OrganizationDisplayName><md:OrganizationURL xml:lang="en"/></md:Organization><md:ContactPerson contactType="technical"><md:Company>Foo Inc.</md:Company><md:GivenName>John</md:GivenName><md:SurName>Doe</md:SurName><md:EmailAddress>john.doe@foo.com</md:EmailAddress><md:TelephoneNumber>4254166431</md:TelephoneNumber></md:ContactPerson></md:EntityDescriptor>\]\]></Item>
+    </Metadata>
+    <InputClaims />
+    <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="AccessLevel" PartnerClaimType="accessLevel" />
+        <OutputClaim ClaimTypeReferenceId="AddressCity" PartnerClaimType="city" />
+        <OutputClaim ClaimTypeReferenceId="GivenName" PartnerClaimType="cn" />
+        <OutputClaim ClaimTypeReferenceId="Email" PartnerClaimType="email" />
+        <OutputClaim ClaimTypeReferenceId="Gender" PartnerClaimType="gender" />
+        <OutputClaim ClaimTypeReferenceId="MiddleName" PartnerClaimType="middleName" />
+        <OutputClaim ClaimTypeReferenceId="AddressZip" PartnerClaimType="postalCode" />
+        <OutputClaim ClaimTypeReferenceId="SurName" PartnerClaimType="sn" />
+        <OutputClaim ClaimTypeReferenceId="AddressState" PartnerClaimType="stateCode" />
+        <OutputClaim ClaimTypeReferenceId="AddressLine2" PartnerClaimType="streetAddressLine2" />
+        <OutputClaim ClaimTypeReferenceId="AddressLine1" PartnerClaimType="streetAddressLine1" />
+        <OutputClaim ClaimTypeReferenceId="UserId" PartnerClaimType="assertionSubjectName" /> 
+</OutputClaims>
+</TechnicalProfile>
+```
