@@ -138,7 +138,7 @@ add the OIDC IdP.
 
         2. response\_types
 
-5.  Upload Client Secret - These is the client secret sent to the Identity provider.
+5.  Upload Client Secret - This is the client secret sent to the Identity provider.
 
     1.  Open Powershell
 
