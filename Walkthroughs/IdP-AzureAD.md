@@ -87,12 +87,12 @@ do you want. See the sections below for more details on each setup.
 1.  Configure Metadata section as follows
 
     1.  METADATA -
-        https://login.windows.net/&lt;tenantname&gt;/.well-known/openid-configuration
+        https://login.windows.net/<tenantname\>/.well-known/openid-configuration
 
     2.  authorization\_endpoint -
         https://login.windows.net/common/oauth2/authorize
 
-    3.  ProviderName - https://sts.windows.net/&lt;tenantid&gt;/
+    3.  ProviderName - https://sts.windows.net/<tenantid\>/
 
         1.  You can retrieve the tenant ID by navigating to the Metadata
             URL from (a) above and retrieving the value from the
@@ -113,13 +113,13 @@ do you want. See the sections below for more details on each setup.
 1.  Configure Metadata section
 
     1.  METADATA -
-        https://login.windows.net/&lt;tenantname&gt;/v2.0/.well-known/openid-configuration
+        https://login.windows.net/<tenantname\>/v2.0/.well-known/openid-configuration
 
     2.  authorization\_endpoint -
         https://login.windows.net/common/oauth2/v2.0/authorize
 
     3.  ProviderName -
-        https://login.microsoftonline.com/&lt;tenantid&gt;/v2.0
+        https://login.microsoftonline.com/<tenantid\>/v2.0
 
         1.  You can retrieve the tenant ID by navigating to the Metadata
             URL from (a) above and retrieving the value from the
