@@ -27,7 +27,7 @@ Walkthrough
 Setup
 -----
 
-Make sure you first complete the Basic Setup tutorial.
+Make sure you first complete the [Basic Setup tutorial](BasicSetup.md).
 
 Register the App in the OIDC IdP
 --------------------------------
@@ -138,9 +138,7 @@ add the OIDC IdP.
 
         2. response\_types
 
-5.  Upload Client Secret - These are the certificates used to sign the
-    SAML request and message. Even though we’ve configured the Claims
-    Provider to not sign these, a certificate must still be provided.
+5.  Upload Client Secret - These is the client secret sent to the Identity provider.
 
     1.  Open Powershell
 
