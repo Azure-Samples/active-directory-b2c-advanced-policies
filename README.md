@@ -1,9 +1,7 @@
-# Attention: Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the Facebook Technical Profile:
-
-"<!-- The Facebook required HTTP GET method, but the access token response is in JSON format from 3/27/2017 -->"
-
-"<Item Key="AccessTokenResponseFormat">json</Item>"
-
+# Attention: 
+Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the ```
+<Item Key="AccessTokenResponseFormat">json</Item>
+```
 
 # B2C Training tools
 
