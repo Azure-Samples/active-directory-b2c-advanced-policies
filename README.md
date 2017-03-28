@@ -1,6 +1,7 @@
 # Attention: 
-Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the ```xml
-<Item Key="AccessTokenResponseFormat">json</Item>
+Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the
+```
+<Item Key="AccessTokenResponseFormat"<json</Item>
 ```
 
 # B2C Training tools
