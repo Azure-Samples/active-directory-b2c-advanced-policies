@@ -1,7 +1,7 @@
 # Attention: 
 On 3/27/2017, Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the Facebook Technical Profile:
 ```
-<Item Key="AccessTokenResponseFormat"<json</Item>
+<Item Key="AccessTokenResponseFormat">json</Item>
 ```
 
 # B2C Training tools
