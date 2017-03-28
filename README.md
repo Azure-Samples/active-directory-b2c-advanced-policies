@@ -1,5 +1,5 @@
 # Attention: 
-Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the ```
+Facebook made an a change to the method by which they send responses. The following entry must be included in the metadata section of the ```xml
 <Item Key="AccessTokenResponseFormat">json</Item>
 ```
 
