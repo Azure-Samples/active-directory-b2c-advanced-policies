@@ -48,72 +48,70 @@ add the capability for your tenant to issue SAML tokens.
 3.  Inside of that &lt;ClaimProvider&gt; add the following
     &lt;TechnicalProfile&gt; right after the one with Id=”JwtIssuer”:
 
-    &lt;TechnicalProfile Id="Saml2AssertionIssuer"&gt;\
-      &lt;DisplayName&gt;Token Issuer&lt;/DisplayName&gt;\
-      &lt;Protocol Name="None"/&gt;\
-      &lt;OutputTokenFormat&gt;SAML2&lt;/OutputTokenFormat&gt;
-
-    &lt;Metadata&gt;\
-      
-    &lt;Item Key="IssuerUri"&gt;https://login.microsoftonline.com/te/contoso.onmicrosoft.com/saml&lt;/Item&gt;\
-      &lt;/Metadata&gt;\
-      &lt;CryptographicKeys&gt;\
-        &lt;Key Id="SamlAssertionSigning" StorageReferenceId="YourAppNameSamlCert"/&gt;\
-        &lt;Key Id="SamlMessageSigning" StorageReferenceId="
-    YourAppNameSamlCert "/&gt;\
-      &lt;/CryptographicKeys&gt;\
-      &lt;InputClaims/&gt;\
-      &lt;OutputClaims/&gt;\
-    &lt;/TechnicalProfile&gt;
+```xml
+<TechnicalProfile Id="Saml2AssertionIssuer">
+  <DisplayName>Token Issuer</DisplayName>
+  <Protocol Name="None"/>
+  <OutputTokenFormat>SAML2</OutputTokenFormat>
+  <Metadata>
+    <Item Key="IssuerUri">https://login.microsoftonline.com/te/contoso.onmicrosoft.com/saml</Item>
+  </Metadata>
+  <CryptographicKeys>
+    <Key Id="SamlAssertionSigning" StorageReferenceId="YourAppNameSamlCert" />
+    <Key Id="SamlMessageSigning" StorageReferenceId="YourAppNameSamlCert "/>
+  </CryptographicKeys>
+  <InputClaims/>
+  <OutputClaims/>
+</TechnicalProfile>
+```
 
 4.  Configure Metadata
 
-    a.  IssuerUri – Update *contoso.onmicrosoft.com* to your tenant
+    1.  IssuerUri – Update *contoso.onmicrosoft.com* to your tenant
 
 5.  Upload Certs - These are the certificates used to sign the SAML
     response.
 
-    a.  (If you don’t have a cert already) Create the cert using
-        makecert
-        (http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
+    1.  (If you don’t have a cert already) Create the cert [using
+        makecert](http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
 
-        i.  makecert -r -pe -n
+        1.  makecert -r -pe -n
             "CN=yourappname.yourtenant.onmicrosoft.com" -a sha256 -sky
             signature -len 2048 -e 12/21/2018 -sr CurrentUser -ss My
             YourAppNameSamlCert.cer
 
-        ii. Go to cert store “Manage User Certificates” &gt; Current
+        2. Go to cert store “Manage User Certificates” &gt; Current
             User &gt; Personal &gt; Certificates &gt;
             yourappname.yourtenant.onmicrosoft.com
 
-        iii. Right click &gt; All Tasks &gt; Export
+        3. Right click &gt; All Tasks &gt; Export
 
-        iv. Yes, export the private key
+        4. Yes, export the private key
 
-        v.  Defaults (PFX and first checkbox)
+        5.  Defaults (PFX and first checkbox)
 
-    b.  Open Powershell
+    2.  Open Powershell
 
-    c.  Go to ExploreAdmin
+    3.  Go to ExploreAdmin
 
-    d.  Import-Module ExploreAdmin.dll (if it fails, it might be because
+    4.  Import-Module ExploreAdmin.dll (if it fails, it might be because
         the dll hasn’t been unblocked)
 
-    e.  Run New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
+    5.  Run New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
         -CertificateId YourAppNameSamlCert -CertificateFileName path
         -CertificatePassword password
 
-        i.  When you run the command, make sure you sign in with the
+        1.  When you run the command, make sure you sign in with the
             onmicrosoft.com account local to the tenant.
 
-        ii. It’ll ask you for MFA
+        2. It’ll ask you for MFA
 
 6.  Save your changes and upload updated policy
 
-    a.  This time, make sure you check the *Overwrite the policy if it
+    1.  This time, make sure you check the *Overwrite the policy if it
         exists* checkbox.
 
-    b.  At this point, this will not have any effect, the intent of
+    2.  At this point, this will not have any effect, the intent of
         uploading is confirming that what you’ve added thus far doesn’t
         have any issues.
 
@@ -149,68 +147,57 @@ journey that will be the one issuing this SAML tokens.
 
 10. Replace its &lt;RelayingParty&gt; element with the following:
 
-    &lt;RelyingParty&gt;\
-      &lt;DefaultUserJourney ReferenceId="SignInSamlSF"/&gt;\
-      &lt;TechnicalProfile Id="PolicyProfile"&gt;\
-        &lt;DisplayName&gt;PolicyProfile&lt;/DisplayName&gt;\
-        &lt;Protocol Name="SAML2"/&gt;\
-        &lt;Metadata&gt;\
-          &lt;Item Key="PartnerEntity"&gt; &lt;!\[CDATA\[
-
-    &lt;md:EntityDescriptor
-    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-    entityID="https://contoso.3dmetrics.com"
-    validUntil="2026-12-27T23:42:22.079Z"
-    xmlns:ds="http://www.w3.org/2000/09/xmldsig\#"&gt;
-
-    &lt;md:SPSSODescriptor WantAssertionsSigned="true"
-    protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"&gt;
-
-    &lt;md:NameIDFormat&gt;urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified&lt;/md:NameIDFormat&gt;
-
-    &lt;md:AssertionConsumerService
-    Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    Location="https://contoso.3dmetrics.com/samlp " index="0"
-    isDefault="true"/&gt;
-
-    &lt;/md:SPSSODescriptor&gt;
-
-    &lt;/md:EntityDescriptor&gt;
-
-    \]\]&gt; &lt;/Item&gt;\
-          &lt;Item Key="Saml2AttributeEncodingInfo"&gt;\
-    &lt;!\[CDATA\[ &lt;saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"&gt;&lt;saml2:Attribute FriendlyName="UserPrincipalName" Name="UserId"NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"&gt;&lt;saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string"&gt;&lt;/saml2:AttributeValue&gt;&lt;/saml2:Attribute&gt;&lt;/saml2:AttributeStatement&gt; \]\]&gt;      &lt;/Item&gt;\
-          &lt;Item Key="Saml11AttributeEncodingInfo"&gt;\
-    &lt;!\[CDATA\[ &lt;saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"&gt;&lt;saml:Attribute AttributeName="ImmutableID"AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05"&gt;&lt;saml:AttributeValue&gt;&lt;/saml:AttributeValue&gt;&lt;/saml:Attribute&gt;&lt;saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims"&gt;&lt;saml:AttributeValue&gt;&lt;/saml:AttributeValue&gt;&lt;/saml:Attribute&gt;&lt;/saml:AttributeStatement&gt; \]\]&gt;      &lt;/Item&gt;\
-          &lt;Item Key="client\_id"&gt;customClientId&lt;/Item&gt;\
-        &lt;/Metadata&gt;\
-        &lt;OutputClaims&gt;\
-          &lt;OutputClaim ClaimTypeReferenceId="displayName"/&gt;\
-          &lt;OutputClaim ClaimTypeReferenceId="givenName"/&gt;\
-          &lt;OutputClaim ClaimTypeReferenceId="surname"/&gt;\
-          &lt;OutputClaim ClaimTypeReferenceId="email"/&gt;\
-          &lt;OutputClaim ClaimTypeReferenceId="userPrincipalName"/&gt;\
-          &lt;OutputClaim ClaimTypeReferenceId="identityProvider"/&gt;\
-        &lt;/OutputClaims&gt;\
-        &lt;SubjectNamingInfo ClaimType="userPrincipalName"/&gt;\
-      &lt;/TechnicalProfile&gt;\
-    &lt;/RelyingParty&gt;
+```xml
+    <RelyingParty>
+      <DefaultUserJourney ReferenceId="SignInSamlSF"/>
+      <TechnicalProfile Id="PolicyProfile">
+        <DisplayName>PolicyProfile</DisplayName>
+        <Protocol Name="SAML2"/>
+        <Metadata>
+          <Item Key="PartnerEntity"><![CDATA[
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.3dmetrics.com" validUntil="2026-12-27T23:42:22.079Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:SPSSODescriptor WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+<md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+<md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.3dmetrics.com/samlp " index="0" isDefault="true"/> </md:SPSSODescriptor> </md:EntityDescriptor>
+    ]]>
+		  </Item>
+          <Item Key="Saml2AttributeEncodingInfo"><![CDATA[ 
+<saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"><saml2:Attribute FriendlyName="UserPrincipalName" Name="UserId"NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"><saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string"></saml2:AttributeValue></saml2:Attribute></saml2:AttributeStatement> 
+	]]>
+	      </Item>
+          <Item Key="Saml11AttributeEncodingInfo"><![CDATA[ 
+<saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"><saml:Attribute AttributeName="ImmutableID"AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05"><saml:AttributeValue></saml:AttributeValue></saml:Attribute><saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims"><saml:AttributeValue></saml:AttributeValue></saml:Attribute></saml:AttributeStatement> 
+	]]>
+	      </Item>
+          <Item Key="client_id">customClientId</Item>
+        </Metadata>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="displayName"/>
+          <OutputClaim ClaimTypeReferenceId="givenName"/>
+          <OutputClaim ClaimTypeReferenceId="surname"/>
+          <OutputClaim ClaimTypeReferenceId="email"/>
+          <OutputClaim ClaimTypeReferenceId="userPrincipalName"/>
+          <OutputClaim ClaimTypeReferenceId="identityProvider"/>
+        </OutputClaims>
+        <SubjectNamingInfo ClaimType="userPrincipalName"/>
+      </TechnicalProfile>
+</RelyingParty>
+```
 
 11. Update the &lt;Item&gt; with Key=”PartnerEntity“ as follows:
 
-    a.  Set the entityId attribute of &lt;md:EntityDescriptor&gt; to the
+    1.  Set the entityId attribute of &lt;md:EntityDescriptor&gt; to the
         SAML RP’s identifier / Entity Id
 
-    b.  Set the Location attribute of
+    2.  Set the Location attribute of
         &lt;md:AssertionConsumerService&gt; to the SAML RP’s Reply URL /
         Assertion Consumer Service (ACS) URL
 
-    c.  Alternatively, you can replace the entire value of the
+    3.  Alternatively, you can replace the entire value of the
         &lt;Item&gt; element with the URL to the SAML RP’s metadata if
         such exists
 
-        i.  e.g &lt;Item
-            Key=”PartnerEntity”&gt;https://app.com/metadata&lt;/Item&gt;
+        1.  e.g <Item Key=”PartnerEntity”\>https://app.com/metadata<Item\>;
 
 12. Save your changes and upload this new policy.
 
@@ -224,15 +211,15 @@ provide some or all the following data points:
 
 -   **Metadata:**
 
-    https://login.microsoftonline.com/te/*&lt;tenantName&gt;*.onmicrosoft.com/b2c\_1a\_&lt;*policyName*&gt;/Samlp/metadata
+    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/b2c\_1a\<policyName\>/Samlp/metadata
 
 -   **Issuer:**
 
-    https://login.microsoftonline.com/te/*&lt;tenantName&gt;*.onmicrosoft.com/B2C\_1A\_&lt;*policyName*&gt;
+    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>
 
 -   **Login URL / SAML Endpoint / SAML URL: **
 
-    https://login.microsoftonline.com/te/*&lt;tenantName&gt;*.onmicrosoft.com/B2C\_1A\_&lt;*policyName*&gt;/samlp/sso/login
+    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>/samlp/sso/login
 
 -   **Certificate: **
 
@@ -260,14 +247,14 @@ that occur. This should only be enabled during development.
 2.  Add the following attributes to the &lt;TrustFrameworkPolicy&gt;
     element:
 
-    a.  DeploymentMode=”Development”
+    1.  DeploymentMode=”Development”
 
-    b.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=&lt;guid&gt;"
+    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=<guid\>"
 
-        i.  Replace &lt;guid&gt; with an actual GUID
+        1.  Replace &lt;guid&gt; with an actual GUID
 
 This will allow you to troubleshoot by going to
-https://b2crecorder.azurewebsites.net/trace\_102.html?id=&lt;guid&gt;
+https://b2crecorder.azurewebsites.net/trace\_102.html?id=<guid\>
 
 Policy Reference
 ================
