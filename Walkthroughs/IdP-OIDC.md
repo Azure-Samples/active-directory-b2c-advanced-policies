@@ -184,6 +184,12 @@ Journey.
 4.  In the &lt;OrchestrationStep&gt; with Order=”2”, add a new
     &lt;ClaimsExchange&gt;
 
+    For example:
+    
+    ```XML
+    <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+    ```
+
     1.  Set the Id following the same convention as the others
         *\[ClaimProviderName\]Exchange*
 
@@ -198,12 +204,11 @@ Journey.
 
 6.  Save your changes and upload the updated policy
 
-7.  Copy the SignUpOrSignIn.xml file
+7.  Copy the SignUpOrSignIn.xml file to a new file.
 
-8.  Rename it match the Id of the new journey you created (i.e.
-    SignUpOrSignInOidc)
+8. Rename the PolicyId to something unique (e.g. SignUpOrSignInOidc).
 
-9.  Modify its PolicyId to a new Guid.
+9. Modify the ReferenceId of the DefaultUserJourney to match the ID of the new user journey you created in the base policy (i.e. SignUpOrSignInOidc).
 
 10. Save your changes and upload this new policy.
 

@@ -1,5 +1,6 @@
-Overview
-========
+# Basic Setup
+
+## Overview
 
 This document will walk you through the initial setup steps to get the
 setup for Azure AD B2C advanced. After completing this setup, you’ll
@@ -7,11 +8,9 @@ have a standard set of advanced policies uploaded and running without
 any extra functionality. Check out the other tutorials for walkthroughs
 on enabling specific advanced scenarios.
 
-Walkthrough
-===========
+## Walkthrough
 
-Setup
------
+### Setup
 
 First, we’ll need to make sure you’ve been enabled for Azure AD B2C
 Advanced functionality and that you have all the tools you’ll need to
@@ -51,7 +50,7 @@ work on advanced policies.
     policies and PowerShell commandlets)
 
     1.  In your browser, navigate to:
-        <https://github.com/beejones/B2CDemoTools>
+        <https://github.com/Azure-Samples/active-directory-b2c-advanced-policies>
 
     2.  Extract the zip files to your disk
 
@@ -131,10 +130,12 @@ accounts (vs social or custom IdPs).
 
 1.  Open Powershell
 
-2.  Got to ExploreAdmin
+2.  Go to ExploreAdmin
 
 3.  Run ./New-AzureADB2CPolicyEngineApplications.ps1 -BasePolicyPath
     &lt;PathOfTheBasePolicyInYourWorkingDirectory&gt;
+    
+    Parakh: What is the base policy?!
 
 Upload Advanced Policies Starter Pack
 -------------------------------------
