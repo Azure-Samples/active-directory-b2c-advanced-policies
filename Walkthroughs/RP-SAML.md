@@ -148,39 +148,42 @@ journey that will be the one issuing this SAML tokens.
 10. Replace its &lt;RelayingParty&gt; element with the following:
 
 ```xml
-    <RelyingParty>
-      <DefaultUserJourney ReferenceId="SignInSamlSF"/>
-      <TechnicalProfile Id="PolicyProfile">
-        <DisplayName>PolicyProfile</DisplayName>
-        <Protocol Name="SAML2"/>
-        <Metadata>
-          <Item Key="PartnerEntity"><![CDATA[
+<RelyingParty>
+  <DefaultUserJourney ReferenceId="SignInSamlSF"/>
+  <TechnicalProfile Id="PolicyProfile">
+    <DisplayName>PolicyProfile</DisplayName>
+    <Protocol Name="SAML2"/>
+    <Metadata>
+      <Item Key="PartnerEntity">
+        <![CDATA[
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.3dmetrics.com" validUntil="2026-12-27T23:42:22.079Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 <md:SPSSODescriptor WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
 <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
 <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.3dmetrics.com/samlp " index="0" isDefault="true"/> </md:SPSSODescriptor> </md:EntityDescriptor>
-    ]]>
-		  </Item>
-          <Item Key="Saml2AttributeEncodingInfo"><![CDATA[ 
+ ]]>
+      </Item>
+      <Item Key="Saml2AttributeEncodingInfo">
+        <![CDATA[ 
 <saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"><saml2:Attribute FriendlyName="UserPrincipalName" Name="UserId"NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"><saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string"></saml2:AttributeValue></saml2:Attribute></saml2:AttributeStatement> 
-	]]>
-	      </Item>
-          <Item Key="Saml11AttributeEncodingInfo"><![CDATA[ 
+ ]]>
+      </Item>
+      <Item Key="Saml11AttributeEncodingInfo">
+        <![CDATA[ 
 <saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"><saml:Attribute AttributeName="ImmutableID"AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05"><saml:AttributeValue></saml:AttributeValue></saml:Attribute><saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims"><saml:AttributeValue></saml:AttributeValue></saml:Attribute></saml:AttributeStatement> 
-	]]>
-	      </Item>
-          <Item Key="client_id">customClientId</Item>
-        </Metadata>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="displayName"/>
-          <OutputClaim ClaimTypeReferenceId="givenName"/>
-          <OutputClaim ClaimTypeReferenceId="surname"/>
-          <OutputClaim ClaimTypeReferenceId="email"/>
-          <OutputClaim ClaimTypeReferenceId="userPrincipalName"/>
-          <OutputClaim ClaimTypeReferenceId="identityProvider"/>
-        </OutputClaims>
-        <SubjectNamingInfo ClaimType="userPrincipalName"/>
-      </TechnicalProfile>
+ ]]>
+      </Item>
+      <Item Key="client_id">customClientId</Item>
+    </Metadata>
+    <OutputClaims>
+      <OutputClaim ClaimTypeReferenceId="displayName"/>
+      <OutputClaim ClaimTypeReferenceId="givenName"/>
+      <OutputClaim ClaimTypeReferenceId="surname"/>
+      <OutputClaim ClaimTypeReferenceId="email"/>
+      <OutputClaim ClaimTypeReferenceId="userPrincipalName"/>
+      <OutputClaim ClaimTypeReferenceId="identityProvider"/>
+    </OutputClaims>
+    <SubjectNamingInfo ClaimType="userPrincipalName"/>
+  </TechnicalProfile>
 </RelyingParty>
 ```
 
@@ -301,20 +304,20 @@ for a SAML 2.0 token issuer:
 
 ```xml
 <TechnicalProfile Id="Saml2AssertionIssuer">
-	<DisplayName>Token Issuer</DisplayName>
-	<Protocol Name="None" />
-	<OutputTokenFormat>SAML2</OutputTokenFormat>
-	<Metadata>
-		<Item Key="IssuerUri">https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C_1A_casinitiated</Item>
-		<Item Key="TokenLifeTimeInSeconds">600</Item>
-	</Metadata>
-	<CryptographicKeys>
-		<Key Id="SamlMessageSigning" StorageReferenceId="B2CSigningCertificate" />
-		<Key Id="SamlAssertionSigning" StorageReferenceId="B2CSigningCertificate" />
-		<Key Id="SamlAssertionDecryption" StorageReferenceId="B2CSigningCertificate" />
-	</CryptographicKeys>
-	<InputClaims />
-	<OutputClaims />
+  <DisplayName>Token Issuer</DisplayName>
+  <Protocol Name="None" />
+  <OutputTokenFormat>SAML2</OutputTokenFormat>
+  <Metadata>
+    <Item Key="IssuerUri">https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C_1A_casinitiated</Item>
+    <Item Key="TokenLifeTimeInSeconds">600</Item>
+  </Metadata>
+  <CryptographicKeys>
+    <Key Id="SamlMessageSigning" StorageReferenceId="B2CSigningCertificate" />
+    <Key Id="SamlAssertionSigning" StorageReferenceId="B2CSigningCertificate" />
+    <Key Id="SamlAssertionDecryption" StorageReferenceId="B2CSigningCertificate" />
+  </CryptographicKeys>
+  <InputClaims />
+  <OutputClaims />
 </TechnicalProfile>
 ```
 
@@ -383,6 +386,7 @@ following attribute:
 
 The *ContentDefinitionParameters* XML element contains the following XML
 elements:
+
 |XML element|Occurrences|Description|
 |-----------|-----------|-----------|
 |*ContentDefinitionParameter*|0:n|Define a key value pair that is to be appended to the query string of content definition load Uri.<br/>Type: String|
@@ -466,45 +470,45 @@ how to define a relying party:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"  PublicPolicyUri="http://example.com"  PolicySchemaVersion="0.3.0.0"  TenantId="contoso369b2c.onmicrosoft.com"  PolicyId="B2C\_1A\_MsolActive">
-	<BasePolicy>
-		<TenantId>contoso369b2c.onmicrosoft.com</TenantId>
-		<PolicyId>B2C\_1A\_base-v2</PolicyId>
-	</BasePolicy>
-	<RelyingParty>
-		<DefaultUserJourney ReferenceId="ActiveRST"/>
-		<TechnicalProfile Id="PolicyProfile">
-			<DisplayName>WsFedProfile</DisplayName>
-			<Protocol Name="WsFed" />
-			<OutputTokenFormat>SAML11</OutputTokenFormat>
-			<SubjectAuthenticationRequirements TimeToLive="4" ResetExpiryWhenTokenIssued="false" />
-			<Metadata>
-				<Item Key="Saml2AttributeEncodingInfo">
-					<!\[CDATA\[  					<saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
-						<saml2:Attribute FriendlyName="UserPrincipalName"  Name="IDPEmail"  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-							<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">  							</saml2:AttributeValue>
-						</saml2:Attribute>
-					</saml2:AttributeStatement>  \]\]>
-				</Item>
-				<Item Key="Saml11AttributeEncodingInfo">
-					<!\[CDATA\[  					<saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
-						<saml:Attribute AttributeName="ImmutableID"  AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05">
-							<saml:AttributeValue/>
-						</saml:Attribute>
-						<saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims">
-							<saml:AttributeValue/>
-						</saml:Attribute>
-					</saml:AttributeStatement>  \]\]>
-				</Item>
-				<Item Key="PartnerEntity">https://www.contoso369b2c.com/wp-content/uploads/2015/01/metadata.xml</Item>
-				<Item Key="client\_id">customClientId</Item>
-			</Metadata>
-			<OutputClaims>
-				<OutputClaim ClaimTypeReferenceId="immutableId" PartnerClaimType="ImmutableID" />
-				<OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="UPN" />
-				<OutputClaim ClaimTypeReferenceId="AuthenticationContext" DefaultValue="urn:federation:authentication:windows" />
-			</OutputClaims>
-			<SubjectNamingInfo ClaimType="immutableId" />
-		</TechnicalProfile>
-	</RelyingParty>
+  <BasePolicy>
+    <TenantId>contoso369b2c.onmicrosoft.com</TenantId>
+    <PolicyId>B2C\_1A\_base-v2</PolicyId>
+  </BasePolicy>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="ActiveRST"/>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>WsFedProfile</DisplayName>
+      <Protocol Name="WsFed" />
+      <OutputTokenFormat>SAML11</OutputTokenFormat>
+      <SubjectAuthenticationRequirements TimeToLive="4" ResetExpiryWhenTokenIssued="false" />
+      <Metadata>
+        <Item Key="Saml2AttributeEncodingInfo">
+          <!\[CDATA\[            <saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
+            <saml2:Attribute FriendlyName="UserPrincipalName"  Name="IDPEmail"  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+              <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">                </saml2:AttributeValue>
+            </saml2:Attribute>
+          </saml2:AttributeStatement>  \]\]>
+        </Item>
+        <Item Key="Saml11AttributeEncodingInfo">
+          <!\[CDATA\[            <saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
+            <saml:Attribute AttributeName="ImmutableID"  AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05">
+              <saml:AttributeValue/>
+            </saml:Attribute>
+            <saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims">
+              <saml:AttributeValue/>
+            </saml:Attribute>
+          </saml:AttributeStatement>  \]\]>
+        </Item>
+        <Item Key="PartnerEntity">https://www.contoso369b2c.com/wp-content/uploads/2015/01/metadata.xml</Item>
+        <Item Key="client\_id">customClientId</Item>
+      </Metadata>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="immutableId" PartnerClaimType="ImmutableID" />
+        <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="UPN" />
+        <OutputClaim ClaimTypeReferenceId="AuthenticationContext" DefaultValue="urn:federation:authentication:windows" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="immutableId" />
+    </TechnicalProfile>
+  </RelyingParty>
 </TrustFrameworkPolicy>
 ```
