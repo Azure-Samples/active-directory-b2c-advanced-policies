@@ -430,8 +430,8 @@ attributes:
 As already introduced, the *OutputClaims* XML elements contain the
 following XML elements:
 
-  XML element     Occurrences   Description
-  --------------- ------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|XML element|Occurrences|Description|
+|-----------|-----------|-----------|
 |*OutputClaim*|0:n|Specify the name of an expected claim type in the supported list for the policy to which the relying party subscribes. This claim serves as an output for the technical profile.|
 
 Each *OutputClaim* XML element contains the following attributes:
