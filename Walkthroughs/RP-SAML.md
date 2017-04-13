@@ -217,11 +217,11 @@ provide some or all the following data points:
 
     https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>
 
--   **Login URL / SAML Endpoint / SAML URL: **
+-   **Login URL / SAML Endpoint / SAML URL:**
 
     https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>/samlp/sso/login
 
--   **Certificate: **
+-   **Certificate:**
 
     This is the YourAppNameSamlCert, but *without* the private key – Do
     not upload the cert you uploaded to B2C via Powershell. Instead, do
@@ -274,34 +274,21 @@ the Azure AD B2C Premium XML schema.
 
 The following keys must or may be present in the *Metadata* XML element:
 
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Key                      Required   Description
-  ------------------------ ---------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  IssuerUri                False      Specify the issuer in the SAML assertion. If not specified, default to something rational.
-                                      
-                                      Type: String
-
-  TokenLifeTimeInSeconds   False      Specify the lifetime of the SAML assertion.
-                                      
-                                      Type: Integer
-
-  RequestOperation         False      Allow if specified to use a remote token issuer service in lieu of the one provided by the Azure AD B2C Premium service. See section § *Using a remote token issuer service*.
-                                      
-                                      Type: String
-                                      
-                                      Value: Must be set to **HttpRequest**.
-
-  client\_secret           False      Specify a cryptographic key to use if a remote token issuer service is being used. Define the key and algorithm.
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Key|Required|Description|
+|---|--------|-----------|
+|IssuerUri|False|Specify the issuer in the SAML assertion. If not specified, default to something rational.<br/>Type: String|
+|TokenLifeTimeInSeconds|False|Specify the lifetime of the SAML assertion.<br/>Type: Integer|
+|RequestOperation|False|Allow if specified to use a remote token issuer service in lieu of the one provided by the Azure AD B2C Premium service. See section § *Using a remote token issuer service*.<br/>Type: String<br/>Value: Must be set to **HttpRequest**.|
+|client\_secret|False|Specify a cryptographic key to use if a remote token issuer service is being used. Define the key and algorithm.|
 
 Similarly, the following keys must or may be present in the
 *CryptographicKeys* XML element:
 
-  Key                       Required   Description
-  ------------------------- ---------- --------------------------------------------------------------------------------------------
-  SamlMessageSigning        True       Specify the X509 certificate (RSA key set) to use to sign SAML messages.
-  SamlAssertionSigning      True       Specify the X509 certificate (RSA key set) to use to sign SAML assertions.
-  SamlAssertionDecryption   True       Specify the X509 certificate (RSA key set) to use to decrypt SAML messages if you have to.
+|Key|Required|Description|
+|---|--------|-----------|
+|SamlMessageSigning|True|Specify the X509 certificate (RSA key set) to use to sign SAML messages.|
+|SamlAssertionSigning|True|Specify the X509 certificate (RSA key set) to use to sign SAML assertions.|
+|SamlAssertionDecryption|True|Specify the X509 certificate (RSA key set) to use to decrypt SAML messages if you have to.|
 
 > **Note** All the above keys may reference the same X509 certificate.
 
@@ -312,47 +299,29 @@ absent here.
 The following XML snippet illustrates how to define a technical profile
 for a SAML 2.0 token issuer:
 
-&lt;TechnicalProfile Id="Saml2AssertionIssuer"&gt;
-
-&lt;DisplayName&gt;Token Issuer&lt;/DisplayName&gt;
-
-&lt;Protocol Name="None" /&gt;
-
-&lt;OutputTokenFormat&gt;SAML2&lt;/OutputTokenFormat&gt;
-
-&lt;Metadata&gt;
-
-&lt;Item
-Key="IssuerUri"&gt;https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C\_1A\_casinitiated&lt;/Item&gt;
-
-&lt;Item Key="TokenLifeTimeInSeconds"&gt;600&lt;/Item&gt;
-
-&lt;/Metadata&gt;
-
-&lt;CryptographicKeys&gt;
-
-&lt;Key Id="SamlMessageSigning"
-StorageReferenceId="B2CSigningCertificate" /&gt;
-
-&lt;Key Id="SamlAssertionSigning"
-StorageReferenceId="B2CSigningCertificate" /&gt;
-
-&lt;Key Id="SamlAssertionDecryption"
-StorageReferenceId="B2CSigningCertificate" /&gt;
-
-&lt;/CryptographicKeys&gt;
-
-&lt;InputClaims /&gt;
-
-&lt;OutputClaims /&gt;
-
-&lt;/TechnicalProfile&gt;
+```xml
+<TechnicalProfile Id="Saml2AssertionIssuer">
+	<DisplayName>Token Issuer</DisplayName>
+	<Protocol Name="None" />
+	<OutputTokenFormat>SAML2</OutputTokenFormat>
+	<Metadata>
+		<Item Key="IssuerUri">https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C_1A_casinitiated</Item>
+		<Item Key="TokenLifeTimeInSeconds">600</Item>
+	</Metadata>
+	<CryptographicKeys>
+		<Key Id="SamlMessageSigning" StorageReferenceId="B2CSigningCertificate" />
+		<Key Id="SamlAssertionSigning" StorageReferenceId="B2CSigningCertificate" />
+		<Key Id="SamlAssertionDecryption" StorageReferenceId="B2CSigningCertificate" />
+	</CryptographicKeys>
+	<InputClaims />
+	<OutputClaims />
+</TechnicalProfile>
+```
 
 Relying Party
 -------------
 
-![](media/image7.png){width="3.6023622047244093in"
-height="2.236220472440945in"}
+![](media/image7.png)
 
 The relying party information chooses the user journey to enforce for
 the current request. It also chooses the list of claims the relying
@@ -372,11 +341,11 @@ policy XML file. This element is optional.
 
 This element contains the following XML elements:
 
-  XML element              Occurrences   Description
-  ------------------------ ------------- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *DefaultUserJourney*     0:1           Define the default user journey for the relying party application.
-  *UserJourneyBehaviors*   0:1           Control the scope of various user journey behaviors.
-  *TechnicalProfile*       0:1           Define a technical profile supported by the relying party application. The technical profile provides in this context a contract for the relying party application to contact Azure AD B2C Premium.
+|XML element|Occurrences|Description|
+|-----------|-----------|-----------|
+|*DefaultUserJourney*|0:1|Define the default user journey for the relying party application.|
+|*UserJourneyBehaviors*|0:1|Control the scope of various user journey behaviors.|
+|*TechnicalProfile*|0:1|Define a technical profile supported by the relying party application. The technical profile provides in this context a contract for the relying party application to contact Azure AD B2C Premium.|
 
 These above *DefaultUserJourney* and *TechnicalProfile* elements must be
 declared for any given *RelyingParty* XML element.
@@ -384,355 +353,158 @@ declared for any given *RelyingParty* XML element.
 The *DefaultUserJourney* XML element contains in turn the following
 attribute:
 
-  Attribute       Required   Description
-  --------------- ---------- ----------------------------------------------------------------------------------------------------------------------------------
-  *ReferenceId*   True       Specify a machine understandable identifier that is used to uniquely reference a particular user journey in the policy XML file.
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*ReferenceId*|True|Specify a machine understandable identifier that is used to uniquely reference a particular user journey in the policy XML file.|
 
 The *UserJourneyBehaviors* XML element contains the following XML
 elements:
 
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  XML element                     Occurrences   Description
-  ------------------------------- ------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *SingleSignOn*                  0:1           Control the scope of the single sign-on (SSO) behavior of a user journey.
-
-  *SessionExpiryType*             0:1           Control the whether the session is rolling or absolute.
-                                                
-                                                Value: one of the following value as per *SessionExpiryTypeTYPE* enumeration in the Azure AD B2C Premium XML schema for the names of the valid values the single sign-on session type:
-                                                
-                                                -   **Rolling**.
-                                                
-                                                -   **Absolute**.
-                                                
-
-  *SessionExpiryInSeconds*        0:1           Control the time of the session expiry in seconds.
-                                                
-                                                Value: Integer
-
-  *AzureApplicationInsights*      0:1           Specify the Microsoft Azure Application Insights instrumentation key to be used in the application insights JavaScript.
-                                                
-                                                For additional information, see the [<span style="font-variant:small-caps;">Visual Studio Application Insights documentation</span>](https://azure.microsoft.com/en-us/documentation/services/application-insights/)[^1].
-
-  *ContentDefinitionParameters*   0:1           Specify the list of key value pairs to be appended to the content definition load Uri.
-  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|XML element|Occurrences|Description|
+|-----------|-----------|-----------|
+|*SingleSignOn*|0:1|Control the scope of the single sign-on (SSO) behavior of a user journey.|
+|*SessionExpiryType*|0:1|Control the whether the session is rolling or absolute.<br/>Value: one of the following value as per *SessionExpiryTypeTYPE* enumeration in the Azure AD B2C Premium XML schema for the names of the valid values the single sign-on session type:<br/>-   **Rolling**.<br/>-   **Absolute**.|
+|*SessionExpiryInSeconds*|0:1|Control the time of the session expiry in seconds.<br/>Value: Integer|
+|*AzureApplicationInsights*|0:1|Specify the Microsoft Azure Application Insights instrumentation key to be used in the application insights JavaScript.<br/>For additional information, see the [Visual Studio Application Insights documentation](https://azure.microsoft.com/en-us/documentation/services/application-insights/)|
+|*ContentDefinitionParameters*|0:1|Specify the list of key value pairs to be appended to the content definition load Uri.|
 
 The *SingleSignOn* XML element contains in turn the following attribute:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute   Required   Description
-  ----------- ---------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *Scope*     True       Define the scope of the single sign-on behavior.
-                         
-                         Value: one of the following value as per *UserJourneyBehaviorScopeType* enumeration in the Azure AD B2C Premium XML schema:
-                         
-                         -   **Suppressed**. Indicate that the behavior is suppressed. For example in the case of SSO, no session is maintained for the user and the user will always be prompted for identity provider selection.
-                         
-                         -   **TrustFramework**. Indicate that the behavior is applied for all policies in the trust framework. For example, a user being put through two policy journeys for a given trust framework will not be prompted for identity provider selection.
-                         
-                         -   **Tenant**. Indicates that the behavior is applied for all policies in the tenant. For example, a user being put through two policy journeys for a given tenant will not be prompted for identity provider selection.
-                         
-                         -   **Application**. Indicate that the behavior is applied for all policies for the application making the request. For example, a user being put through two policy journeys for a given application will not be prompted for identity provider selection.
-                         
-                         -   **Policy**. Indicate that the behavior only applies to a policy. For example, a user being put through two policy journeys for a given trust framework will be prompted for identity provider selection when switching between policies.
-                         
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*Scope*|True|Define the scope of the single sign-on behavior.<br/>Value: one of the following value as per *UserJourneyBehaviorScopeType* enumeration in the Azure AD B2C Premium XML schema:<br/>-   **Suppressed**. Indicate that the behavior is suppressed. For example in the case of SSO, no session is maintained for the user and the user will always be prompted for identity provider selection.<br/>-   **TrustFramework**. Indicate that the behavior is applied for all policies in the trust framework. For example, a user being put through two policy journeys for a given trust framework will not be prompted for identity provider selection.<br/>-   **Tenant**. Indicates that the behavior is applied for all policies in the tenant. For example, a user being put through two policy journeys for a given tenant will not be prompted for identity provider selection.<br/>-   **Application**. Indicate that the behavior is applied for all policies for the application making the request. For example, a user being put through two policy journeys for a given application will not be prompted for identity provider selection.<br/>-   **Policy**. Indicate that the behavior only applies to a policy. For example, a user being put through two policy journeys for a given trust framework will be prompted for identity provider selection when switching between policies.|
 
 The *AzureApplicationInsights* XML element contains in turn the
 following attribute:
 
-  --------------------------------------------------------------------------------------------------------
-  Attribute              Required   Description
-  ---------------------- ---------- ----------------------------------------------------------------------
-  *InstrumentationKey*   True       Define the instrumentation key for the application insights element.
-                                    
-                                    Value: String
-  --------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*InstrumentationKey*|True|Define the instrumentation key for the application insights element.<br/>Value: String|
 
 The *ContentDefinitionParameters* XML element contains the following XML
 elements:
-
-  -------------------------------------------------------------------------------------------------------------------------------------------------
-  XML element                    Occurrences   Description
-  ------------------------------ ------------- ----------------------------------------------------------------------------------------------------
-  *ContentDefinitionParameter*   0:n           Define a key value pair that is to be appended to the query string of content definition load Uri.
-                                               
-                                               Type: String
-  -------------------------------------------------------------------------------------------------------------------------------------------------
+|XML element|Occurrences|Description|
+|-----------|-----------|-----------|
+|*ContentDefinitionParameter*|0:n|Define a key value pair that is to be appended to the query string of content definition load Uri.<br/>Type: String|
 
 The *ContentDefinitionParameter* XML element contains in turn the
 following attribute:
 
-  Attribute   Required   Description
-  ----------- ---------- -----------------------------------------
-  *Name*      True       Specify the name of the key value pair.
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*Name*|True|Specify the name of the key value pair.|
 
 The *TechnicalProfile* XML element basically follows the structure
 outlined before for a technical profile. Thus, it contains in turn the
 following attributes:
 
-  Attribute   Required   Description
-  ----------- ---------- --------------------------------------------------------------------------------------------------------------------------------------
-  *Id*        True       Specify a machine understandable identifier that is used to uniquely identify a particular technical profile in the policy XML file.
+
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*Id*|True|Specify a machine understandable identifier that is used to uniquely identify a particular technical profile in the policy XML file.|
 
 And the following XML elements:
 
-  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  XML element                           Occurrences   Description
-  ------------------------------------- ------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *DisplayName*                         0:1           Specify the human understandable name of the technical profile that can be displayed to the users.
-                                                      
-                                                      Type: String
-
-  *Description*                         0:1           Specify a human understandable description of the technical profile that can be displayed to the users.
-                                                      
-                                                      Type: String
-
-  *Protocol*                            0:1           Specify the protocol used for the federation.
-
-  *Metadata*                            1:1           Specify the metadata utilized by the protocol for communicating with the endpoint in the course of a transaction to plumb “on the wire” interoperability between the relying party and other community participants.
-                                                      
-                                                      Type: collection of *Item* of key/value pairs.
-
-  *OutputClaims*                        0:1           Specify an optional list of the claim types that are taken as output in the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section or in a policy from which this policy XML file inherits.
-
-  *OutputTokenFormat*                   0:1           Specify the format of the output token.
-                                                      
-                                                      Type: String (enumeration)
-                                                      
-                                                      Value: one of the following types as per *TokenFormat* enumeration in the Azure AD B2C Premium XML schema. See above.
-
-  *SubjectAuthenticationRequirements*   0:1           Specify the requirements regarding the conscious and active participation of the subject in authentication
-
-  *SubjectNamingInfo*                   0:1           Control the production of the subject name in tokens (e.g. SAML) where subject name is specified separately from claims.
-  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|XML element|Occurrences|Description|
+|-----------|-----------|-----------|
+|*DisplayName*|0:1|Specify the human understandable name of the technical profile that can be displayed to the users.<br/>Type: String|
+|*Description*|0:1|Specify a human understandable description of the technical profile that can be displayed to the users.<br/>Type: String|
+|*Protocol*|0:1|Specify the protocol used for the federation.|
+|*Metadata*|1:1|Specify the metadata utilized by the protocol for communicating with the endpoint in the course of a transaction to plumb “on the wire” interoperability between the relying party and other community participants.<br/>Type: collection of *Item* of key/value pairs.|
+|*OutputClaims*|0:1|Specify an optional list of the claim types that are taken as output in the technical profile. Each of these elements contains reference to a *ClaimType* already defined in the *ClaimsSchema* section or in a policy from which this policy XML file inherits.|
+|*OutputTokenFormat*|0:1|Specify the format of the output token.<br/>Type: String (enumeration)<br/>Value: one of the following types as per *TokenFormat* enumeration in the Azure AD B2C Premium XML schema. See above.|
+|*SubjectAuthenticationRequirements*|0:1|Specify the requirements regarding the conscious and active participation of the subject in authentication|
+|*SubjectNamingInfo*|0:1|Control the production of the subject name in tokens (e.g. SAML) where subject name is specified separately from claims.|
 
 The *Protocol* XML element in the above table contains the following
 attributes:
 
-  ----------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute   Required   Description
-  ----------- ---------- -----------------------------------------------------------------------------------------------------------------------
-  *Name*      True       Specify the name of a valid protocol supported by Azure AD B2C Premium that is used as part of the technical profile.
-                         
-                         Type: String (enumeration)
-                         
-                         Value: one of the following types as per *ProtocolName* enumeration in the Azure AD B2C Premium XML schema:
-                         
-                         -   **OAuth1**. OAuth 1.0 protocol standard as per IETF specification.
-                         
-                         <!-- -->
-                         
-                         -   **OAuth2**. OAuth 2.0 protocol standard as per IETF specification.
-                         
-                         -   **SAML2**. SAML 2.0 protocol standard as per OASIS specification.
-                         
-                         -   **OpenIdConnect**. OpenID Connect 1.0 protocol standard as per OpenID foundation specification.
-                         
-                         -   **WsFed**. WS-Federation (WS-Fed) 1.2 protocol standard as per OASIS specification.
-                         
-                         -   **WsTrust**. WS-Trust 1.3 protocol standard as per OASIS specification.
-                         
-  ----------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*Name*|True|Specify the name of a valid protocol supported by Azure AD B2C Premium that is used as part of the technical profile.<br/>Type: String (enumeration)<br/>Value: one of the following types as per *ProtocolName* enumeration in the Azure AD B2C Premium XML schema:<br/>-   **OAuth1**. OAuth 1.0 protocol standard as per IETF specification.<br/>-   **OAuth2**. OAuth 2.0 protocol standard as per IETF specification.<br/>-   **SAML2**. SAML 2.0 protocol standard as per OASIS specification.<br/>-   **OpenIdConnect**. OpenID Connect 1.0 protocol standard as per OpenID foundation specification.<br/>-   **WsFed**. WS-Federation (WS-Fed) 1.2 protocol standard as per OASIS specification.<br/>-   **WsTrust**. WS-Trust 1.3 protocol standard as per OASIS specification.
 
 As already introduced, the *OutputClaims* XML elements contain the
 following XML elements:
 
   XML element     Occurrences   Description
   --------------- ------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *OutputClaim*   0:n           Specify the name of an expected claim type in the supported list for the policy to which the relying party subscribes. This claim serves as an output for the technical profile.
+|*OutputClaim*|0:n|Specify the name of an expected claim type in the supported list for the policy to which the relying party subscribes. This claim serves as an output for the technical profile.|
 
 Each *OutputClaim* XML element contains the following attributes:
 
-  ------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                Required   Description
-  ------------------------ ---------- ------------------------------------------------------------------------------------------------------------
-  *ClaimTypeReferenceId*   True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                      
-                                      Type: String
 
-  *DefaultValue *          False      Specify a default value if not set.
-                                      
-                                      Type: String
-
-  *PartnerClaimType*       False      Specify the partner claim type.
-                                      
-                                      Type: String
-
-  *Required*               False      Specify this claim is required.
-                                      
-                                      Type: String
-  ------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*ClaimTypeReferenceId*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br/>Type: String|
+|*DefaultValue *|False|Specify a default value if not set.<br/>Type: String|
+|*PartnerClaimType*|False|Specify the partner claim type.<br/>Type: String|
+|*Required*|False|Specify this claim is required.<br/>Type: String|
 
 The *SubjectAuthenticationRequirements* XML element in the above table
 contains the following attributes:
 
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute                      Required   Description
-  ------------------------------ ---------- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  *TimeToLive*                   True       Specify the maximum number of minutes cached credentials can be used following an active authentication by the subject.
-                                            
-                                            Type: Integer
-
-  *ResetExpiryWhenTokenIssued*   Optional   Specify how the expiry time is set.
-                                            
-                                            Type: Boolean. Default is False. If True then whenever a token is issued (even using a cached credential) the expiry time is set to the current time plus the *TimeToLive*.
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*TimeToLive*|True|Specify the maximum number of minutes cached credentials can be used following an active authentication by the subject.<br/>Type: Integer|
+|*ResetExpiryWhenTokenIssued*|Optional|Specify how the expiry time is set.<br/>Type: Boolean. Default is False. If True then whenever a token is issued (even using a cached credential) the expiry time is set to the current time plus the *TimeToLive*.|
 
 The *SubjectNamingInfo* XML element in the above table contains the
 following attributes:
 
-  -------------------------------------------------------------------------------------------------------------------------------------------
-  Attribute           Required   Description
-  ------------------- ---------- ------------------------------------------------------------------------------------------------------------
-  *ClaimType*         True       Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.
-                                 
-                                 Type: String
 
-  *NameQualifier*     False      Provide a description
-                                 
-                                 Type: String
-
-  *SPNameQualifier*   False      Provide a description
-                                 
-                                 Type: String
-
-  *Format*            False      Provide a description
-                                 
-                                 Type: String
-
-  *SPProvidedID*      False      Provide a description
-                                 
-                                 Type: String
-  -------------------------------------------------------------------------------------------------------------------------------------------
+|Attribute|Required|Description|
+|---------|--------|-----------|
+|*ClaimType*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br/>Type: String|
+|*NameQualifier*|False|Provide a description<br/>Type: String|
+|*SPNameQualifier*|False|Provide a description<br/>Type: String|
+|*Format*|False|Provide a description<br/>Type: String|
+|*SPProvidedID*|False|Provide a description<br/>Type: String|
 
 Considering the above explanation, the following XML snippet illustrates
 how to define a relying party:
 
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-
-&lt;TrustFrameworkPolicy
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-
-xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-
-PublicPolicyUri="http://example.com"
-
-PolicySchemaVersion="0.3.0.0"
-
-TenantId="contoso369b2c.onmicrosoft.com"
-
-PolicyId="B2C\_1A\_MsolActive"&gt;
-
-&lt;BasePolicy&gt;
-
-&lt;TenantId&gt;contoso369b2c.onmicrosoft.com&lt;/TenantId&gt;
-
-&lt;PolicyId&gt;B2C\_1A\_base-v2&lt;/PolicyId&gt;
-
-&lt;/BasePolicy&gt;
-
-&lt;RelyingParty&gt;
-
-&lt;DefaultUserJourney ReferenceId="ActiveRST"/&gt;
-
-&lt;TechnicalProfile Id="PolicyProfile"&gt;
-
-&lt;DisplayName&gt;WsFedProfile&lt;/DisplayName&gt;
-
-&lt;Protocol Name="WsFed" /&gt;
-
-&lt;OutputTokenFormat&gt;SAML11&lt;/OutputTokenFormat&gt;
-
-&lt;SubjectAuthenticationRequirements TimeToLive="4"
-ResetExpiryWhenTokenIssued="false" /&gt;
-
-&lt;Metadata&gt;
-
-&lt;Item Key="Saml2AttributeEncodingInfo"&gt;
-
-&lt;!\[CDATA\[
-
-&lt;saml2:AttributeStatement
-xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"&gt;
-
-&lt;saml2:Attribute FriendlyName="UserPrincipalName"
-
-Name="IDPEmail"
-
-NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"&gt;
-
-&lt;saml2:AttributeValue
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:type="xs:string"&gt;
-
-&lt;/saml2:AttributeValue&gt;
-
-&lt;/saml2:Attribute&gt;
-
-&lt;/saml2:AttributeStatement&gt;
-
-\]\]&gt;
-
-&lt;/Item&gt;
-
-&lt;Item Key="Saml11AttributeEncodingInfo"&gt;
-
-&lt;!\[CDATA\[
-
-&lt;saml:AttributeStatement
-xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"&gt;
-
-&lt;saml:Attribute AttributeName="ImmutableID"
-
-AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05"&gt;
-
-&lt;saml:AttributeValue&gt;&lt;/saml:AttributeValue&gt;
-
-&lt;/saml:Attribute&gt;
-
-&lt;saml:Attribute AttributeName="UPN"
-AttributeNamespace="http://schemas.xmlsoap.org/claims"&gt;
-
-&lt;saml:AttributeValue&gt;&lt;/saml:AttributeValue&gt;
-
-&lt;/saml:Attribute&gt;
-
-&lt;/saml:AttributeStatement&gt;
-
-\]\]&gt;
-
-&lt;/Item&gt;
-
-&lt;Item
-Key="PartnerEntity"&gt;https://www.contoso369b2c.com/wp-content/uploads/2015/01/metadata.xml&lt;/Item&gt;
-
-&lt;Item Key="client\_id"&gt;customClientId&lt;/Item&gt;
-
-&lt;/Metadata&gt;
-
-&lt;OutputClaims&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="immutableId"
-PartnerClaimType="ImmutableID" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="userPrincipalName"
-PartnerClaimType="UPN" /&gt;
-
-&lt;OutputClaim ClaimTypeReferenceId="AuthenticationContext"
-DefaultValue="urn:federation:authentication:windows" /&gt;
-
-&lt;/OutputClaims&gt;
-
-&lt;SubjectNamingInfo ClaimType="immutableId" /&gt;
-
-&lt;/TechnicalProfile&gt;
-
-&lt;/RelyingParty&gt;
-
-&lt;/TrustFrameworkPolicy&gt;
-
-[^1]:  <span style="font-variant:small-caps;">Visual Studio Application
-    Insights documentation</span>:
-    https://azure.microsoft.com/en-us/documentation/services/application-insights/
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"  PublicPolicyUri="http://example.com"  PolicySchemaVersion="0.3.0.0"  TenantId="contoso369b2c.onmicrosoft.com"  PolicyId="B2C\_1A\_MsolActive">
+	<BasePolicy>
+		<TenantId>contoso369b2c.onmicrosoft.com</TenantId>
+		<PolicyId>B2C\_1A\_base-v2</PolicyId>
+	</BasePolicy>
+	<RelyingParty>
+		<DefaultUserJourney ReferenceId="ActiveRST"/>
+		<TechnicalProfile Id="PolicyProfile">
+			<DisplayName>WsFedProfile</DisplayName>
+			<Protocol Name="WsFed" />
+			<OutputTokenFormat>SAML11</OutputTokenFormat>
+			<SubjectAuthenticationRequirements TimeToLive="4" ResetExpiryWhenTokenIssued="false" />
+			<Metadata>
+				<Item Key="Saml2AttributeEncodingInfo">
+					<!\[CDATA\[  					<saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
+						<saml2:Attribute FriendlyName="UserPrincipalName"  Name="IDPEmail"  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+							<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">  							</saml2:AttributeValue>
+						</saml2:Attribute>
+					</saml2:AttributeStatement>  \]\]>
+				</Item>
+				<Item Key="Saml11AttributeEncodingInfo">
+					<!\[CDATA\[  					<saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
+						<saml:Attribute AttributeName="ImmutableID"  AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05">
+							<saml:AttributeValue/>
+						</saml:Attribute>
+						<saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims">
+							<saml:AttributeValue/>
+						</saml:Attribute>
+					</saml:AttributeStatement>  \]\]>
+				</Item>
+				<Item Key="PartnerEntity">https://www.contoso369b2c.com/wp-content/uploads/2015/01/metadata.xml</Item>
+				<Item Key="client\_id">customClientId</Item>
+			</Metadata>
+			<OutputClaims>
+				<OutputClaim ClaimTypeReferenceId="immutableId" PartnerClaimType="ImmutableID" />
+				<OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="UPN" />
+				<OutputClaim ClaimTypeReferenceId="AuthenticationContext" DefaultValue="urn:federation:authentication:windows" />
+			</OutputClaims>
+			<SubjectNamingInfo ClaimType="immutableId" />
+		</TechnicalProfile>
+	</RelyingParty>
+</TrustFrameworkPolicy>
+```
