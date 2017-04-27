@@ -134,8 +134,6 @@ accounts (vs social or custom IdPs).
 
 3.  Run ./New-AzureADB2CPolicyEngineApplications.ps1 -BasePolicyPath
     &lt;PathOfTheBasePolicyInYourWorkingDirectory&gt;
-    
-    Parakh: What is the base policy?!
 
 Upload Advanced Policies Starter Pack
 -------------------------------------
