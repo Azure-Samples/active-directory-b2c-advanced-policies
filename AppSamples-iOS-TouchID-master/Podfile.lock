@@ -1,0 +1,18 @@
+PODS:
+  - AFViewShaker (0.0.4)
+  - AppAuth (0.9.0)
+  - BKPasscodeView (0.2.4):
+    - AFViewShaker (~> 0.0)
+
+DEPENDENCIES:
+  - AppAuth
+  - BKPasscodeView
+
+SPEC CHECKSUMS:
+  AFViewShaker: 4296c638c24a037e02727b40d89d8f178df3b3f4
+  AppAuth: 4fabb6b8068a2e61b914b41071bdbd95da2c9553
+  BKPasscodeView: 947e3542c126a9fa41c46318759d928919636e96
+
+PODFILE CHECKSUM: b9ddcd665514d0e999fac9f19015af3c5b3d251c
+
+COCOAPODS: 1.0.1

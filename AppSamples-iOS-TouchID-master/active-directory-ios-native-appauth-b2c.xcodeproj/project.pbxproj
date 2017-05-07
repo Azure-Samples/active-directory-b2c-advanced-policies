@@ -1,0 +1,545 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B50BCD21E9AF9DF0012DE89 /* Games.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B50BCD11E9AF9DF0012DE89 /* Games.m */; };
+		2B50BCD51E9AFDD90012DE89 /* GameTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B50BCD41E9AFDD90012DE89 /* GameTableViewController.m */; };
+		2B50BCDB1E9C4ECE0012DE89 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCDA1E9C4ECE0012DE89 /* logo.png */; };
+		2B50BCFA1E9DA29A0012DE89 /* Icon-16.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCDD1E9DA29A0012DE89 /* Icon-16.png */; };
+		2B50BCFB1E9DA29A0012DE89 /* Icon-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCDE1E9DA29A0012DE89 /* Icon-24.png */; };
+		2B50BCFC1E9DA29A0012DE89 /* Icon-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCDF1E9DA29A0012DE89 /* Icon-32.png */; };
+		2B50BCFD1E9DA29A0012DE89 /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE01E9DA29A0012DE89 /* Icon-40.png */; };
+		2B50BCFE1E9DA29A0012DE89 /* Icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE11E9DA29A0012DE89 /* Icon-40@2x.png */; };
+		2B50BCFF1E9DA29A0012DE89 /* Icon-40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE21E9DA29A0012DE89 /* Icon-40@3x.png */; };
+		2B50BD001E9DA29A0012DE89 /* Icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE31E9DA29A0012DE89 /* Icon-60.png */; };
+		2B50BD011E9DA29A0012DE89 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE41E9DA29A0012DE89 /* Icon-60@2x.png */; };
+		2B50BD021E9DA29A0012DE89 /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE51E9DA29A0012DE89 /* Icon-60@3x.png */; };
+		2B50BD031E9DA29A0012DE89 /* Icon-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE61E9DA29A0012DE89 /* Icon-64.png */; };
+		2B50BD041E9DA29A0012DE89 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE71E9DA29A0012DE89 /* Icon-72.png */; };
+		2B50BD051E9DA29A0012DE89 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE81E9DA29A0012DE89 /* Icon-72@2x.png */; };
+		2B50BD061E9DA29A0012DE89 /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCE91E9DA29A0012DE89 /* Icon-76.png */; };
+		2B50BD071E9DA29A0012DE89 /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCEA1E9DA29A0012DE89 /* Icon-76@2x.png */; };
+		2B50BD081E9DA29A0012DE89 /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCEB1E9DA29A0012DE89 /* Icon-120.png */; };
+		2B50BD091E9DA29A0012DE89 /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCEC1E9DA29A0012DE89 /* Icon-152.png */; };
+		2B50BD0A1E9DA29A0012DE89 /* Icon-167.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCED1E9DA29A0012DE89 /* Icon-167.png */; };
+		2B50BD0B1E9DA29A0012DE89 /* Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCEE1E9DA29A0012DE89 /* Icon-180.png */; };
+		2B50BD0C1E9DA29A0012DE89 /* Icon-Small-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCEF1E9DA29A0012DE89 /* Icon-Small-40.png */; };
+		2B50BD0D1E9DA29A0012DE89 /* Icon-Small-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF01E9DA29A0012DE89 /* Icon-Small-40@2x.png */; };
+		2B50BD0E1E9DA29A0012DE89 /* Icon-Small-40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF11E9DA29A0012DE89 /* Icon-Small-40@3x.png */; };
+		2B50BD0F1E9DA29A0012DE89 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF21E9DA29A0012DE89 /* Icon-Small-50.png */; };
+		2B50BD101E9DA29A0012DE89 /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF31E9DA29A0012DE89 /* Icon-Small-50@2x.png */; };
+		2B50BD111E9DA29A0012DE89 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF41E9DA29A0012DE89 /* Icon-Small.png */; };
+		2B50BD121E9DA29A0012DE89 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF51E9DA29A0012DE89 /* Icon-Small@2x.png */; };
+		2B50BD131E9DA29A0012DE89 /* Icon-Small@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF61E9DA29A0012DE89 /* Icon-Small@3x.png */; };
+		2B50BD141E9DA29A0012DE89 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF71E9DA29A0012DE89 /* Icon.png */; };
+		2B50BD151E9DA29A0012DE89 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF81E9DA29A0012DE89 /* Icon@2x.png */; };
+		2B50BD161E9DA29A0012DE89 /* Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2B50BCF91E9DA29A0012DE89 /* Icon@3x.png */; };
+		67E207AF1C558AE7C71941DD /* libPods-active-directory-ios-native-appauth-b2c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 799AC0E4D73FA8C3CF4B4A26 /* libPods-active-directory-ios-native-appauth-b2c.a */; };
+		847CC46A1E6A4DD400B98781 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 847CC4691E6A4DD400B98781 /* main.m */; };
+		847CC46D1E6A4DD400B98781 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 847CC46C1E6A4DD400B98781 /* AppDelegate.m */; };
+		847CC4701E6A4DD400B98781 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 847CC46F1E6A4DD400B98781 /* ViewController.m */; };
+		847CC4731E6A4DD400B98781 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 847CC4711E6A4DD400B98781 /* Main.storyboard */; };
+		847CC4751E6A4DD400B98781 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 847CC4741E6A4DD400B98781 /* Assets.xcassets */; };
+		847CC4781E6A4DD400B98781 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 847CC4761E6A4DD400B98781 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2B50BCD01E9AF9DF0012DE89 /* Games.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Games.h; sourceTree = "<group>"; };
+		2B50BCD11E9AF9DF0012DE89 /* Games.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Games.m; sourceTree = "<group>"; };
+		2B50BCD31E9AFDD90012DE89 /* GameTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTableViewController.h; sourceTree = "<group>"; };
+		2B50BCD41E9AFDD90012DE89 /* GameTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameTableViewController.m; sourceTree = "<group>"; };
+		2B50BCDA1E9C4ECE0012DE89 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		2B50BCDD1E9DA29A0012DE89 /* Icon-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-16.png"; sourceTree = "<group>"; };
+		2B50BCDE1E9DA29A0012DE89 /* Icon-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-24.png"; sourceTree = "<group>"; };
+		2B50BCDF1E9DA29A0012DE89 /* Icon-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-32.png"; sourceTree = "<group>"; };
+		2B50BCE01E9DA29A0012DE89 /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40.png"; sourceTree = "<group>"; };
+		2B50BCE11E9DA29A0012DE89 /* Icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@2x.png"; sourceTree = "<group>"; };
+		2B50BCE21E9DA29A0012DE89 /* Icon-40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40@3x.png"; sourceTree = "<group>"; };
+		2B50BCE31E9DA29A0012DE89 /* Icon-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60.png"; sourceTree = "<group>"; };
+		2B50BCE41E9DA29A0012DE89 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		2B50BCE51E9DA29A0012DE89 /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@3x.png"; sourceTree = "<group>"; };
+		2B50BCE61E9DA29A0012DE89 /* Icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-64.png"; sourceTree = "<group>"; };
+		2B50BCE71E9DA29A0012DE89 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		2B50BCE81E9DA29A0012DE89 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
+		2B50BCE91E9DA29A0012DE89 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
+		2B50BCEA1E9DA29A0012DE89 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
+		2B50BCEB1E9DA29A0012DE89 /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = "<group>"; };
+		2B50BCEC1E9DA29A0012DE89 /* Icon-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-152.png"; sourceTree = "<group>"; };
+		2B50BCED1E9DA29A0012DE89 /* Icon-167.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-167.png"; sourceTree = "<group>"; };
+		2B50BCEE1E9DA29A0012DE89 /* Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-180.png"; sourceTree = "<group>"; };
+		2B50BCEF1E9DA29A0012DE89 /* Icon-Small-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40.png"; sourceTree = "<group>"; };
+		2B50BCF01E9DA29A0012DE89 /* Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@2x.png"; sourceTree = "<group>"; };
+		2B50BCF11E9DA29A0012DE89 /* Icon-Small-40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@3x.png"; sourceTree = "<group>"; };
+		2B50BCF21E9DA29A0012DE89 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
+		2B50BCF31E9DA29A0012DE89 /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
+		2B50BCF41E9DA29A0012DE89 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
+		2B50BCF51E9DA29A0012DE89 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		2B50BCF61E9DA29A0012DE89 /* Icon-Small@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@3x.png"; sourceTree = "<group>"; };
+		2B50BCF71E9DA29A0012DE89 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		2B50BCF81E9DA29A0012DE89 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		2B50BCF91E9DA29A0012DE89 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
+		3290BA4F47711C140C6C551A /* Pods-active-directory-ios-native-appauth-b2c.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-active-directory-ios-native-appauth-b2c.debug.xcconfig"; path = "Pods/Target Support Files/Pods-active-directory-ios-native-appauth-b2c/Pods-active-directory-ios-native-appauth-b2c.debug.xcconfig"; sourceTree = "<group>"; };
+		799AC0E4D73FA8C3CF4B4A26 /* libPods-active-directory-ios-native-appauth-b2c.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-active-directory-ios-native-appauth-b2c.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		847CC4651E6A4DD400B98781 /* WingTipGames.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WingTipGames.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		847CC4691E6A4DD400B98781 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		847CC46B1E6A4DD400B98781 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		847CC46C1E6A4DD400B98781 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		847CC46E1E6A4DD400B98781 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		847CC46F1E6A4DD400B98781 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		847CC4721E6A4DD400B98781 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		847CC4741E6A4DD400B98781 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		847CC4771E6A4DD400B98781 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		847CC4791E6A4DD400B98781 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AE43D798863A7742DB7702B7 /* Pods-active-directory-ios-native-appauth-b2c.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-active-directory-ios-native-appauth-b2c.release.xcconfig"; path = "Pods/Target Support Files/Pods-active-directory-ios-native-appauth-b2c/Pods-active-directory-ios-native-appauth-b2c.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		847CC4621E6A4DD300B98781 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67E207AF1C558AE7C71941DD /* libPods-active-directory-ios-native-appauth-b2c.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B50BCDC1E9DA28B0012DE89 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				2B50BCDD1E9DA29A0012DE89 /* Icon-16.png */,
+				2B50BCDE1E9DA29A0012DE89 /* Icon-24.png */,
+				2B50BCDF1E9DA29A0012DE89 /* Icon-32.png */,
+				2B50BCE01E9DA29A0012DE89 /* Icon-40.png */,
+				2B50BCE11E9DA29A0012DE89 /* Icon-40@2x.png */,
+				2B50BCE21E9DA29A0012DE89 /* Icon-40@3x.png */,
+				2B50BCE31E9DA29A0012DE89 /* Icon-60.png */,
+				2B50BCE41E9DA29A0012DE89 /* Icon-60@2x.png */,
+				2B50BCE51E9DA29A0012DE89 /* Icon-60@3x.png */,
+				2B50BCE61E9DA29A0012DE89 /* Icon-64.png */,
+				2B50BCE71E9DA29A0012DE89 /* Icon-72.png */,
+				2B50BCE81E9DA29A0012DE89 /* Icon-72@2x.png */,
+				2B50BCE91E9DA29A0012DE89 /* Icon-76.png */,
+				2B50BCEA1E9DA29A0012DE89 /* Icon-76@2x.png */,
+				2B50BCEB1E9DA29A0012DE89 /* Icon-120.png */,
+				2B50BCEC1E9DA29A0012DE89 /* Icon-152.png */,
+				2B50BCED1E9DA29A0012DE89 /* Icon-167.png */,
+				2B50BCEE1E9DA29A0012DE89 /* Icon-180.png */,
+				2B50BCEF1E9DA29A0012DE89 /* Icon-Small-40.png */,
+				2B50BCF01E9DA29A0012DE89 /* Icon-Small-40@2x.png */,
+				2B50BCF11E9DA29A0012DE89 /* Icon-Small-40@3x.png */,
+				2B50BCF21E9DA29A0012DE89 /* Icon-Small-50.png */,
+				2B50BCF31E9DA29A0012DE89 /* Icon-Small-50@2x.png */,
+				2B50BCF41E9DA29A0012DE89 /* Icon-Small.png */,
+				2B50BCF51E9DA29A0012DE89 /* Icon-Small@2x.png */,
+				2B50BCF61E9DA29A0012DE89 /* Icon-Small@3x.png */,
+				2B50BCF71E9DA29A0012DE89 /* Icon.png */,
+				2B50BCF81E9DA29A0012DE89 /* Icon@2x.png */,
+				2B50BCF91E9DA29A0012DE89 /* Icon@3x.png */,
+			);
+			name = icons;
+			sourceTree = "<group>";
+		};
+		2BFE3C511EAD6E5600F09AFA /* images */ = {
+			isa = PBXGroup;
+			children = (
+				847CC4711E6A4DD400B98781 /* Main.storyboard */,
+				847CC4741E6A4DD400B98781 /* Assets.xcassets */,
+				847CC4761E6A4DD400B98781 /* LaunchScreen.storyboard */,
+				2B50BCDC1E9DA28B0012DE89 /* icons */,
+				2B50BCDA1E9C4ECE0012DE89 /* logo.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
+		847CC45C1E6A4DD300B98781 = {
+			isa = PBXGroup;
+			children = (
+				847CC4671E6A4DD400B98781 /* active-directory-ios-native-appauth-b2c */,
+				847CC4661E6A4DD400B98781 /* Products */,
+				8BC01C7E01EC55A9AAFFD3A4 /* Pods */,
+				C9BDBB236F41B9C66EEF1020 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		847CC4661E6A4DD400B98781 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				847CC4651E6A4DD400B98781 /* WingTipGames.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		847CC4671E6A4DD400B98781 /* active-directory-ios-native-appauth-b2c */ = {
+			isa = PBXGroup;
+			children = (
+				2BFE3C511EAD6E5600F09AFA /* images */,
+				847CC46E1E6A4DD400B98781 /* ViewController.h */,
+				847CC46F1E6A4DD400B98781 /* ViewController.m */,
+				2B50BCD31E9AFDD90012DE89 /* GameTableViewController.h */,
+				2B50BCD41E9AFDD90012DE89 /* GameTableViewController.m */,
+				2B50BCD01E9AF9DF0012DE89 /* Games.h */,
+				2B50BCD11E9AF9DF0012DE89 /* Games.m */,
+				847CC4791E6A4DD400B98781 /* Info.plist */,
+				847CC4681E6A4DD400B98781 /* Supporting Files */,
+				847CC46B1E6A4DD400B98781 /* AppDelegate.h */,
+				847CC46C1E6A4DD400B98781 /* AppDelegate.m */,
+			);
+			path = "active-directory-ios-native-appauth-b2c";
+			sourceTree = "<group>";
+		};
+		847CC4681E6A4DD400B98781 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				847CC4691E6A4DD400B98781 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8BC01C7E01EC55A9AAFFD3A4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3290BA4F47711C140C6C551A /* Pods-active-directory-ios-native-appauth-b2c.debug.xcconfig */,
+				AE43D798863A7742DB7702B7 /* Pods-active-directory-ios-native-appauth-b2c.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C9BDBB236F41B9C66EEF1020 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				799AC0E4D73FA8C3CF4B4A26 /* libPods-active-directory-ios-native-appauth-b2c.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		847CC4641E6A4DD300B98781 /* active-directory-ios-native-appauth-b2c */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 847CC47C1E6A4DD400B98781 /* Build configuration list for PBXNativeTarget "active-directory-ios-native-appauth-b2c" */;
+			buildPhases = (
+				019F1F36074250DDF3FCD1D8 /* [CP] Check Pods Manifest.lock */,
+				847CC4611E6A4DD300B98781 /* Sources */,
+				847CC4621E6A4DD300B98781 /* Frameworks */,
+				847CC4631E6A4DD300B98781 /* Resources */,
+				D66DD89BFDD5F63ADD9BDC81 /* [CP] Embed Pods Frameworks */,
+				833F6FA0E07BA3A0FC067E90 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "active-directory-ios-native-appauth-b2c";
+			productName = "active-directory-ios-native-appauth-b2c";
+			productReference = 847CC4651E6A4DD400B98781 /* WingTipGames.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		847CC45D1E6A4DD300B98781 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = Microsoft;
+				TargetAttributes = {
+					847CC4641E6A4DD300B98781 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = MR2287782X;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 847CC4601E6A4DD300B98781 /* Build configuration list for PBXProject "active-directory-ios-native-appauth-b2c" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 847CC45C1E6A4DD300B98781;
+			productRefGroup = 847CC4661E6A4DD400B98781 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				847CC4641E6A4DD300B98781 /* active-directory-ios-native-appauth-b2c */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		847CC4631E6A4DD300B98781 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B50BD101E9DA29A0012DE89 /* Icon-Small-50@2x.png in Resources */,
+				2B50BCFD1E9DA29A0012DE89 /* Icon-40.png in Resources */,
+				2B50BD0D1E9DA29A0012DE89 /* Icon-Small-40@2x.png in Resources */,
+				2B50BCDB1E9C4ECE0012DE89 /* logo.png in Resources */,
+				2B50BD0B1E9DA29A0012DE89 /* Icon-180.png in Resources */,
+				2B50BCFC1E9DA29A0012DE89 /* Icon-32.png in Resources */,
+				2B50BCFE1E9DA29A0012DE89 /* Icon-40@2x.png in Resources */,
+				2B50BD0A1E9DA29A0012DE89 /* Icon-167.png in Resources */,
+				2B50BD111E9DA29A0012DE89 /* Icon-Small.png in Resources */,
+				2B50BD001E9DA29A0012DE89 /* Icon-60.png in Resources */,
+				2B50BCFF1E9DA29A0012DE89 /* Icon-40@3x.png in Resources */,
+				847CC4781E6A4DD400B98781 /* LaunchScreen.storyboard in Resources */,
+				2B50BCFB1E9DA29A0012DE89 /* Icon-24.png in Resources */,
+				2B50BD0E1E9DA29A0012DE89 /* Icon-Small-40@3x.png in Resources */,
+				2B50BD141E9DA29A0012DE89 /* Icon.png in Resources */,
+				847CC4751E6A4DD400B98781 /* Assets.xcassets in Resources */,
+				2B50BD021E9DA29A0012DE89 /* Icon-60@3x.png in Resources */,
+				2B50BD151E9DA29A0012DE89 /* Icon@2x.png in Resources */,
+				2B50BD071E9DA29A0012DE89 /* Icon-76@2x.png in Resources */,
+				2B50BD161E9DA29A0012DE89 /* Icon@3x.png in Resources */,
+				2B50BD081E9DA29A0012DE89 /* Icon-120.png in Resources */,
+				2B50BD131E9DA29A0012DE89 /* Icon-Small@3x.png in Resources */,
+				2B50BD051E9DA29A0012DE89 /* Icon-72@2x.png in Resources */,
+				2B50BD091E9DA29A0012DE89 /* Icon-152.png in Resources */,
+				2B50BD031E9DA29A0012DE89 /* Icon-64.png in Resources */,
+				2B50BD061E9DA29A0012DE89 /* Icon-76.png in Resources */,
+				2B50BD041E9DA29A0012DE89 /* Icon-72.png in Resources */,
+				2B50BD121E9DA29A0012DE89 /* Icon-Small@2x.png in Resources */,
+				2B50BD0F1E9DA29A0012DE89 /* Icon-Small-50.png in Resources */,
+				2B50BD0C1E9DA29A0012DE89 /* Icon-Small-40.png in Resources */,
+				847CC4731E6A4DD400B98781 /* Main.storyboard in Resources */,
+				2B50BCFA1E9DA29A0012DE89 /* Icon-16.png in Resources */,
+				2B50BD011E9DA29A0012DE89 /* Icon-60@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		019F1F36074250DDF3FCD1D8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		833F6FA0E07BA3A0FC067E90 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-active-directory-ios-native-appauth-b2c/Pods-active-directory-ios-native-appauth-b2c-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D66DD89BFDD5F63ADD9BDC81 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-active-directory-ios-native-appauth-b2c/Pods-active-directory-ios-native-appauth-b2c-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		847CC4611E6A4DD300B98781 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				847CC4701E6A4DD400B98781 /* ViewController.m in Sources */,
+				847CC46D1E6A4DD400B98781 /* AppDelegate.m in Sources */,
+				847CC46A1E6A4DD400B98781 /* main.m in Sources */,
+				2B50BCD51E9AFDD90012DE89 /* GameTableViewController.m in Sources */,
+				2B50BCD21E9AF9DF0012DE89 /* Games.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		847CC4711E6A4DD400B98781 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				847CC4721E6A4DD400B98781 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		847CC4761E6A4DD400B98781 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				847CC4771E6A4DD400B98781 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		847CC47A1E6A4DD400B98781 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		847CC47B1E6A4DD400B98781 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		847CC47D1E6A4DD400B98781 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3290BA4F47711C140C6C551A /* Pods-active-directory-ios-native-appauth-b2c.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = MR2287782X;
+				INFOPLIST_FILE = "active-directory-ios-native-appauth-b2c/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.active-directory-ios-native-appauth-b2c";
+				PRODUCT_NAME = WingTipGames;
+			};
+			name = Debug;
+		};
+		847CC47E1E6A4DD400B98781 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE43D798863A7742DB7702B7 /* Pods-active-directory-ios-native-appauth-b2c.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = MR2287782X;
+				INFOPLIST_FILE = "active-directory-ios-native-appauth-b2c/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.active-directory-ios-native-appauth-b2c";
+				PRODUCT_NAME = WingTipGames;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		847CC4601E6A4DD300B98781 /* Build configuration list for PBXProject "active-directory-ios-native-appauth-b2c" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				847CC47A1E6A4DD400B98781 /* Debug */,
+				847CC47B1E6A4DD400B98781 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		847CC47C1E6A4DD400B98781 /* Build configuration list for PBXNativeTarget "active-directory-ios-native-appauth-b2c" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				847CC47D1E6A4DD400B98781 /* Debug */,
+				847CC47E1E6A4DD400B98781 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 847CC45D1E6A4DD300B98781 /* Project object */;
+}
