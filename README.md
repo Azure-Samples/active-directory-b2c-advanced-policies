@@ -20,6 +20,7 @@ The Identity Experience Framework is a powerful identity engine with a very comp
 * Web app with admin side analytics src/WingTipToysWebApplication
 
 ### Training Laboratory for learning Azure AD B2C w Custom Policies
+* /Labs-Training-V2
 
 ### Sample iOS Touch ID with B2C
 
