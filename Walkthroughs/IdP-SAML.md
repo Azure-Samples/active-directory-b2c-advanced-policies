@@ -141,11 +141,11 @@ add the SAML IdP.
     request and message. Even though we’ve configured the Claims
     Provider to not sign these, a certificate must still be provided.
 
-    1.  (If you don’t have a cert already) [Create the cert using makecert](http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
+    1.  (If you don’t have a cert already) [Create the cert using makecert](http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/). `makecert` is typically found in a subfolder of `C:\Program Files (x86)\Windows Kits\<Version>\bin` after installing the Windows SDK in Visual Studio.
 
-        1.  makecert -r -pe -n "CN=idpsaml.yourtenant.onmicrosoft.com"
+        1.  `makecert -r -pe -n "CN=idpsaml.yourtenant.onmicrosoft.com"
             -a sha256 -sky signature -len 2048 -e 12/21/2018 -sr
-            CurrentUser -ss My ContosoIdpSamlCert.cer
+            CurrentUser -ss My ContosoIdpSamlCert.cer`
 
         2. Go to cert store “Manage User Certificates” &gt; Current
             User &gt; Personal &gt; Certificates &gt;
@@ -157,21 +157,23 @@ add the SAML IdP.
 
         5.  Defaults (PFX and first checkbox)
 
-    2.  Open Powershell
+    2.  Run `powershell -noprofile`
 
-    3.  Go to ExploreAdmin
+    3.  Change directory to the location of the `ExploreAdmin` folder inside this repo
 
-    4.  Import-Module ExploreAdmin.dll (if it fails, it might be because
-        the dll hasn’t been unblocked)
+    4.  Run `Import-Module .\ExploreAdmin.dll` (if it fails, it might be because
+        the dll hasn't been unblocked)
 
-    5.  Run New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
+    5.  Run `New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
         -CertificateId ContosoIdpSamlCert -CertificateFileName path
-        -CertificatePassword password
+        -CertificatePassword password`
 
-        1.  When you run the command, make sure you sign in with the
+        -  When you run the command, make sure you sign in with the
             onmicrosoft.com account local to the tenant.
 
-        2. It’ll ask you for MFA
+        - You will be prompted for MFA.
+        
+        - If you have trouble logging in due to multiple directories, run `` to open a shell that will not use cached credentials in your profile. You can use `Login-AzureRmAccount` to authenticate, and then execute the commands above in there. 
 
 6.  Save your changes and upload updated policy
 
