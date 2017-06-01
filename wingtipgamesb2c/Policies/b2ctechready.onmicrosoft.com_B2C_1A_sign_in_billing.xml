@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+	PolicySchemaVersion="0.3.0.0"
+	TenantId="b2ctechready.onmicrosoft.com"
+	PolicyId="B2C_1A_sign_in_billing"
+	PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
+	DeploymentMode="Development"
+	UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <BasePolicy>
+    <TenantId>b2ctechready.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_base_extensions</PolicyId>
+  </BasePolicy>
+  <!-- The following policy is used for logging in a user to the WingTip Billing app. -->
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignInForBilling" />
+    <UserJourneyBehaviors>
+      <SingleSignOn Scope="Tenant" />
+      <SessionExpiryType>Rolling</SessionExpiryType>
+      <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
+      <JourneyInsights InstrumentationKey="94c4abef-8598-4211-b957-b0d0d1d202d1" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryEngine="ApplicationInsights" TelemetryVersion="1.0.0" />
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="SignInForBilling">
+      <DisplayName>Sign In</DisplayName>
+      <Protocol Name="SAML2" />
+      <OutputTokenFormat>SAML2</OutputTokenFormat>
+      <Metadata>
+        <Item Key="PartnerEntity">https://wingtipbillingb2c.azurewebsites.net/Metadata</Item>
+        <Item Key="Saml2AttributeEncodingInfo">
+          <![CDATA[ 
+<saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
+	<saml2:Attribute FriendlyName="DisplayName" Name="displayName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+		<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string"></saml2:AttributeValue>
+	</saml2:Attribute>
+	<saml2:Attribute FriendlyName="UserPrincipalName" Name="userPrincipalName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+		<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string"></saml2:AttributeValue>
+	</saml2:Attribute>
+</saml2:AttributeStatement> 
+]]>
+        </Item>
+      </Metadata>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

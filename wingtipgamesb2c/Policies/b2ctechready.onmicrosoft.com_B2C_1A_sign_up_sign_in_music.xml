@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+	PolicySchemaVersion="0.3.0.0"
+	TenantId="b2ctechready.onmicrosoft.com"
+	PolicyId="B2C_1A_sign_up_sign_in_music"
+	PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
+	DeploymentMode="Development"
+	UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <BasePolicy>
+    <TenantId>b2ctechready.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_base_extensions</PolicyId>
+  </BasePolicy>
+  <!-- The following policy is used for logging in or registering a user to the WingTip Music app. -->
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignInForMusic" />
+    <UserJourneyBehaviors>
+      <SingleSignOn Scope="Tenant" />
+      <SessionExpiryType>Rolling</SessionExpiryType>
+      <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
+      <JourneyInsights InstrumentationKey="94c4abef-8598-4211-b957-b0d0d1d202d1" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryEngine="ApplicationInsights" TelemetryVersion="1.0.0" />
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="SignUpOrSignInForMusic">
+      <DisplayName>Sign In or Sign Up</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <InputTokenFormat>JWT</InputTokenFormat>
+      <CryptographicKeys>
+        <Key Id="client_secret" StorageReferenceId="WingTipMusicClientSecret" />
+      </CryptographicKeys>
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="extension_Brand" />
+      </InputClaims>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="newUser" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="extension_ListenerGenre" />
+        <OutputClaim ClaimTypeReferenceId="extension_Picture" />
+        <OutputClaim ClaimTypeReferenceId="extension_PlayerZone" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

@@ -1,0 +1,65 @@
+<TrustFrameworkPolicy
+	PolicySchemaVersion="0.3.0.0"
+	TenantId="b2ctechready.onmicrosoft.com"
+	PolicyId="B2C_1A_base_extensions"
+	PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <BasePolicy>
+    <TenantId>b2ctechready.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_base</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ContentDefinitions>
+      <!-- The following content definition is used for selecting an identity provider. -->
+      <ContentDefinition Id="api.idpselection">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/idpselection.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account. -->
+      <ContentDefinition Id="api.localaccount.login">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for recovering the password for a local account. -->
+      <ContentDefinition Id="api.localaccount.passwordrecovery">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-passwordrecovery.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for resetting the password for a local account. -->
+      <ContentDefinition Id="api.localaccount.passwordreset">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-passwordreset.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering a local account. -->
+      <ContentDefinition Id="api.localaccount.registration">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-registration.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering, validating, and verifying a verification phone. -->
+      <ContentDefinition Id="api.phonefactor">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/phonefactor.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for updating the consent for a user. -->
+      <ContentDefinition Id="api.selfasserted.consent">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-consent.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for updating the listener profile for a user. -->
+      <ContentDefinition Id="api.selfasserted.listenerprofileupdate">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-listenerprofileupdate.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering the minimum player profile for a user. -->
+      <ContentDefinition Id="api.selfasserted.playerprofileregistration.basic">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-playerprofileregistration-basic.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering the maximum player profile for a user. -->
+      <ContentDefinition Id="api.selfasserted.playerprofileregistration.full">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-playerprofileregistration-full.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for updating the player profile for a user. -->
+      <ContentDefinition Id="api.selfasserted.playerprofileupdate">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-playerprofileupdate.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a user. -->
+      <ContentDefinition Id="api.signupsignin">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/signupsignin.html</LoadUri>
+      </ContentDefinition>
+    </ContentDefinitions>
+  </BuildingBlocks>
+</TrustFrameworkPolicy>
