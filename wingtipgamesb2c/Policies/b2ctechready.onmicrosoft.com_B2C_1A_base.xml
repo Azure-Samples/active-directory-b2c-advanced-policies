@@ -206,6 +206,10 @@
         <DisplayName>Display Name from Social Account</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
+      <ClaimType Id="emailFromSocialAccount">
+        <DisplayName>Email from Social Account</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
       <ClaimType Id="fromMailAddress">
         <DisplayName>From Mail Address</DisplayName>
         <DataType>string</DataType>
@@ -244,6 +248,15 @@
       </ClaimType>
       <!-- The following claim types can be collected from the end users, managed in the Azure Active Directory store, and sent as
            claims in the security tokens. -->
+      <ClaimType Id="extension_ActivationStatus">
+        <DisplayName>Activation Status</DisplayName>
+        <DataType>string</DataType>
+        <DefaultPartnerClaimTypes>
+          <Protocol Name="OAuth2" PartnerClaimType="activation_status" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="activation_status" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.wingtipb2c.net/identity/claims/activationstatus" />
+        </DefaultPartnerClaimTypes>
+      </ClaimType>
       <ClaimType Id="extension_Brand">
         <DisplayName>Brand</DisplayName>
         <DataType>string</DataType>
@@ -296,6 +309,15 @@
           <Protocol Name="SAML2" PartnerClaimType="http://schemas.wingtipb2c.net/identity/claims/marketingfrequency" />
         </DefaultPartnerClaimTypes>
         <UserInputType>DropdownSingleSelect</UserInputType>
+      </ClaimType>
+      <ClaimType Id="extension_Nonce">
+        <DisplayName>Nonce</DisplayName>
+        <DataType>string</DataType>
+        <DefaultPartnerClaimTypes>
+          <Protocol Name="OAuth2" PartnerClaimType="nonce" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="nonce" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.wingtipb2c.net/identity/claims/nonce" />
+        </DefaultPartnerClaimTypes>
       </ClaimType>
       <ClaimType Id="extension_Picture">
         <DisplayName>Picture</DisplayName>
@@ -383,6 +405,16 @@
         </DefaultPartnerClaimTypes>
         <UserInputType>CheckboxMultiSelect</UserInputType>
       </ClaimType>
+      <ClaimType Id="extension_VerifiedEmail">
+        <DisplayName>Verified Email</DisplayName>
+        <DataType>string</DataType>
+        <DefaultPartnerClaimTypes>
+          <Protocol Name="OAuth2" PartnerClaimType="verified_email" />
+          <Protocol Name="OpenIdConnect" PartnerClaimType="verified_email" />
+          <Protocol Name="SAML2" PartnerClaimType="http://schemas.wingtipb2c.net/identity/claims/verifiedemail" />
+        </DefaultPartnerClaimTypes>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
     </ClaimsSchema>
     <ClaimsTransformations>
       <!-- The following claims transformation creates the alternative security identifier for an external user. -->
@@ -393,6 +425,30 @@
         </InputClaims>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="alternativeSecurityId" TransformationClaimType="alternativeSecurityId" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <!-- The following claims transformation creates the mail address for an external user. -->
+      <ClaimsTransformation Id="CreateEmailFromEmailFromSocialAccount" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="emailFromSocialAccount" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="email" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <!-- The following claims transformation creates the mail address for a user. -->
+      <ClaimsTransformation Id="CreateEmailFromVerifiedEmail" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="extension_VerifiedEmail" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="email" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
       <!-- The following claims transformation generates the user name for an external user. -->
@@ -435,6 +491,16 @@
           <OutputClaim ClaimTypeReferenceId="otherMails" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
+      <!-- The following claims transformation creates the alternative mail addresses for an external user. -->
+      <ClaimsTransformation Id="CreateOtherMailsFromEmailFromSocialAccount" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="emailFromSocialAccount" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="otherMails" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="otherMails" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
       <!-- The following claims transformation formats the player tag for an external user. -->
       <ClaimsTransformation Id="CreateReadOnlyPlayerTagFromPlayerTag" TransformationMethod="FormatStringClaim">
         <InputClaims>
@@ -458,14 +524,53 @@
       </ClaimsTransformation>
     </ClaimsTransformations>
     <ContentDefinitions>
+      <!-- The following content definition is used for errors. -->
+      <ContentDefinition Id="api.error">
+        <LoadUri>~/tenant/default/exception.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:globalexception:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Error page</Item>
+        </Metadata>
+      </ContentDefinition>
       <!-- The following content definition is used for selecting an identity provider. -->
-      <ContentDefinition Id="api.idpselection">
+      <ContentDefinition Id="api.idpselection.signin">
         <LoadUri>~/tenant/default/idpselector.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Identity provider selection page</Item>
         </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.idpselection.signin.en" />
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.idpselection.signin.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <!-- The following content definition is used for selecting an identity provider. -->
+      <ContentDefinition Id="api.idpselection.signupsignin">
+        <LoadUri>~/tenant/default/idpselector.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Identity provider selection page</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.idpselection.signupsignin.en" />
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.idpselection.signupsignin.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering a local account via an activation link. -->
+      <ContentDefinition Id="api.localaccount.activation">
+        <LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Local Account Password Recovery</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.activation.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.activation.fr" />
+        </LocalizedResourcesReferences>
       </ContentDefinition>
       <!-- The following content definition is used for logging in a local account. -->
       <ContentDefinition Id="api.localaccount.login">
@@ -478,6 +583,32 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.login.en" />
           <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.login.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account using an e-mail code. -->
+      <ContentDefinition Id="api.localaccount.login.emailcode">
+        <LoadUri>~/tenant/default/selfasserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Local Account Login</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.login.emailcode.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.login.emailcode.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account using a phone code. -->
+      <ContentDefinition Id="api.localaccount.login.phonecode">
+        <LoadUri>~/tenant/default/selfasserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Local Account Login</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.login.phonecode.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.login.phonecode.fr" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <!-- The following content definition is used for recovering the password for a local account. -->
@@ -506,6 +637,19 @@
           <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.passwordreset.fr" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
+      <!-- The following content definition is used for setting the password for a local account. -->
+      <ContentDefinition Id="api.localaccount.passwordset">
+        <LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Local Account Password Set</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.passwordset.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.passwordset.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
       <!-- The following content definition is used for registering a local account. -->
       <ContentDefinition Id="api.localaccount.registration">
         <LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
@@ -527,6 +671,10 @@
         <Metadata>
           <Item Key="DisplayName">Phone Factor</Item>
         </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.phonefactor.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.phonefactor.fr" />
+        </LocalizedResourcesReferences>
       </ContentDefinition>
       <!-- The following content definition is used for updating the consent for a user. -->
       <ContentDefinition Id="api.selfasserted.consent">
@@ -597,10 +745,27 @@
       <ContentDefinition Id="api.signupsignin">
         <LoadUri>~/tenant/default/unified.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:unifiedssp:1.0.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:unifiedssp:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Account Login or Registration</Item>
         </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.signupsignin.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.signupsignin.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering a social account. -->
+      <ContentDefinition Id="api.socialaccount.registration">
+        <LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Social Account Registration</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.socialaccount.registration.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.socialaccount.registration.fr" />
+        </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
     <Localization Enabled="true">
@@ -642,30 +807,117 @@
           </LocalizedCollection>
         </LocalizedCollections>
       </LocalizedResources>
+      <LocalizedResources Id="api.idpselection.signin.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="intro">Sign in with your existing account</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.idpselection.signupsignin.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="intro">Sign in with your social account or create a WingTip account</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.activation.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Confirm your email address.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're preparing your WingTip account</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email address</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Email address</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <LocalizedResources Id="api.localaccount.login.en">
         <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Sign in</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Sign in with your WingTip account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're signing you in</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Email address</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Password</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.login.emailcode.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Sign in</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Sign in with your WingTip account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Change</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send another</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verify</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send sign-in code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">We've sent you a sign-in code. Copy it to the input field below.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Sign-in code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">We've verified your email address. You can now sign in.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're signing you in</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email address</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.login.phonecode.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Sign in with your WingTip account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're finding your phone number</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email address</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <LocalizedResources Id="api.localaccount.passwordrecovery.en">
         <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter your email address and we'll send you a verification code.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Change</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send another</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verify</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">We've sent you a verification code. Copy it to the input field below.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">We've verified your email address. You can now continue.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're preparing your password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email address</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Email address</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccount.passwordreset.en">
         <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter your new password.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're resetting your password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm new password</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.passwordset.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter your new password.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're setting your password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm new password</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccount.registration.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter the following details.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Create your WingTip account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">You must enter this field</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Change</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send another</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verify</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">We've sent you a verification code. Copy it to the input field below.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">We've verified your email address. You can now continue.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're creating your WingTip account</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email address</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Email address</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm new password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Display name</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.phonefactor.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_send_code">Text me</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_verify">Call me</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="country_code_label">Country code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="enter_code_text_intro">Enter the verification code or </LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="intro_entry_mixed">Enter your phone number and we'll send you a verification code by either a text message or a phone call.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="intro_mixed">We have your phone number. We'll send you a verification code by either a text message or a phone call.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_number">You must enter a valid phone number</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="number_label">Phone number</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="text_button_send_second_code">send another verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_incorrect_code">You must enter the verification code that we sent you</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.consent.en">
@@ -676,14 +928,18 @@
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.listenerprofileupdate.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter the following details.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Update</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Update your WingTip listener profile</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're updating your WingTip listener profile</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_ListenerGenre" StringId="DisplayName">Listener genre</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_MarketingFrequency" StringId="DisplayName">Frequency</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.playerprofileupdate.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter the following details.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Update</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Update your WingTip player profile</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're updating your WingTip player profile</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_ReadOnlyPlayerTag" StringId="DisplayName">Player tag</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerZone" StringId="DisplayName">Player zone</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerMotto" StringId="DisplayName">Player motto</LocalizedString>
@@ -693,12 +949,35 @@
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.playerprofileregistration.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enter the following details.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Create</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Create your WingTip player profile</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're creating your WingTip player profile</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerTag" StringId="DisplayName">Player tag</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerZone" StringId="DisplayName">Player zone</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerMotto" StringId="DisplayName">Player motto</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerBio" StringId="DisplayName">Player bio</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_MarketingFrequency" StringId="DisplayName">Frequency</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.signupsignin.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Don't have a WingTip account?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_link">Create one now!</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_email">You must enter a valid email address</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_password">You must enter a valid password</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="local_intro_email">Sign in with your WingTip account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="logonIdentifier_email">Email address</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="remember_me">Keep me signed in</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_email">You must enter an email address</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_password">You must enter a password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Password</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.socialaccount.registration.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Register</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Register your social account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're registering your social account</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Culture="fr">
@@ -945,30 +1224,117 @@
           </LocalizedCollection>
         </LocalizedCollections>
       </LocalizedResources>
+      <LocalizedResources Id="api.idpselection.signin.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="intro">Connectez-vous avec votre compte existant</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.idpselection.signupsignin.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="intro">Connectez-vous avec votre compte social ou créez un compte WingTip</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.activation.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Confirmez votre adresse email.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous préparons votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Adresse e-mail</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Adresse e-mail</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <LocalizedResources Id="api.localaccount.login.fr">
         <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Se connecter</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Connectez-vous avec votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous vous signons</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Adresse e-mail</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Mot de passe</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.login.emailcode.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Se connecter</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Connectez-vous avec votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Changer</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Envoie un autre</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Vérifier</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Envoyer le code de connexion</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Nous vous avons envoyé un code de connexion. Copiez-le dans le champ de saisie ci-dessous.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Code de connexion</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">Nous avons vérifié votre adresse e-mail. Vous pouvez maintenant vous connecter.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous vous signons</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Adresse e-mail</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.login.phonecode.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Connectez-vous avec votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous trouvons votre numéro de téléphone</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Adresse e-mail</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <LocalizedResources Id="api.localaccount.passwordrecovery.fr">
         <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez votre adresse e-mail et nous vous enverrons un code de vérification.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Changer</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Envoie un autre</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Vérifier</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Envoyer le code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Nous vous avons envoyé un code de vérification. Copiez-le dans le champ de saisie ci-dessous.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Code de vérification</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">Nous avons vérifié votre adresse e-mail. Vous pouvez maintenant continuer.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous récupérons votre mot de passe</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Adresse e-mail</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Adresse e-mail</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccount.passwordreset.fr">
         <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez votre nouveau mot de passe.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous réinitialisons votre mot de passe</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nouveau mot de passe</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Devise du joueurConfirmer le nouveau mot de passe</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.passwordset.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez votre nouveau mot de passe.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous définissons votre mot de passe</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nouveau mot de passe</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Devise du joueurConfirmer le nouveau mot de passe</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccount.registration.fr">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez les informations suivantes.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Créez votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Vous devez entrer dans ce champ</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Changer</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Envoie un autre</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Vérifier</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Envoyer le code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Nous vous avons envoyé un code de vérification. Copiez-le dans le champ de saisie ci-dessous.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Code de vérification</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">Nous avons vérifié votre adresse e-mail. Vous pouvez maintenant continuer.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous créons votre compte WingTip</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Adresse e-mail</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Adresse e-mail</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nouveau mot de passe</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Devise du joueurConfirmer le nouveau mot de passe</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Afficher un nom</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.phonefactor.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_send_code">Écris moi</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_verify">Appelle-moi</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="country_code_label">Code postal</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="enter_code_text_intro">Entrez le code de vérification ou </LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="intro_entry_mixed">Entrez votre numéro de téléphone et nous vous enverrons un code de vérification par un message texte ou par un appel téléphonique.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="intro_mixed">Nous avons votre numéro de téléphone. We'll send you a verification code by either a text message or a phone call.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="number_label">Numéro de téléphone</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_number">Vous devez entrer un numéro de téléphone valide</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="text_button_send_second_code">envoyer un autre code de vérification</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_incorrect_code">Vous devez entrer le code de vérification que nous vous avons envoyé</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.consent.fr">
@@ -979,14 +1345,18 @@
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.listenerprofileupdate.fr">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez les informations suivantes.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Revise</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Mettre à jour votre profil d'écoute WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous mettons à jour votre profil d'écoute WingTip</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_ListenerGenre" StringId="DisplayName">Genre d'écoute</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_MarketingFrequency" StringId="DisplayName">Fréquence</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.playerprofileupdate.fr">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez les informations suivantes.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Revise</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Mettez à jour votre profil de joueur WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous mettons à jour votre profil de joueur WingTip</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_ReadOnlyPlayerTag" StringId="DisplayName">Nom du joueur</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerZone" StringId="DisplayName">Zone du joueur</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerMotto" StringId="DisplayName">Devise du joueur</LocalizedString>
@@ -996,12 +1366,35 @@
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.playerprofileregistration.fr">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="initial_intro">Entrez les informations suivantes.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Créer</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Créez votre profil de joueur WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous créons votre profil de joueur WingTip</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerTag" StringId="DisplayName">Nom du joueur</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerZone" StringId="DisplayName">Zone du joueur</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerMotto" StringId="DisplayName">Devise du joueur</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_PlayerBio" StringId="DisplayName">Joueur bio</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_MarketingFrequency" StringId="DisplayName">Fréquence</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.signupsignin.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Vous n'avez pas de compte WingTip?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_link">Créez-en maintenant!</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_email">Vous devez entrer une adresse email valide</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_password">Vous devez entrer un mot de passe valide</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="local_intro_email">Connectez-vous avec votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="logonIdentifier_email">Adresse e-mail</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="remember_me">Gardez-moi connecté</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_email">Vous devez entrer une adresse e-mail</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_password">Vous devez entrer un mot de passe</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Mot de passe</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.socialaccount.registration.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Enregistrer</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Enregistrez votre compte social</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous enregistrons votre compte social</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
@@ -1032,7 +1425,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialAccountAuthentication" />
             <OutputClaim ClaimTypeReferenceId="displayNameFromSocialAccount" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="emailFromSocialAccount" PartnerClaimType="email" />
             <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="amazon.com" />
             <OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="user_id" />
           </OutputClaims>
@@ -1163,7 +1556,7 @@
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
           <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmail" />
+            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmailFromSocialAccount" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
@@ -1189,7 +1582,7 @@
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
           <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmail" />
+            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmailFromSocialAccount" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
@@ -1216,7 +1609,7 @@
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
           <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmail" />
+            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmailFromSocialAccount" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="alternativeSecurityId" Required="true" />
@@ -1379,6 +1772,22 @@
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-Noop" />
         </TechnicalProfile>
+        <!-- The following technical profile checks whether the email address that is associated with a social account matches the email
+		     address that is associated with an invitation link. -->
+        <TechnicalProfile Id="AzureFunctions-CheckEmailWebHook">
+          <DisplayName>Check Player Tag Web Hook Azure Function</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CheckEmailWebHook?code=4kh9rgvmT0G81hia1BsdpNrjqaI8/EDlngJacrxohrwQPJ6MYX4jhw==</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="emailFromSocialAccount" PartnerClaimType="emailFromSocialAccount" />
+            <InputClaim ClaimTypeReferenceId="extension_VerifiedEmail" PartnerClaimType="verifiedEmail" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-Noop" />
+        </TechnicalProfile>
         <!-- The following technical profile checks whether a player tag already exists. -->
         <TechnicalProfile Id="AzureFunctions-CheckPlayerTagWebHook">
           <DisplayName>Check Player Tag Web Hook Azure Function</DisplayName>
@@ -1420,6 +1829,28 @@
     <ClaimsProvider>
       <DisplayName>Classic Account</DisplayName>
       <TechnicalProfiles>
+        <!-- The following technical profile is called when a user is logging in. It creates the user in the Azure Active Directory
+             identity store if the user does not exist or updates the password for the user in the Azure Active Directory identity store
+             if the user does exist. -->
+        <TechnicalProfile Id="ClassicAccount-CheckNonce">
+          <DisplayName>Classic Account Check Nonce</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://wingtipidentityb2c.azurewebsites.net/api/account/checknonce</Item>
+            <Item Key="AuthenticationType">Basic</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="ClassicAccountClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="ClassicAccountClientSecret" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_verifiedEmail" PartnerClaimType="userName" />
+            <InputClaim ClaimTypeReferenceId="extension_Nonce" PartnerClaimType="nonce" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-Noop" />
+        </TechnicalProfile>
         <!-- The following technical profile is called when a user is logging in. It creates the user in the Azure Active Directory
              identity store if the user does not exist or updates the password for the user in the Azure Active Directory identity store
              if the user does exist. -->
@@ -1533,7 +1964,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialAccountAuthentication" />
             <OutputClaim ClaimTypeReferenceId="displayNameFromSocialAccount" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="emailFromSocialAccount" PartnerClaimType="email" />
             <OutputClaim ClaimTypeReferenceId="givenNameFromSocialAccount" PartnerClaimType="first_name" />
             <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="facebook.com" />
             <OutputClaim ClaimTypeReferenceId="surnameFromSocialAccount" PartnerClaimType="last_name" />
@@ -1555,9 +1986,40 @@
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
+        <!-- The following technical profile activates a local account. -->
+        <TechnicalProfile Id="LocalAccount-Activation">
+          <DisplayName>WingTip Account</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.activation</Item>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateEmailFromVerifiedEmail" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_VerifiedEmail" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_VerifiedEmail" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="sub" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="ClassicAccount-CheckNonce" />
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmail-ThrowIfNotExists" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
         <!-- The following technical profile logs in a local account. -->
         <TechnicalProfile Id="LocalAccount-Login">
-          <DisplayName>Local Account</DisplayName>
+          <DisplayName>WingTip Account</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.localaccount.login</Item>
@@ -1580,18 +2042,21 @@
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-AzureActiveDirectory" />
         </TechnicalProfile>
-        <!-- The following technical profile recovers a local account password. -->
-        <TechnicalProfile Id="LocalAccount-PasswordRecovery">
-          <DisplayName>Reset password using email address</DisplayName>
+        <!-- The following technical profile logs in a local account using an email code. -->
+        <TechnicalProfile Id="LocalAccount-Login-EmailCode">
+          <DisplayName>WingTip Account</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.localaccount.passwordrecovery</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.login.emailcode</Item>
             <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
           </CryptographicKeys>
           <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
@@ -1605,9 +2070,37 @@
             <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmail-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
+        <!-- The following technical profile logs in a local account using a phone code. -->
+        <TechnicalProfile Id="LocalAccount-Login-PhoneCode">
+          <DisplayName>WingTip Account</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.login.phonecode</Item>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="sub" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="ClassicAccount-RecoverPassword" />
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmail-ThrowIfNotExists" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
         <!-- The following technical profile authenticates a local account. -->
         <TechnicalProfile Id="LocalAccount-OpenIdConnect">
-          <DisplayName>Local Account</DisplayName>
+          <DisplayName>WingTip Account</DisplayName>
           <Protocol Name="OpenIdConnect" />
           <Metadata>
             <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can't seem to find your account</Item>
@@ -1647,9 +2140,84 @@
             <OutputClaimsTransformation ReferenceId="CreateSubject" />
           </OutputClaimsTransformations>
         </TechnicalProfile>
+        <!-- The following technical profile recovers the password for a local account. -->
+        <TechnicalProfile Id="LocalAccount-PasswordRecovery">
+          <DisplayName>Reset password using email address</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.passwordrecovery</Item>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="sub" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="ClassicAccount-RecoverPassword" />
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmail-ThrowIfNotExists" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+         <!-- The following technical profile resets a local account password. -->
+        <TechnicalProfile Id="LocalAccount-PasswordReset">
+          <DisplayName>Reset password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.passwordreset</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+            <InputClaim ClaimTypeReferenceId="verified.strongAuthenticationPhoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-WriteUserPasswordByObjectId-ThrowIfNotExists" />
+            <ValidationTechnicalProfile ReferenceId="ClassicAccount-ResetPassword" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+         <!-- The following technical profile sets a local account password. -->
+        <TechnicalProfile Id="LocalAccount-PasswordSet">
+          <DisplayName>Reset password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.passwordset</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+            <InputClaim ClaimTypeReferenceId="verified.strongAuthenticationPhoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-WriteUserPasswordByObjectId-ThrowIfNotExists" />
+            <ValidationTechnicalProfile ReferenceId="ClassicAccount-ResetPassword" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-AzureActiveDirectory" />
+        </TechnicalProfile>
         <!-- The following technical profile registers a local account. -->
-        <TechnicalProfile Id="LocalAccount-Registration">
-          <DisplayName>Email signup</DisplayName>
+        <TechnicalProfile Id="LocalAccount-Registration-UnverifiedEmail">
+          <DisplayName>WingTip Account</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.localaccount.registration</Item>
@@ -1681,28 +2249,42 @@
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-AzureActiveDirectory" />
         </TechnicalProfile>
-        <!-- The following technical profile resets a local account password. -->
-        <TechnicalProfile Id="LocalAccount-PasswordReset">
-          <DisplayName>Change password (username)</DisplayName>
+        <!-- The following technical profile registers a local account. -->
+        <TechnicalProfile Id="LocalAccount-Registration-VerifiedEmail">
+          <DisplayName>WingTip Account</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.localaccount.passwordreset</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.registration</Item>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="language.button_continue">Create</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
           </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateEmailFromVerifiedEmail" />
+          </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="objectId" />
-            <InputClaim ClaimTypeReferenceId="verified.strongAuthenticationPhoneNumber" />
+            <InputClaim ClaimTypeReferenceId="extension_VerifiedEmail" />
           </InputClaims>
           <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_VerifiedEmail" Required="true" />
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfServiceConsented" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="sub" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-WriteUserPasswordByObjectId-ThrowIfNotExists" />
-            <ValidationTechnicalProfile ReferenceId="ClassicAccount-ResetPassword" />
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-WriteUserByEmail-ThrowIfExists" />
+            <ValidationTechnicalProfile ReferenceId="ClassicAccount-Create" />
           </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-AzureActiveDirectory" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -1882,7 +2464,7 @@
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
           <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="CreateReadOnlyPlayerTagFromPlayerTag" ></InputClaimsTransformation>
+            <InputClaimsTransformation ReferenceId="CreateReadOnlyPlayerTagFromPlayerTag" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="alternativeSecurityId" />
@@ -1914,15 +2496,18 @@
       <DisplayName>Social Account</DisplayName>
       <TechnicalProfiles>
         <!-- The following technical profile registers a social account. -->
-        <TechnicalProfile Id="SocialAccount-Registration">
+        <TechnicalProfile Id="SocialAccount-Registration-UnverifiedEmail">
           <DisplayName>Social Account Registration</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.consent</Item>
+            <Item Key="ContentDefinitionReferenceId">api.socialaccount.registration</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
           </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateEmailFromEmailFromSocialAccount" />
+          </InputClaimsTransformations>
           <InputClaims />
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfServiceConsented" Required="true" />
@@ -1931,6 +2516,31 @@
             <OutputClaim ClaimTypeReferenceId="objectId" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-WriteUserByAlternativeSecurityId-ThrowIfExists" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+        <!-- The following technical profile registers a social account. -->
+        <TechnicalProfile Id="SocialAccount-Registration-VerifiedEmail">
+          <DisplayName>Social Account Registration</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.consent</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateEmailFromEmailFromSocialAccount" />
+          </InputClaimsTransformations>
+          <InputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfServiceConsented" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AzureFunctions-CheckEmailWebHook" />
             <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-WriteUserByAlternativeSecurityId-ThrowIfExists" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
@@ -2039,6 +2649,390 @@
     </ClaimsProvider>
   </ClaimsProviders>
   <UserJourneys>
+    <!-- The following user journey is used for registering a local account via an activation link. This user journey requires the email
+         address for the local account, to which the activation link has been sent, to be passed as an input claim called "extension_VerifiedEmail".
+         See the "B2C_1A_activation" policy for an example of this.
+         The high-level steps for this user journey are:
+           1. The user confirms the email address for a local account to which the activation link has been sent. If the local account
+              does exist in the SQL identity service but it does not exist in the Azure Active Directory one, then it is migrated from
+              the SQL identity store to the Azure Active Directory one with a generated password.
+           2. The user enters the new password for the local account. The local account is synchronized from the Azure Active Directory
+              identity store to the SQL one with the new password.
+           3. A JWT is issued to the relying party. -->
+    <UserJourney Id="Activation">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <!-- The following orchestration step is always executed. It can create the user in the Azure Active Directory identity store
+             if the user does not exist.-->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountPasswordRecoveryVerifiedEmailExchange" TechnicalProfileReferenceId="LocalAccount-Activation" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It updates the password for a user, identified by the object identifier
+             for the user, in the Azure Active Directory identity store. An error is raised if the user does not exist. It can then
+             update the password for the user in the SQL identity store.-->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountPasswordResetWithSSOSessionExchange" TechnicalProfileReferenceId="LocalAccount-PasswordSet" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It reads the user, identified by the object identifier for the user,
+             from the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to consent to terms of service. It updates
+             the consent for the user, identified by the object identifier for the user, in the Azure Active Directory identity store.
+             An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_TermsOfServiceConsented</Value>
+              <Value>2017-03-09</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed when the user is registering. It sends a mail message to the user. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsSendMailWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-SendMailWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to register the minimum player profile. It
+             checks whether a player tag already exists and then updates the local account profile for a user, identified by the object
+             identifier for the user, in the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_PlayerTag</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_PlayerProfileRegistrationMode</Value>
+              <Value>Full</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedLocalAccountPlayerProfileRegistrationBasicExchange" TechnicalProfileReferenceId="SelfAsserted-PlayerProfileRegistration-Basic" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to register the maximum player profile. It
+             checks whether a player tag already exists and then updates the local account profile for a user, identified by the object
+             identifier for the user, in the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_PlayerTag</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_PlayerProfileRegistrationMode</Value>
+              <Value>Basic</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedLocalAccountPlayerProfileRegistrationFullExchange" TechnicalProfileReferenceId="SelfAsserted-PlayerProfileRegistration-Full" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It calculates the player profile percent complete for the user. -->
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsCalculatePlayerProfilePercentCompleteWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-CalculatePlayerProfilePercentCompleteWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to register a verification phone. -->
+        <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActivePhoneFactorSession</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>strongAuthenticationPhoneNumber</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactorInputExchange" TechnicalProfileReferenceId="PhoneFactor-Input" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is registering a verification phone. It updates the verification
+             phone number for the user, identified by the object identifier for the user, in the Azure Active Directory identity store.
+             An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="10" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>executed-PhoneFactor-Input</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryWriteUserPhoneNumberByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-WriteUserPhoneNumberByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It issues a JWT token to the relying party. -->
+        <OrchestrationStep Order="11" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+    <!-- The following user journey is used for registering a local or social account via an invitation link. This user journey requires
+         the email address for the user, to which the invitation link has been sent, to be passed as an input claim called "extension_VerifiedEmail".
+         See the "B2C_1A_invitation" policy for an example of this.
+         The high-level steps for this user journey are:
+           1. The user logs in or registers a local or social account. If the user logs in a local account and the local account does
+              exist in the SQL identity service but it does not exist in the Azure Active Directory one, then it is migrated from the
+              SQL identity store to the Azure Active Directory one with the SQL-managed password. If the user registers a local account,
+              then the local account is synchronized from the Azure Active Directory identity store to the SQL one with the Azure Active
+              Directory-managed password. 
+           2. If the user logs in a social account, then the email address that is associated with the social account must match the
+              email address that is associated with the invitation link. If so, then the user profile is updated with the social account
+              profile properties.
+           3. If the user is required to consent to the current terms of service (i.e. if either the user is registering a new account
+              or a new terms of service must be consented to), then the user is prompted to do so.
+           4. If the user is registering a local account, then the email address that is associated with the social account must match
+              the email address that is associated with the invitation link.
+           5. If the user is required to register a player profile (i.e., if the user is accessing the WingTip Games app for the first
+              time), then the user is prompted to do so.
+           6. If the user is required to register a verification phone, then the user is prompted to do so.
+           7. A JWT is issued to the relying party. -->
+    <UserJourney Id="Invitation">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <!-- The following orchestration step is always executed. -->
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection.signupsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="AmazonAccountExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookAccountExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountRegistrationExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <!-- The following claims exchange is executed when the user is logging in an Amazon account. -->
+            <ClaimsExchange Id="AmazonAccountExchange" TechnicalProfileReferenceId="AmazonAccount-OAuth2" />
+            <!-- The following claims exchange is executed when the user is logging in a Facebook account. -->
+            <ClaimsExchange Id="FacebookAccountExchange" TechnicalProfileReferenceId="FacebookAccount-OAuth2" />
+            <!-- The following claims exchange is executed when the user is registering a local account. It can create the user in the
+                 Azure Active Directory identity store if the user does not exist or update the password for the user in the Azure Active
+                 Directory identity store if the user does exist. -->
+            <ClaimsExchange Id="LocalAccountRegistrationExchange" TechnicalProfileReferenceId="LocalAccount-Registration-VerifiedEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is logging in a local account. It reads the user, identified
+             by the object identifier for the user, from the Azure Active Directory identity store. An error is raised if the user does
+             not exist. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is logging in a social account. It reads the user, identified
+             by the alternative security identifier for the user, from the Azure Active Directory identity store. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>evoStsAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByAlternativeSecurityIdBeforeWriteUserExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is registering a social account. It creates a user, identified
+             by the alternative security identifier for the user, in the Azure Active Directory identity store. An error is raised if
+             the user already exists. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>evoStsAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedSocialAccountRegistrationVerifiedEmailExchange" TechnicalProfileReferenceId="SocialAccount-Registration-VerifiedEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is logging in a social account. It updates the social account
+             profile for the user, identified by the object identifier for the user, in the Azure Active Directory identity store. An
+             error is raised if the user does not exist. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>evoStsAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>newUser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryWriteUserAccountProfileByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-WriteUserAccountProfileByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is logging in a social account. It re-reads the user, identified
+             by the alternative security identifier for the user, from the Azure Active Directory identity store. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>evoStsAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByAlternativeSecurityIdAfterWriteUserExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to consent to terms of service. It updates
+             the consent for the user, identified by the object identifier for the user, in the Azure Active Directory identity store.
+             An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_TermsOfServiceConsented</Value>
+              <Value>2017-03-09</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is registering. It sends a mail message to the user. -->
+        <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newUser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsSendMailWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-SendMailWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to register the minimum player profile. It
+             checks whether a player tag already exists and then updates the local account profile for a user, identified by the object
+             identifier for the user, in the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="10" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_PlayerTag</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_PlayerProfileRegistrationMode</Value>
+              <Value>Full</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedLocalAccountPlayerProfileRegistrationBasicExchange" TechnicalProfileReferenceId="SelfAsserted-PlayerProfileRegistration-Basic" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to register the maximum player profile. It
+             checks whether a player tag already exists and then updates the local account profile for a user, identified by the object
+             identifier for the user, in the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="11" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_PlayerTag</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_PlayerProfileRegistrationMode</Value>
+              <Value>Basic</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedLocalAccountPlayerProfileRegistrationFullExchange" TechnicalProfileReferenceId="SelfAsserted-PlayerProfileRegistration-Full" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It calculates the player profile percent complete for the user. -->
+        <OrchestrationStep Order="12" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsCalculatePlayerProfilePercentCompleteWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-CalculatePlayerProfilePercentCompleteWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is required to register a verification phone. -->
+        <OrchestrationStep Order="13" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActivePhoneFactorSession</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>strongAuthenticationPhoneNumber</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactorInputExchange" TechnicalProfileReferenceId="PhoneFactor-Input" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is only executed when the user is registering a verification phone. It updates the verification
+             phone number for the user, identified by the object identifier for the user, in the Azure Active Directory identity store.
+             An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="14" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>executed-PhoneFactor-Input</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryWriteUserPhoneNumberByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-WriteUserPhoneNumberByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It issues a JWT token to the relying party. -->
+        <OrchestrationStep Order="15" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
     <!-- The following user journey is used for linking the local account for a user to the social account for the user.
          The high-level steps for this user journey are:
            1. The user logs in a local account. If the local account does exist in the SQL identity service but it does not exist in
@@ -2052,7 +3046,7 @@
       <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
       <OrchestrationSteps>
         <!-- The following orchestration step is always executed. -->
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection">
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection.signin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountLoginExchange" />
           </ClaimsProviderSelections>
@@ -2086,7 +3080,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. -->
-        <OrchestrationStep Order="5" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection">
+        <OrchestrationStep Order="5" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection.signin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="AmazonAccountExchange" />
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookAccountExchange" />
@@ -2142,7 +3136,7 @@
              if the user does not exist.-->
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountPasswordRecoveryExchange" TechnicalProfileReferenceId="LocalAccount-PasswordRecovery" />
+            <ClaimsExchange Id="LocalAccountPasswordRecoveryUnverifiedEmailExchange" TechnicalProfileReferenceId="LocalAccount-PasswordRecovery" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is only executed when the user is required to verify a verification phone. -->
@@ -2162,7 +3156,7 @@
              update the password for the user in the SQL identity store.-->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountPasswordResetExchange" TechnicalProfileReferenceId="LocalAccount-PasswordReset" />
+            <ClaimsExchange Id="LocalAccountPasswordResetWithoutSSOSessionExchange" TechnicalProfileReferenceId="LocalAccount-PasswordReset" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It reads the user, identified by the object identifier for the user,
@@ -2193,7 +3187,7 @@
       <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
       <OrchestrationSteps>
         <!-- The following orchestration step is always executed. -->
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection">
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection.signin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="AmazonAccountExchange" />
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookAccountExchange" />
@@ -2275,7 +3269,7 @@
       <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
       <OrchestrationSteps>
         <!-- The following orchestration step is always executed. -->
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection">
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection.signin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="AmazonAccountExchange" />
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookAccountExchange" />
@@ -2351,7 +3345,7 @@
       <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
       <OrchestrationSteps>
         <!-- The following orchestration step is always executed. -->
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection">
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselection.signin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="AmazonAccountExchange" />
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookAccountExchange" />
@@ -2415,6 +3409,80 @@
         <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="Saml2AssertionIssuer" />
       </OrchestrationSteps>
     </UserJourney>
+    <!-- The following user journey is used for logging in a user to the WingTip Games app using an email code.
+         The high-level steps for this user journey are:
+           1. The user enters the email address for a local account to which a verification code is to be sent. If the local account
+              does exist in the SQL identity service but it does not exist in the Azure Active Directory one, then it is migrated from
+              the SQL identity store to the Azure Active Directory one with a generated password.
+           2. The user verifies the verification code that was sent to the email address for the local account.
+           3. A JWT is issued to the relying party. -->
+    <UserJourney Id="SignInForGamesUsingEmailCode">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <!-- The following orchestration step is always executed. It can create the user in the Azure Active Directory identity store
+             if the user does not exist.-->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountLoginEmailCodeExchange" TechnicalProfileReferenceId="LocalAccount-Login-EmailCode" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It reads the user, identified by the object identifier for the user,
+             from the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It calculates the player profile percent complete for the user. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsCalculatePlayerProfilePercentCompleteWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-CalculatePlayerProfilePercentCompleteWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It issues a JWT token to the relying party. -->
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+    <!-- The following user journey is used for logging in a user to the WingTip Games app using a phone code.
+         The high-level steps for this user journey are:
+           1. The user enters the email address for a local account. If the local account does exist in the SQL identity service but
+              it does not exist in the Azure Active Directory one, then it is migrated from the SQL identity store to the Azure Active
+              Directory one with a generated password.
+           2. If the user account is protected with a verification phone, then the user verifies the verification phone.
+           3. A JWT is issued to the relying party. -->
+    <UserJourney Id="SignInForGamesUsingPhoneCode">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <!-- The following orchestration step is always executed. It can create the user in the Azure Active Directory identity store
+             if the user does not exist.-->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountIdentificationExchange" TechnicalProfileReferenceId="LocalAccount-Login-PhoneCode" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It verifies the verification phone for the user. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It reads the user, identified by the object identifier for the user,
+             from the Azure Active Directory identity store. An error is raised if the user does not exist. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It calculates the player profile percent complete for the user. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsCalculatePlayerProfilePercentCompleteWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-CalculatePlayerProfilePercentCompleteWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The following orchestration step is always executed. It issues a JWT token to the relying party. -->
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
     <!-- The following user journey is used for logging in or registering a user to the WingTip Games app.
          The high-level steps for this user journey are:
            1. The user logs in or registers a local or social account. If the user logs in a local account and the local account does
@@ -2464,7 +3532,7 @@
              by the email address for the user, in the Azure Active Directory identity store. An error is raised if the user already
              exists. It can then create the user in the existing identity store if the user does not exist or updates the password for
              the user in the existing identity store if the user does exist.-->
-            <ClaimsExchange Id="LocalAccountRegistrationExchange" TechnicalProfileReferenceId="LocalAccount-Registration" />
+            <ClaimsExchange Id="LocalAccountRegistrationExchange" TechnicalProfileReferenceId="LocalAccount-Registration-UnverifiedEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is only executed when the user is logging in a local account. It reads the user, identified
@@ -2522,7 +3590,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAssertedSocialAccountRegistrationExchange" TechnicalProfileReferenceId="SocialAccount-Registration" />
+            <ClaimsExchange Id="SelfAssertedSocialAccountRegistrationUnverifiedEmailExchange" TechnicalProfileReferenceId="SocialAccount-Registration-UnverifiedEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is only executed when the user is logging in a social account. It updates the social account
@@ -2719,7 +3787,7 @@
              by the email address for the user, in the Azure Active Directory identity store. An error is raised if the user already
              exists. It can then create the user in the existing identity store if the user does not exist or updates the password for
              the user in the existing identity store if the user does exist.-->
-            <ClaimsExchange Id="LocalAccountRegistrationExchange" TechnicalProfileReferenceId="LocalAccount-Registration" />
+            <ClaimsExchange Id="LocalAccountRegistrationExchange" TechnicalProfileReferenceId="LocalAccount-Registration-UnverifiedEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is only executed when the user is logging in a local account. It reads the user, identified
@@ -2777,7 +3845,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAssertedSocialAccountRegistrationExchange" TechnicalProfileReferenceId="SocialAccount-Registration" />
+            <ClaimsExchange Id="SelfAssertedSocialAccountRegistrationUnverifiedEmailExchange" TechnicalProfileReferenceId="SocialAccount-Registration-UnverifiedEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is only executed when the user is logging in a social account. It updates the social account

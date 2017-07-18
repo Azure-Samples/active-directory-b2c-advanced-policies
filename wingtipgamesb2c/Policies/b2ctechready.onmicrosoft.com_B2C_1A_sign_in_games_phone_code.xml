@@ -2,7 +2,7 @@
 <TrustFrameworkPolicy
 	PolicySchemaVersion="0.3.0.0"
 	TenantId="b2ctechready.onmicrosoft.com"
-	PolicyId="B2C_1A_sign_up_sign_in_games"
+	PolicyId="B2C_1A_sign_in_games_phone_code"
 	PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
 	DeploymentMode="Development"
 	UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
@@ -13,31 +13,25 @@
     <TenantId>b2ctechready.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_base_extensions</PolicyId>
   </BasePolicy>
-  <!-- The following policy is used for logging in or registering a user to the WingTip Games app. -->
+  <!-- The following policy is used for logging in a user using a phone code to the WingTip Games app. -->
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpOrSignInForGames" />
+    <DefaultUserJourney ReferenceId="SignInForGamesUsingPhoneCode" />
     <UserJourneyBehaviors>
-      <SingleSignOn Scope="Tenant" KeepAliveInDays="14" />
-      <SessionExpiryType>Absolute</SessionExpiryType>
+      <SingleSignOn Scope="Tenant" />
+      <SessionExpiryType>Rolling</SessionExpiryType>
       <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
       <JourneyInsights InstrumentationKey="94c4abef-8598-4211-b957-b0d0d1d202d1" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryEngine="ApplicationInsights" TelemetryVersion="1.0.0" />
     </UserJourneyBehaviors>
-    <TechnicalProfile Id="SignUpOrSignInForGames">
-      <DisplayName>Sign In or Sign Up</DisplayName>
+    <TechnicalProfile Id="SignInForGamesUsingPhoneCode">
+      <DisplayName>Sign In</DisplayName>
       <Protocol Name="OpenIdConnect" />
       <InputTokenFormat>JWT</InputTokenFormat>
       <CryptographicKeys>
         <Key Id="client_secret" StorageReferenceId="WingTipGamesClientSecret" />
       </CryptographicKeys>
-      <InputClaims>
-        <InputClaim ClaimTypeReferenceId="extension_Brand" />
-        <InputClaim ClaimTypeReferenceId="extension_PlayerProfileRegistrationMode" />
-      </InputClaims>
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="displayName" />
         <OutputClaim ClaimTypeReferenceId="email" />
-        <OutputClaim ClaimTypeReferenceId="identityProvider" />
-        <OutputClaim ClaimTypeReferenceId="newUser" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
         <OutputClaim ClaimTypeReferenceId="extension_ListenerGenre" />
         <OutputClaim ClaimTypeReferenceId="extension_Picture" />

@@ -17,8 +17,8 @@
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignInForMusic" />
     <UserJourneyBehaviors>
-      <SingleSignOn Scope="Tenant" />
-      <SessionExpiryType>Rolling</SessionExpiryType>
+      <SingleSignOn Scope="Tenant" KeepAliveInDays="14" />
+      <SessionExpiryType>Absolute</SessionExpiryType>
       <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
       <JourneyInsights InstrumentationKey="94c4abef-8598-4211-b957-b0d0d1d202d1" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryEngine="ApplicationInsights" TelemetryVersion="1.0.0" />
     </UserJourneyBehaviors>

@@ -12,13 +12,33 @@
   </BasePolicy>
   <BuildingBlocks>
     <ContentDefinitions>
+      <!-- The following content definition is used for errors. -->
+      <ContentDefinition Id="api.error">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/error.html</LoadUri>
+      </ContentDefinition>
       <!-- The following content definition is used for selecting an identity provider. -->
-      <ContentDefinition Id="api.idpselection">
-        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/idpselection.html</LoadUri>
+      <ContentDefinition Id="api.idpselection.signin">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/idpselection-signin.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for selecting an identity provider. -->
+      <ContentDefinition Id="api.idpselection.signupsignin">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/idpselection-signupsignin.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering a local account via an activation link. -->
+      <ContentDefinition Id="api.localaccount.activation">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-activation.html</LoadUri>
       </ContentDefinition>
       <!-- The following content definition is used for logging in a local account. -->
       <ContentDefinition Id="api.localaccount.login">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account using an e-mail code. -->
+      <ContentDefinition Id="api.localaccount.login.emailcode">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login-emailcode.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account using a phone code. -->
+      <ContentDefinition Id="api.localaccount.login.phonecode">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login-phonecode.html</LoadUri>
       </ContentDefinition>
       <!-- The following content definition is used for recovering the password for a local account. -->
       <ContentDefinition Id="api.localaccount.passwordrecovery">
@@ -27,6 +47,10 @@
       <!-- The following content definition is used for resetting the password for a local account. -->
       <ContentDefinition Id="api.localaccount.passwordreset">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-passwordreset.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for setting the password for a local account. -->
+      <ContentDefinition Id="api.localaccount.passwordset">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-passwordset.html</LoadUri>
       </ContentDefinition>
       <!-- The following content definition is used for registering a local account. -->
       <ContentDefinition Id="api.localaccount.registration">
@@ -59,6 +83,10 @@
       <!-- The following content definition is used for logging in a user. -->
       <ContentDefinition Id="api.signupsignin">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/signupsignin.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering a social account. -->
+      <ContentDefinition Id="api.socialaccount.registration">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/socialaccount-registration.html</LoadUri>
       </ContentDefinition>
     </ContentDefinitions>
   </BuildingBlocks>
