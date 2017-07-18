@@ -5,13 +5,17 @@ VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Policies", "Policies", "{19A225F5-DD9A-404A-852A-3B93FAB3046D}"
 	ProjectSection(SolutionItems) = preProject
+		Policies\b2ctechready.onmicrosoft.com_B2C_1A_activation.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_activation.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_base.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_base.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_base_extensions.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_base_extensions.xml
+		Policies\b2ctechready.onmicrosoft.com_B2C_1A_invitation.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_invitation.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_link.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_link.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_password_reset.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_password_reset.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_profile_update_games.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_profile_update_games.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_profile_update_music.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_profile_update_music.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_in_billing.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_in_billing.xml
+		Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_in_games_email_code.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_in_games_email_code.xml
+		Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_in_games_phone_code.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_in_games_phone_code.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_up_sign_in_games.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_up_sign_in_games.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_up_sign_in_music.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_sign_up_sign_in_music.xml
 		Policies\b2ctechready.onmicrosoft.com_B2C_1A_step_up.xml = Policies\b2ctechready.onmicrosoft.com_B2C_1A_step_up.xml
@@ -44,7 +48,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingTipUserJourneyPlayerWeb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{846A1DCB-4B77-4B16-A618-558B4A755FC6}"
 	ProjectSection(SolutionItems) = preProject
+		Templates\error.html = Templates\error.html
+		Templates\idpselection-signin.html = Templates\idpselection-signin.html
+		Templates\idpselection-signupsignin.html = Templates\idpselection-signupsignin.html
 		Templates\idpselection.html = Templates\idpselection.html
+		Templates\localaccount-identification.html = Templates\localaccount-identification.html
+		Templates\localaccount-login-emailcode.html = Templates\localaccount-login-emailcode.html
 		Templates\localaccount-login.html = Templates\localaccount-login.html
 		Templates\localaccount-passwordrecovery.html = Templates\localaccount-passwordrecovery.html
 		Templates\localaccount-passwordreset.html = Templates\localaccount-passwordreset.html
@@ -56,6 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 		Templates\selfasserted-playerprofileregistration-full.html = Templates\selfasserted-playerprofileregistration-full.html
 		Templates\selfasserted-playerprofileupdate.html = Templates\selfasserted-playerprofileupdate.html
 		Templates\signupsignin.html = Templates\signupsignin.html
+		Templates\socialaccount-registration.html = Templates\socialaccount-registration.html
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{B1947906-3328-4248-8BAC-2EC1952C9092}"
@@ -145,10 +155,10 @@ Global
 		{50EB09EE-060E-4A48-BA26-D8A07FF0B956} = {630A606A-D9C1-4608-A75F-43526EED5280}
 		{A0EF70BB-B592-4283-83A6-B7E3DCDD0DFF} = {630A606A-D9C1-4608-A75F-43526EED5280}
 		{2E82C75E-EE4E-4A81-808B-A2A7B2DD9A3D} = {630A606A-D9C1-4608-A75F-43526EED5280}
+		{FAF833A7-E020-44F9-8857-D1825DA0ED21} = {630A606A-D9C1-4608-A75F-43526EED5280}
 		{B1947906-3328-4248-8BAC-2EC1952C9092} = {846A1DCB-4B77-4B16-A618-558B4A755FC6}
 		{07BFD529-8065-4880-9C3E-90D690A3DFFE} = {846A1DCB-4B77-4B16-A618-558B4A755FC6}
 		{0A16CBA3-5C5C-4983-BF8F-8C91F423F4A6} = {846A1DCB-4B77-4B16-A618-558B4A755FC6}
 		{3ED8DF35-B118-4362-B560-13724483CCDB} = {846A1DCB-4B77-4B16-A618-558B4A755FC6}
-		{FAF833A7-E020-44F9-8857-D1825DA0ED21} = {630A606A-D9C1-4608-A75F-43526EED5280}
 	EndGlobalSection
 EndGlobal
