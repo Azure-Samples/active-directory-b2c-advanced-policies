@@ -819,12 +819,14 @@ The following command line illustrates how to configure issuance
 transform rules for the previously created relying party trust named
 “*Contoso369b2c B2C Tenant*”:
 
-PS &gt; \$wsRealm =
-"https://login.microsoftonline.com/te/contoso369b2c.onmicrosoft.com/B2C\_1A\_base\_extensions"
+```Powershell
+PS > $wsRealm = "https://login.microsoftonline.com/te/contoso369b2c.onmicrosoft.com/B2C\_1A\_base\_extensions"
+```
 
-PS &gt; \$ruleSet = New-ADFSClaimRuleSet -ClaimRule 'c:\[Type ==
+```Powershell
+PS > $ruleSet = New-ADFSClaimRuleSet -ClaimRule 'c:[Type ==
 "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname",
-Issuer == "AD AUTHORITY"\] =&gt; issue(store = "Active Directory", types
+Issuer == "AD AUTHORITY"] => issue(store = "Active Directory", types
 =
 ("http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname",
 
@@ -835,9 +837,10 @@ Issuer == "AD AUTHORITY"\] =&gt; issue(store = "Active Directory", types
 "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"), query
 = ";userPrincipalName,employeeNumber,mail,givenName,sn;{0}", param =
 c.Value);'
-
-PS &gt;Set-ADFSRelyingPartyTrust -TargetIdentifier \$wsRealm
--IssuanceTransformRules \$ruleSet.ClaimRulesString
+```
+```Powershell
+PS > Set-ADFSRelyingPartyTrust -TargetIdentifier $wsRealm -IssuanceTransformRules $ruleSet.ClaimRulesString
+```
 
 ![](media/04_05.png)
 
