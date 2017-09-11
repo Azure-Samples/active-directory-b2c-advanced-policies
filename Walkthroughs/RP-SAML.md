@@ -1,7 +1,7 @@
 Scenario
 ========
 
-This document will walk you through adding a SAML-based Relaying party
+This document will walk you through adding a SAML-based Relying party
 to Azure AD B2C.
 
 This will enable scenarios such as:
