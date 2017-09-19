@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Authentication Count Summary Report";
+}
+<h1 class="page-header">Authentication Count Summary Report</h1>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Authentication Count</th>
+                <th>Authorization Code (Public Client)</th>
+                <th>Authorization Code (Confidential Client)</th>
+                <th>Hybrid</th>
+                <th>Implicit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reportEntryViewModel in Model.ReportEntries)
+            {
+                <tr>
+                    <td>@reportEntryViewModel.Date</td>
+                    <td>@reportEntryViewModel.AuthenticationCount</td>
+                    <td>@reportEntryViewModel.AuthorizationCodeAsPublicClientAuthenticationCount</td>
+                    <td>@reportEntryViewModel.AuthorizationCodeAsConfidentialClientAuthenticationCount</td>
+                    <td>@reportEntryViewModel.HybridAuthenticationCount</td>
+                    <td>@reportEntryViewModel.ImplicitAuthenticationCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

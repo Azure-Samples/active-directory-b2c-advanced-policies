@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "User Journey Summary Events Report";
+}
+<h1 class="page-header">User Journey Summary Events Report</h1>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Base Policy Unique ID</th>
+                <th>User Journey ID</th>
+                <th>Resource ID</th>
+                <th>Success Count</th>
+                <th>Failure Count</th>
+                <th>Caller Error Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reportEntryViewModel in Model.ReportEntries)
+            {
+                <tr>
+                    <td>@reportEntryViewModel.Id</td>
+                    <td>@reportEntryViewModel.BasePolicyUniqueId</td>
+                    <td>@reportEntryViewModel.UserJourneyId</td>
+                    <td>@reportEntryViewModel.ResourceId</td>
+                    <td>@reportEntryViewModel.SuccessCount</td>
+                    <td>@reportEntryViewModel.FailureCount</td>
+                    <td>@reportEntryViewModel.CallerErrorCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "User Audit";
+}
+<h1 class="page-header">User Audit</h1>
+<h2 class="sub-header">Latest @Model.Top activities</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Correlation ID</th>
+                <th>Activity</th>
+                <th>Activity Date</th>
+                <th>Actor</th>
+                <th>Target Resource</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var auditEntryViewModel in Model.AuditEntries)
+            {
+                <tr>
+                    <td>@auditEntryViewModel.CorrelationId</td>
+                    <td>@auditEntryViewModel.Activity</td>
+                    <td>@auditEntryViewModel.ActivityDate</td>
+                    <td>@auditEntryViewModel.ActorName<br /><span class="small">@auditEntryViewModel.ActorType</span></td>
+                    <td>@auditEntryViewModel.TargetResourceName<br /><span class="small">@auditEntryViewModel.TargetResourceType</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

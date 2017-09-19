@@ -1,0 +1,260 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo - WingTip Games</title>
+    <environment names="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
+        <link href="~/css/demo.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/demo.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <link href="~/images/logo.png" rel="icon" type="image/png">
+</head>
+<body>
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <nav>
+                            <ul class="nav masthead-nav">
+                                <li class="active"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                <li>
+                                    <a href="https://wingtipbillingb2c.azurewebsites.net" target="_blank">Billing</a>
+                                </li>
+                                <li>
+                                    <a href="http://wingtipmusicb2c.azurewebsites.net" target="_blank">Music</a>
+                                </li>
+                                <li>
+                                    <a href="http://wingtiptoysb2c.azurewebsites.net" target="_blank">Administration</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="inner cover">
+                    <form method="GET" asp-controller="Account" asp-action="LogIn">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Default sign-up or sign-in
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/amazon.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/facebook.png" />
+                                </h1>
+                                <p class="lead">Sign up or sign in with a classic, local or social account <a id="accountTooltip" href="#" title="A classic account is one that is migrated, just in time, from an existing identity store to the B2C directory store." data-placement="top" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a> and access your billing and music data using an access token <a id="accessTooltip" href="#" title="An access token will be issued as result of sign-up or sign-in, containing the Billing.Read and Music.Read scopes, for use using the Billing and Music APIs." data-placement="top" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a></p>
+                                <input name="domainHint" type="hidden" value="*" />
+                                <select name="localeHint" class="form-control input-lg">
+                                    <option disabled selected value="*">Locale</option>
+                                    <option value="en">English</option>
+                                    <option value="fr">French</option>
+                                </select>
+                                <a id="localeHintTooltip" class="lead" href="#" title="If you select a locale option, then you will be signed-up or signed-in using the selected locale; otherwise, you will be signed-up or signed-in using your web locale." data-placement="top" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
+                                <select name="playerProfileRegistrationMode" class="form-control input-lg">
+                                    <option disabled selected value="?">Registration mode</option>
+                                    <option value="Basic">Basic</option>
+                                    <option value="Full">Full</option>
+                                </select>
+                                <a id="playerProfileRegistrationModeTooltip" class="lead" href="#" title="This determines whether a single-field (basic) or multiple-field (full) player profile is displayed for sign-up." data-placement="top" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogIn">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Location-based sign-up or sign-in
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/amazon.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/facebook.png" />
+                                </h1>
+                                <p class="lead">Sign up or sign in, based on your current location <a id="locationTooltip" href="#" title="If you are located in Canada or you select Canada, then you will be signed-up or signed-in using an Amazon account using the French UI locale; otherwise, you will be signed-up or signed-in using a Facebook account using the English UI locale." data-placement="top" data-toggle="tooltip"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>, using a social account and access your billing and music data using an access token</p>
+                                <input name="domainHint" type="hidden" value="?" />
+                                <input name="localeHint" type="hidden" value="?" />
+                                <input name="playerProfileRegistrationMode" type="hidden" value="Basic" />
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogIn">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Amazon sign-up or sign-in
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/amazon.png" />
+                                </h1>
+                                <p class="lead">Sign up or sign in with an Amazon account and access your billing and music data using an access token</p>
+                                <input name="domainHint" type="hidden" value="amazon.com" />
+                                <input name="localeHint" type="hidden" value="*" />
+                                <input name="playerProfileRegistrationMode" type="hidden" value="Basic" />
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogIn">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Facebook sign-up or sign-in
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/facebook.png" />
+                                </h1>
+                                <p class="lead">Sign up or sign in with a Facebook account and access your billing and music data using an access token</p>
+                                <input name="domainHint" type="hidden" value="facebook.com" />
+                                <input name="localeHint" type="hidden" value="*" />
+                                <input name="playerProfileRegistrationMode" type="hidden" value="Basic" />
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="RegisterUsingAppCode">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Register authentication app
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/amazon.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/facebook.png" />
+                                </h1>
+                                <p class="lead">Register an authentication app with a local or social account</p>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogInUsingAppCode">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Sign-in using authentication app
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                </h1>
+                                <p class="lead">Sign in with a local or social account using an authentication app</p>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="RegisterUsingAuthyCode">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Register Authy app
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/amazon.png" />
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/facebook.png" />
+                                </h1>
+                                <p class="lead">Register an Authy app with a local or social account</p>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogInUsingAuthyCode">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    Sign-in using Authy app
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                </h1>
+                                <p class="lead">Sign in with a local or social account using an Authy app</p>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogInUsingEmailCode">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    WingTip sign-in using email code
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                </h1>
+                                <p class="lead">Sign in with a WingTip account using an email code and access your billing and music data using an access token</p>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <form method="GET" asp-controller="Account" asp-action="LogInUsingPhoneCode">
+                        <div class="media">
+                            <div class="media-body">
+                                <h1 class="media-heading">
+                                    WingTip sign-in using phone code
+                                    <img src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/wingtiptoys.png" />
+                                </h1>
+                                <p class="lead">Sign in with a WingTip account using a phone code and access your billing and music data using an access token</p>
+                            </div>
+                            <div class="media-right">
+                                <button class="btn btn-lg btn-success">Go</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+    <script>
+        $(function () {
+            $('#accountTooltip').tooltip();
+            $('#accessTooltip').tooltip();
+            $('#localeHintTooltip').tooltip();
+            $('#playerProfileRegistrationModeTooltip').tooltip();
+            $('#locationTooltip').tooltip();
+        });
+    </script>
+</body>
+</html>

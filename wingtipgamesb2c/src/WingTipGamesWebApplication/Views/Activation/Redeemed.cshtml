@@ -1,0 +1,33 @@
+@model WingTipGamesWebApplication.ViewModels.Activation.RedeemedViewModel
+@{
+    ViewData["Title"] = "You've activated your WingTip account";
+}
+<div class="container marketing new-release-games">
+    <h2>You've activated your WingTip account</h2>
+    <p class="text-center">We hope you enjoy these game rentals.</p>
+    @foreach (var games in Model.Games.Select((x, i) => new
+    {
+        Index = i,
+        Value = x
+    }).GroupBy(x => x.Index / 4).Select(x => x.Select(y => y.Value).ToList()).ToList())
+    {
+        <div class="row">
+            @foreach (var game in games)
+            {
+                <div class="col-lg-3">
+                    <div class="game">
+                        <img alt="@game.Title" src="@game.ImageSource">
+                        <h6>@game.Title</h6>
+                        <p>
+                            <a class="btn btn-primary" href="#" role="button">Rent free</a>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

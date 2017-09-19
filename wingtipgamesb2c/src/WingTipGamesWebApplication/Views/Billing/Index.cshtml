@@ -1,0 +1,35 @@
+﻿@model WingTipGamesWebApplication.ViewModels.Billing.IndexViewModel
+@{
+    ViewData["Title"] = "Billing";
+}
+<div class="container">
+    <h1>Order history</h1>
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Total price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.Date.ToString("d")</td>
+                    <td>@order.Description</td>
+                    <td>@order.Status</td>
+                    <td>$@order.TotalPrice</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-primary" href="https://wingtipbillingb2c.azurewebsites.net/Account/LogIn" target="_blank">See more</a>
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

@@ -1,0 +1,108 @@
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@using WingTipToysWebApplication.HtmlHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WingTip Toys</title>
+    <environment names="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    <link href="~/images/logo.png" rel="icon" type="image/png">
+    @Html.Raw(JavaScriptSnippet.FullScript)
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img alt="WingTip Toys" src="/images/logo.png">
+                </a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid body-content">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="@Html.ActiveNavbarItem("Home", "Index")">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li class="@Html.ActiveNavbarItem("Audit", "ApplicationIndex")">
+                        <a asp-area="" asp-controller="Audit" asp-action="ApplicationIndex">Application Audit</a>
+                    </li>
+                    <li class="@Html.ActiveNavbarItem("Audit", "UserIndex")">
+                        <a asp-area="" asp-controller="Audit" asp-action="UserIndex">User Audit</a>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li class="@Html.ActiveNavbarItem("Report", "B2CAuthenticationCountSummaryIndex")">
+                        <a asp-area="" asp-controller="Report" asp-action="B2CAuthenticationCountSummaryIndex">Authentication Count Summary Report</a>
+                    </li>
+                    <li class="@Html.ActiveNavbarItem("Report", "B2CMfaRequestCountSummaryIndex")">
+                        <a asp-area="" asp-controller="Report" asp-action="B2CMfaRequestCountSummaryIndex">MFA Request Count Summary Report</a>
+                    </li>
+                    <li class="@Html.ActiveNavbarItem("Report", "B2CUserJourneySummaryEventsIndex")">
+                        <a asp-area="" asp-controller="Report" asp-action="B2CUserJourneySummaryEventsIndex">User Journey Summary Events Report</a>
+                    </li>
+                    <li class="@Html.ActiveNavbarItem("Report", "TenantUserCountSummaryIndex")">
+                        <a asp-area="" asp-controller="Report" asp-action="TenantUserCountSummaryIndex">User Count Summary Report</a>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li class="@Html.ActiveNavbarItem("User", "Index")">
+                        <a asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                @RenderBody()
+            </div>
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; 2017 - WingTip Toys</p>
+        </footer>
+    </div>
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

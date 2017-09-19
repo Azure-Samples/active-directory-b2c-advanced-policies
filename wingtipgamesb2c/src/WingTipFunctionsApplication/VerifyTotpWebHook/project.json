@@ -1,0 +1,9 @@
+{
+  "frameworks": {
+    "net46": {
+      "dependencies": {
+        "OtpSharp": "1.3.0.4"
+      }
+    }
+  }
+}

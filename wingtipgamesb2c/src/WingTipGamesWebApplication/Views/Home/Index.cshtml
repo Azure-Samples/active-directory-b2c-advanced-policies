@@ -1,0 +1,76 @@
+﻿@model WingTipGamesWebApplication.ViewModels.Home.IndexViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+@if (ViewBag.IsNewUser != null)
+{
+    <div class="alert alert-dismissible alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Congratulations for joining WingTip Toys!</strong> We've sent you a welcome email with information about using our online services.
+    </div>
+}
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <img alt="Zero slide" class="zero-slide" src="/images/zero-slide.jpg">
+            <div class="carousel-caption hidden-md hidden-sm hidden-xs">
+                <h1>Challenge your friends and<br />play all the latest games</h1>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <p>Sign up for a 30-day free trial!</p>
+                    <p>
+                        <a class="btn btn-success" href="@Url.Action("LogIn", "Account", new {ReturnUrl = Url.Action("Index", "Home")})">Sign up now</a>
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container marketing new-release-games">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-sign-up alert-success hidden-lg" role="alert">
+            <a href="@Url.Action("LogIn", "Account", new {ReturnUrl = Url.Action("Index", "Home")})" class="btn btn-xs btn-success pull-right">Sign up now</a>
+            Sign up for a 30-day free trial!
+        </div>
+        <div class="alert alert-info alert-invitation" role="alert">
+            <a href="@Url.Action("Create", "Invitation")" class="btn btn-xs btn-primary pull-right">Claim now</a>
+            Claim a free game rental!
+        </div>
+    }
+    <h2>New Release Games</h2>
+    @foreach (var newReleaseGames in Model.NewReleaseGames.Select((x, i) => new
+    {
+        Index = i,
+        Value = x
+    }).GroupBy(x => x.Index / 4).Select(x => x.Select(y => y.Value).ToList()).ToList())
+    {
+        <div class="row">
+            @foreach (var newReleaseGame in newReleaseGames)
+            {
+                <div class="col-lg-3">
+                    <div class="game">
+                        <img alt="@newReleaseGame.Title" src="@newReleaseGame.ImageSource">
+                        <h6>@newReleaseGame.Title</h6>
+                        @if (newReleaseGame.StandardPrice > 0)
+                        {
+                            <p>
+                                <a class="btn btn-primary" href="#" role="button">Rent @newReleaseGame.StandardPrice.ToString("$0.00")</a>
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                <a class="btn btn-primary" href="#" role="button">Coming soon</a>
+                            </p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

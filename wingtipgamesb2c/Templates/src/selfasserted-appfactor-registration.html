@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register your authentication app</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TODO: favicon -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- removeIf(production) -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/css/global.css" rel="stylesheet" type="text/css" />
+    <!-- endRemoveIf(production) -->
+  </head>
+  <body>
+    <div class="container self_asserted_container self_asserted_app_factor_container self_asserted_app_factor_registration_container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="image-center">
+                <img alt="WingTip Toys" class="login-logo" src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/logo.png" />
+              </div>
+              <p style="margin-top: 20px;">Ensure you're the only one who can access your account.</p>
+              <p style="font-weight: bold; margin-top: 20px;">1. Install an authentication app</p>
+              <a href="https://itunes.apple.com/au/app/google-authenticator/id388497605" target="_blank">
+                <img alt="Download the Google Authenticator app from App Store" src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/apple-app-store.png">
+              </a>
+              <a class="auth-app-link" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank">
+                <img alt="Download the Google Authenticator app from Play Store" src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/google-play-store.png">
+              </a>
+              <a class="auth-app-link" href="https://www.microsoft.com/en-AU/store/apps/Authenticator/9WZDNCRFJ3RJ" target="_blank">
+                <img alt="Download the Authenticator app from Windows Store" src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/images/microsoft-windows-store.png">
+              </a>
+              <p style="font-weight: bold; margin-top: 20px;">2. Scan this barcode</p>
+              <img id="strongAuthenticationAppQRCodeBitmapImage" src="">
+              <div id="api" data-name="SelfAsserted">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/js/analytics.js" />
+    <script src="https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/js/selfasserted-appfactor-registration.js" />
+  </body>
+</html>

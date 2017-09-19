@@ -1,0 +1,42 @@
+﻿@model WingTipGamesWebApplication.ViewModels.Music.IndexViewModel
+@{
+    ViewData["Title"] = "Music";
+}
+<div class="container marketing new-release-albums">
+    <h2>New Release Albums</h2>
+    @foreach (var newReleaseAlbums in Model.NewReleaseAlbums.Select((x, i) => new
+    {
+        Index = i,
+        Value = x
+    }).GroupBy(x => x.Index / 4).Select(x => x.Select(y => y.Value).ToList()).ToList())
+    {
+        <div class="row">
+            @foreach (var newReleaseAlbum in newReleaseAlbums)
+                {
+                <div class="col-lg-3">
+                    <div class="album">
+                        <img alt="@newReleaseAlbum.Title" src="@string.Format("https://wingtipmusicb2c.azurewebsites.net{0}", newReleaseAlbum.ImageSource)">
+                        <h6>@newReleaseAlbum.Title</h6>
+                        <p>@newReleaseAlbum.Artist.Name</p>
+                        @if (newReleaseAlbum.StandardPrice > 0)
+                        {
+                            <p>
+                                <a class="btn btn-primary" href="#" role="button">Rent @newReleaseAlbum.StandardPrice.ToString("$0.00")</a>
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                <a class="btn btn-primary" href="#" role="button">Coming soon</a>
+                            </p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

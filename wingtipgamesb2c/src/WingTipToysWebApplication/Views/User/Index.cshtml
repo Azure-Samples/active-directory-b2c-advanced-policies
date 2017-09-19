@@ -1,0 +1,87 @@
+﻿@using WingTipCommon
+@model WingTipToysWebApplication.ViewModels.User.IndexViewModel
+@{
+    ViewData["Title"] = "Users";
+}
+<h1 class="page-header">Users</h1>
+<div class="well well-users">
+    <h5>Actions</h5>
+    <div class="media">
+        <div class="media-left">
+            <span class="label label-success">Activate</span>
+        </div>
+        <div class="media-body">
+            <span class="small">Sends an activation link to the email address for a user, which must already be migrated to the B2C identity store, and sets the extension_ActivationStatus property of the User object in the B2C identity store to "Pending".</span>
+        </div>
+    </div>
+    <div class="media">
+        <div class="media-left">
+            <span class="label label-success">Change password</span>
+        </div>
+        <div class="media-body">
+            <span class="small">Updates the password for the user in the local identity store and either (i) creates the user the B2C identity store if they haven't been migrated or (ii) updates the password for the user in the B2C identity store if they have been migrated.</span>
+        </div>
+    </div>
+    <div class="media">
+        <div class="media-left">
+            <span class="label label-success">Migrate</span>
+        </div>
+        <div class="media-body">
+            <span class="small">Adds the user to the B2C identity store with a generated password and sets the MigrationStatus property of the User object in the local identity store to "Migrated without password".</span>
+        </div>
+    </div>
+    <div class="media">
+        <div class="media-left">
+            <span class="label label-warning">Demigrate</span>
+        </div>
+        <div class="media-body">
+            <span class="small">Removes the user from the B2C identity store and sets the MigrationStatus property of the User object in the local identity store to "Not migrated".</span>
+        </div>
+    </div>
+    <div class="media">
+        <div class="media-left">
+            <span class="label label-danger">Delete</span>
+        </div>
+        <div class="media-body">
+            <span class="small">Deletes the user in the local identity store.</span>
+        </div>
+    </div>
+</div>
+<a class="btn btn-primary" asp-action="Create">New</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User name</th>
+                <th>Migration status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var userViewModel in Model.Users)
+            {
+                <tr>
+                    <td>@userViewModel.UserName</td>
+                    <td>@userViewModel.MigrationStatus.ToDisplayString()</td>
+                    <td>
+                        @if (userViewModel.MigrationStatus != MigrationStatus.NotMigrated)
+                        {
+                            <a class="btn btn-success" asp-action="Activate" asp-route-id="@userViewModel.Id">Activate</a>
+                        }
+                        <a class="btn btn-success" asp-action="ChangePassword" asp-route-id="@userViewModel.Id">Change password</a>
+                        @if (userViewModel.MigrationStatus == MigrationStatus.NotMigrated)
+                        {
+                            <a class="btn btn-migration btn-success" asp-action="Migrate" asp-route-id="@userViewModel.Id">Migrate</a>
+                        }
+                        else if (userViewModel.MigrationStatus == MigrationStatus.MigratedWithoutPassword || userViewModel.MigrationStatus == MigrationStatus.MigratedWithPassword)
+                        {
+                            <a class="btn btn-migration btn-warning" asp-action="Demigrate" asp-route-id="@userViewModel.Id">Demigrate</a>
+                        }
+                        <a class="btn btn-warning" asp-action="Reset" asp-route-id="@userViewModel.Id">Reset</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@userViewModel.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

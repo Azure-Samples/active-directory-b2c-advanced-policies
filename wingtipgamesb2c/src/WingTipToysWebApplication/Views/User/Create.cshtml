@@ -1,0 +1,29 @@
+﻿@model WingTipToysWebApplication.ViewModels.User.CreateViewModel
+@{
+    ViewData["Title"] = "New User";
+}
+<h1 class="page-header">New User</h1>
+<form method="POST" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <input class="form-control" type="text" asp-for="UserName" />
+        <span class="text-danger" asp-validation-for="UserName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input class="form-control" type="password" asp-for="Password" />
+        <span class="text-danger" asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DisplayName"></label>
+        <input class="form-control" type="text" asp-for="DisplayName" />
+        <span class="text-danger" asp-validation-for="DisplayName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PlayerTag"></label>
+        <input class="form-control" type="text" asp-for="PlayerTag" />
+        <span class="text-danger" asp-validation-for="PlayerTag"></span>
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+    <a class="btn btn-default" asp-action="Index">Cancel</a>
+</form>

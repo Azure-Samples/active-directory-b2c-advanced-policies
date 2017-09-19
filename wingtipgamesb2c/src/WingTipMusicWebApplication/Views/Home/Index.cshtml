@@ -1,0 +1,68 @@
+﻿@model WingTipMusicWebApplication.ViewModels.Home.IndexViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+@if (ViewBag.IsNewUser != null)
+{
+    <div class="alert alert-dismissible alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Congratulations for joining WingTip Toys!</strong> We've sent you a welcome email with information about using our online services.
+    </div>
+}
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li class="active" data-slide-to="0" data-target="#myCarousel"></li>
+        <li data-slide-to="1" data-target="#myCarousel"></li>
+        <li data-slide-to="2" data-target="#myCarousel"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <img alt="First slide" class="first-slide" src="/images/first-slide.jpg">
+        </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="container marketing new-release-albums">
+    <h2>New Release Albums</h2>
+    @foreach (var newReleaseAlbums in Model.NewReleaseAlbums.Select((x, i) => new
+    {
+        Index = i,
+        Value = x
+    }).GroupBy(x => x.Index / 4).Select(x => x.Select(y => y.Value).ToList()).ToList())
+    {
+        <div class="row">
+            @foreach (var newReleaseAlbum in newReleaseAlbums)
+            {
+                <div class="col-lg-3">
+                    <div class="game">
+                        <img alt="@newReleaseAlbum.Title" src="@newReleaseAlbum.ImageSource">
+                        <h6>@newReleaseAlbum.Title</h6>
+                        @if (newReleaseAlbum.StandardPrice > 0)
+                        {
+                            <p>
+                                <a class="btn btn-primary" href="#" role="button">Rent @newReleaseAlbum.StandardPrice.ToString("$0.00")</a>
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                <a class="btn btn-primary" href="#" role="button">Coming soon</a>
+                            </p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

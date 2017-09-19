@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "MFA Request Count Summary Report";
+}
+<h1 class="page-header">MFA Request Count Summary Report</h1>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>MFA Request Count</th>
+                <th>SMS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reportEntryViewModel in Model.ReportEntries)
+            {
+                <tr>
+                    <td>@reportEntryViewModel.Date</td>
+                    <td>@reportEntryViewModel.MfaCount</td>
+                    <td>@reportEntryViewModel.SmsMfaCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

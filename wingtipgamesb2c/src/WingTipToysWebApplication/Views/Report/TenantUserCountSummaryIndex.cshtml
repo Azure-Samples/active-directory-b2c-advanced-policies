@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "User Count Summary Report";
+}
+<h1 class="page-header">User Count Summary Report</h1>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Total User Count</th>
+                <th>Local User Count</th>
+                <th>Internal User Count</th>
+                <th>External User Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reportEntryViewModel in Model.ReportEntries)
+            {
+                <tr>
+                    <td>@reportEntryViewModel.Date</td>
+                    <td>@reportEntryViewModel.TotalUserCount</td>
+                    <td>@reportEntryViewModel.LocalUserCount</td>
+                    <td>@reportEntryViewModel.InternalUserCount</td>
+                    <td>@reportEntryViewModel.ExternalUserCount<br /><span class="small">Amazon: @reportEntryViewModel.AmazonExternalUserCount</span><br /><span class="small">Facebook: @reportEntryViewModel.FacebookExternalUserCount</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

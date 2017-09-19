@@ -1,0 +1,29 @@
+@model WingTipGamesWebApplication.ViewModels.Invitation.CreateViewModel
+@{
+    ViewData["Title"] = "Claim a free game rental";
+}
+<div class="container">
+    <h1>Claim a free game rental</h1>
+    <p>You can claim a free game rental but entering your email address and then following the invitation link we send you.</p>
+    <form method="POST" asp-action="Create">
+        <div class="form-group">
+            <label asp-for="EmailAddress"></label>
+            <input class="form-control" type="text" asp-for="EmailAddress" />
+            <span class="text-danger" asp-validation-for="EmailAddress"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RedemptionMethod"></label>
+            <select class="form-control" asp-for="RedemptionMethod">
+                <option value="ApplicationLink">Application link</option>
+                <option value="PolicyLink">Policy link</option>
+            </select>
+            <span class="text-danger" asp-validation-for="RedemptionMethod"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <a class="btn btn-default" asp-controller="Home" asp-action="Index">Cancel</a>
+    </form>
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

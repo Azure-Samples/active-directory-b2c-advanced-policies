@@ -1,0 +1,23 @@
+@model WingTipGamesWebApplication.ViewModels.Invitation.RedeemedViewModel
+@{
+    ViewData["Title"] = "You've claimed your free game rental";
+}
+<div class="container marketing new-release-games">
+    <h2>You've claimed your free game rental</h2>
+    <p class="text-center">We hope you enjoy this game rental.</p>
+    <div class="row">
+        <div class="col-lg-3 col-lg-offset-4">
+            <div class="game">
+                <img alt="@Model.Game.Title" src="@Model.Game.ImageSource">
+                <h6>@Model.Game.Title</h6>
+                <p>
+                    <a class="btn btn-primary" href="#" role="button">Rent free</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <footer>
+        <p>&copy; 2017 - WingTip Toys</p>
+    </footer>
+</div>

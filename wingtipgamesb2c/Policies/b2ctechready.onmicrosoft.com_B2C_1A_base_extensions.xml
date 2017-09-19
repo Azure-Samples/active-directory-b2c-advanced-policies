@@ -32,6 +32,14 @@
       <ContentDefinition Id="api.localaccount.login">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login.html</LoadUri>
       </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account using an app code. -->
+      <ContentDefinition Id="api.localaccount.login.appcode">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login-appcode.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for logging in a local account using an Authy code. -->
+      <ContentDefinition Id="api.localaccount.login.authycode">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login-authycode.html</LoadUri>
+      </ContentDefinition>
       <!-- The following content definition is used for logging in a local account using an e-mail code. -->
       <ContentDefinition Id="api.localaccount.login.emailcode">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-login-emailcode.html</LoadUri>
@@ -59,6 +67,18 @@
       <!-- The following content definition is used for registering, validating, and verifying a verification phone. -->
       <ContentDefinition Id="api.phonefactor">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/phonefactor.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering a verification app. -->
+      <ContentDefinition Id="api.selfasserted.appfactor.registration">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-appfactor-registration.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for verifying a verification app. -->
+      <ContentDefinition Id="api.selfasserted.appfactor.verification">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-appfactor-verification.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for registering, validating, and verifying an Authy account. -->
+      <ContentDefinition Id="api.selfasserted.authyfactor">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/selfasserted-authyfactor.html</LoadUri>
       </ContentDefinition>
       <!-- The following content definition is used for updating the consent for a user. -->
       <ContentDefinition Id="api.selfasserted.consent">
