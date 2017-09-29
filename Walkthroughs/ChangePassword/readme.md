@@ -1,5 +1,7 @@
 This sample shows *one way* to provide a Password Change user journey (policy)
 
+NOTE: This sample is offered for training purposes.  Each developer should evaluate how it first their scenario, their UX expectations and their security requirements
+
 Everything is configured in TrustFrameworkExtensions.xml & ChangePassword.xml
 
 It was checked with a with signed in account and non-sign in account. You can test it by yourself https://contosoaadb2cchangepassword.azurewebsites.net 
