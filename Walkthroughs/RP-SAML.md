@@ -5,7 +5,7 @@ This document will walk you through adding a SAML-based Relying party
 to Azure AD B2C.
 
 
-SAML - Relying Party support is available only a private preview feature.  Support is not available for the general public on this functionality as it has only been tested on some specific modalities. The team will ship this into public preview in the first few months of 2018.
+**IMPORTANT NOTE: SAML - Relying Party support is available only a private preview feature.** Support is not available for the general public on this functionality as it has only been tested on some specific modalities. The team will ship this into public preview in the first few months of 2018.
 
 
 This will enable scenarios such as:
