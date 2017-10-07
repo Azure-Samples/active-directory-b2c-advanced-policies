@@ -94,21 +94,19 @@ add the capability for your tenant to issue SAML tokens.
 
         5.  Defaults (PFX and first checkbox)
 
-    2.  Open Powershell
+    2. Go to your Azure AD B2C tenant. Click **Settings > Identity Experience Framework > Policy Keys**.
 
-    3.  Go to ExploreAdmin
+    3. Click **+Add**, and then click **Options > Upload**.
 
-    4.  Import-Module ExploreAdmin.dll (if it fails, it might be because
-        the dll hasn’t been unblocked)
+    4. Enter a **Name** (for example, YourAppNameSamlCert). The prefix B2C_1A\_ is automatically added to the name of your key.
 
-    5.  Run New-CpimCertificate -TenantId yourtenant.onmicrosoft.com
-        -CertificateId YourAppNameSamlCert -CertificateFileName path
-        -CertificatePassword password
+    5. **Upload** your certificate using the upload file control.
 
-        1.  When you run the command, make sure you sign in with the
-            onmicrosoft.com account local to the tenant.
+    6. Enter the **certificate's password**.
 
-        2. It’ll ask you for MFA
+    7. Click **Create**.
+
+    8. Verify that you've created a key (for example, B2C_1A_YourAppNameSamlCert).
 
 6.  Save your changes and upload updated policy
 
@@ -204,7 +202,7 @@ journey that will be the one issuing this SAML tokens.
         &lt;Item&gt; element with the URL to the SAML RP’s metadata if
         such exists
 
-        1.  e.g <Item Key=”PartnerEntity”\>https://app.com/metadata<Item\>;
+        1.  e.g `<Item Key=”PartnerEntity”\>https://app.com/metadata<Item\>`;
 
 12. Save your changes and upload this new policy.
 
@@ -218,15 +216,15 @@ provide some or all the following data points:
 
 -   **Metadata:**
 
-    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/b2c\_1a\<policyName\>/Samlp/metadata
+    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/b2c\_1a\<policyName\>/Samlp/metadata`
 
 -   **Issuer:**
 
-    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>
+    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>`
 
 -   **Login URL / SAML Endpoint / SAML URL:**
 
-    https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>/samlp/sso/login
+    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>/samlp/sso/login`
 
 -   **Certificate:**
 
