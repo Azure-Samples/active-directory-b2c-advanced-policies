@@ -7,6 +7,8 @@ to Azure AD B2C.
 
 **IMPORTANT NOTE: SAML - Relying Party support is available only a private preview feature.** Support is not available for the general public on this functionality as it has only been tested on some specific modalities. The team will ship this into public preview in the first few months of 2018.
 
+**If you are interested in this feature, make sure to [vote for it](https://feedback.azure.com/forums/169401-azure-active-directory/suggestions/15334323-saml-protocol-support) in order to support it and get updates on its progress.**
+
 
 This will enable scenarios such as:
 
