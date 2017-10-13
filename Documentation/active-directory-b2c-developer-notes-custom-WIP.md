@@ -13,7 +13,7 @@ ms.workload: identity
 ms.tgt_pltfrm: na
 ms.topic: article
 ms.devlang: na
-ms.date: 05/05/2017
+ms.date: 10/13/2017
 ms.author: joroja
 
 ---
@@ -45,17 +45,19 @@ With the new features introduced in the public preview, developers can perform t
 Manual policy configuration grants lower-level access to the underlying platform of Azure AD B2C and results in the creation of a unique, fully customizable trust framework. The possible permutations of custom identity providers, trust relationships, integrations with external services, and step-by-step workflows place greater demands on the advanced developers consuming them.
 
 To fully benefit from the public preview, we suggest that developers consuming the custom policy feature set adhere to the following guidelines:
-* Become familiar with the configuration language of the Identity Experience Engine and key/secrets management.
+* Become familiar with the configuration language of the Identity Experience Framework and key/secrets management.
 * Take ownership of scenarios and custom integrations.
 * Perform methodical scenario testing.
 * Follow software development and staging best practices with a minimum of one development and testing environment and one production environment.
 * Stay informed about new developments from the identity providers and services you integrate with. For example, keep track of changes in secrets and of scheduled and unscheduled changes to the service.
 * Set up active monitoring, and monitor the responsiveness of production environments.
-* Keep contact email addresses current, and stay responsive to the Microsoft live-site team emails.
+* Keep contact email addresses current in the Azure subscription, and stay responsive to the Microsoft live-site team emails.
 * Take timely action when advised to do so by the Microsoft live-site team. 
 
 ## Features by stage and known issues
 Custom Policy/Identity Experience Framework capabilities are under constant and rapid development.  This table is an index of features/component availability.
+
+Post questions in Stack Overflow at [aka.ms/aadb2cso](http://aka.ms/aadb2cso)
 
 
 ### Identity Providers, Tokens, Protocols
@@ -67,13 +69,15 @@ Interfaces with external components and applications
 | IDP-OAUTH2 |  | x |  | for example, Facebook  |
 | IDP-OAUTH1 |  | x |  | for example, Twitter |
 | IDP-SAML |  | x |  | for example, Salesforce, ADFS |
-| Token-OAUTH |  | x |  |  |
-| Token-SAML | x |  |  |  |
+| IDP-WSFED | x |  |  |  |
+| Relying Party OAUTH |  | x |  |  |
+| Relying Party OIDC |  | x |  |  |
+| Relying Party SAML | x |  |  |  |
+| Relying Party WSFED | x |  |  |  |
 | REST API with basic and cert. auth |  | x |  | for example, Azure Functions |
 
 
 ### Component Support
-Interfaces with internal components
 
 
 | Feature | Development | Preview | GA | Notes |
@@ -81,8 +85,8 @@ Interfaces with internal components
 | Azure Multi Factor Authentication |  | x |  |  |
 | Azure Active Directory as local directory |  | x |  |  |
 | Azure Email subsystem for 2FA |  | x |  |  |
-| Multi-language |  | x |  |  |
-| Password Complexity |  | x |  |  |
+| Multi-language support|  | x |  |  |
+| Password complexity | x |  |  |  |
 
 
 ### Content Definition
@@ -101,13 +105,13 @@ Interfaces with internal components
 |   Unified signup or sign-in page, api.signuporsignin |  | x |  |  |
 
 
-### App-B2C integration
+### App-IEF integration
 | Feature | Development | Preview | GA | Notes |
 |--------------------------------------------------|-------------|---------|----|-------------------------------------------------|
 | Query string parameter id_token_hint | x |  |  |  |
 | Query string parameter domain_hint |  | x |  | available as claim, can be passed to IDP |
 | Query string parameter login_hint |  | x |  | available as claim, can be passed to IDP |
-| Insert JSON into UserJourney via claim assertion | x |  |  | will be deprecated |
+| Insert JSON into UserJourney via client_assertion | x |  |  | will be deprecated |
 | Insert JSON into UserJourney as id_token_hint | x |  |  | go-forward approach to pass JSON |
 
 
@@ -131,16 +135,10 @@ Interfaces with internal components
 | Feature | Development | Preview | GA | Notes |
 |---------------------------------------------|-------------|---------|----|-------|
 | Azure Portal-IEF UX |  | x |  |  |
-| Application Insights UserJourney Recorder  |  | x |  |  |
+| Application Insights UserJourney Logs  |  | x |  |  |
 | Application Insights Event Logs |x|  |  |  |
 
 
-
-
-
-
->[!NOTE]
->Over time, these features may be included in Azure AD built-in policies.
 
 ## Next steps
 [Get started with custom policies](active-directory-b2c-get-started-custom.md).
