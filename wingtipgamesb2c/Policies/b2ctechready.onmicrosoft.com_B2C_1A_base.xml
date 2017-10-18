@@ -2045,7 +2045,7 @@
           <DisplayName>Calculate Player Profile Percent Complete Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CalculatePlayerProfilePercentCompleteWebHook?code=ucWhxvfDZeEYTOTr7FDhHUnYWta6d/ReZ/aMjXMFaCyXlkV2wzM9zQ==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CalculatePlayerProfilePercentCompleteWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2066,7 +2066,7 @@
           <DisplayName>Check Player Tag Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CheckEmailWebHook?code=4kh9rgvmT0G81hia1BsdpNrjqaI8/EDlngJacrxohrwQPJ6MYX4jhw==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CheckEmailWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2081,7 +2081,7 @@
           <DisplayName>Check Player Tag Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CheckPlayerTagWebHook?code=L/05YRSpojU0nECzM4Tp3LjBiA2ZGh3kTwwp1OVV7m0SelnvlRVLCg==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CheckPlayerTagWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2095,7 +2095,7 @@
           <DisplayName>Create Authy User Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CreateAndWaitForAuthyApprovalRequestWebHook?code=q3ja9CRpJVrhjjIHQ4SEOMFrNiLSTRMC8BdNwVkHz3y1ym1s8VLSHw==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CreateAndWaitForAuthyApprovalRequestWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2110,7 +2110,7 @@
           <DisplayName>Create Authy User Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CreateAuthyUserWebHook?code=wNCJ373ipKYfizsDOIaTgiqctqhDD3rrmCcUMECBVkKfXlhjmDXrNg==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/CreateAuthyUserWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2128,7 +2128,7 @@
           <DisplayName>Generate TOTP Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/GenerateTotpWebHook?code=avVzx5JptwapdyqGmUNLkCseQDMVTKrXCiLeASZqkDCXlnyS/kaesg==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/GenerateTotpWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2146,7 +2146,7 @@
           <DisplayName>Send Mail Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/SendMailWebHook?code=QYtqkZ/n2P4T3V1knyPZ0OJ8ev96dZsTrh2xDNVYOjdK0WxRoq69Cg==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/SendMailWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2166,7 +2166,7 @@
           <DisplayName>Verify TOTP Web Hook Azure Function</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/VerifyTotpWebHook?code=a9Hld046VZbVw5ohPudBdHR4jfrH05Y1Z3GJEVOJEwVm2QaUmxiG3w==</Item>
+            <Item Key="ServiceUrl">https://wingtipb2cfuncs.azurewebsites.net/api/VerifyTotpWebHook?code=</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
@@ -2200,8 +2200,8 @@
             <Item Key="SendClaimsIn">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="ClassicAccountClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="ClassicAccountClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_WingTipClassicAccountClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_WingTipClassicAccountClientSecret" />
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="extension_verifiedEmail" PartnerClaimType="userName" />
@@ -2222,8 +2222,8 @@
             <Item Key="SendClaimsIn">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="ClassicAccountClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="ClassicAccountClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_WingTipClassicAccountClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_WingTipClassicAccountClientSecret" />
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="userName" />
@@ -2243,8 +2243,8 @@
             <Item Key="SendClaimsIn">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="ClassicAccountClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="ClassicAccountClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_WingTipClassicAccountClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_WingTipClassicAccountClientSecret" />
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="userName" />
@@ -2265,8 +2265,8 @@
             <Item Key="SendClaimsIn">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="ClassicAccountClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="ClassicAccountClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_WingTipClassicAccountClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_WingTipClassicAccountClientSecret" />
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="userName" />
@@ -2285,8 +2285,8 @@
             <Item Key="SendClaimsIn">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="ClassicAccountClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="ClassicAccountClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_WingTipClassicAccountClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_WingTipClassicAccountClientSecret" />
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="userName" />

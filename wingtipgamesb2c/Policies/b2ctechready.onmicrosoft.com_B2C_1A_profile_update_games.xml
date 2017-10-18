@@ -4,8 +4,6 @@
 	TenantId="b2ctechready.onmicrosoft.com"
 	PolicyId="B2C_1A_profile_update_games"
 	PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
-	DeploymentMode="Development"
-	UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
 	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -20,7 +18,6 @@
       <SingleSignOn Scope="Tenant" />
       <SessionExpiryType>Rolling</SessionExpiryType>
       <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
-      <JourneyInsights InstrumentationKey="94c4abef-8598-4211-b957-b0d0d1d202d1" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryEngine="ApplicationInsights" TelemetryVersion="1.0.0" />
     </UserJourneyBehaviors>
     <TechnicalProfile Id="ProfileUpdateForGames">
       <DisplayName>Profile Update</DisplayName>

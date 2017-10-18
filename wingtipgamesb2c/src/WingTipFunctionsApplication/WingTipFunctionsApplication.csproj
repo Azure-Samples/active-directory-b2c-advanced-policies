@@ -79,6 +79,16 @@
     <Content Include="appsettings.json" />
     <Content Include="CheckEmailWebHook\function.json" />
     <Content Include="CheckEmailWebHook\run.csx" />
+    <Content Include="CreateAndWaitForAuthyApprovalRequestWebHook\function.json" />
+    <Content Include="CreateAndWaitForAuthyApprovalRequestWebHook\run.csx" />
+    <Content Include="CreateAuthyUserWebHook\function.json" />
+    <Content Include="CreateAuthyUserWebHook\run.csx" />
+    <Content Include="GenerateTotpWebHook\function.json" />
+    <Content Include="GenerateTotpWebHook\run.csx" />
+    <Content Include="VerifyTotpWebHook\function.json" />
+    <Content Include="VerifyTotpWebHook\run.csx" />
+    <Content Include="GenerateTotpWebHook\project.json" />
+    <Content Include="VerifyTotpWebHook\project.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
