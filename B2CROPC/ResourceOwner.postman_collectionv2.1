@@ -1,0 +1,76 @@
+{
+	"info": {
+		"name": "ResourceOwner",
+		"_postman_id": "c52f2efc-5f4c-8683-2c7a-c831d586d829",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "B2C Resource Owner Flow v2 (Production) casalaola",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "leadiocl@trashmail.ws",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Pass@word1",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid bef22d56-552f-4a5b-b90a-1988a7d634ce offline_access",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "bef22d56-552f-4a5b-b90a-1988a7d634ce",
+							"type": "text"
+						},
+						{
+							"key": "response_type",
+							"value": "token id_token",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://te.cpim.windows.net/casalaola.onmicrosoft.com/B2C_1A_ResourceOwnerv2/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"te",
+						"cpim",
+						"windows",
+						"net"
+					],
+					"path": [
+						"casalaola.onmicrosoft.com",
+						"B2C_1A_ResourceOwnerv2",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				},
+				"description": "ResourceOwner v2 endpoint asking for access and refresh tokens  "
+			},
+			"response": []
+		}
+	]
+}
