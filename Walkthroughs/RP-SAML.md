@@ -45,7 +45,7 @@ add the capability for your tenant to issue SAML tokens.
 > contains more details around each of the XML elements referenced in
 > this section.*
 
-1.  Open the B2C\_1A\_base.xml policy from your working directory.
+1.  Open the B2C_1A_base.xml policy from your working directory.
 
 2.  Find the section with the &lt;ClaimsProviders&gt; and look for the
     &lt;ClaimsProvider&gt; with &lt;DisplayName&gt;Token
@@ -125,7 +125,7 @@ Add the SAML Relaying Party to User Journey(s)
 Now that your tenant can issue SAML tokens, we need to create a user
 journey that will be the one issuing this SAML tokens.
 
-1.  Open the B2C\_1A\_base.xml policy from your working directory.
+1.  Open the B2C_1A_base.xml policy from your working directory.
 
 2.  Find the section with the &lt;UserJourneys&gt; and duplicate the
     &lt;UserJourney&gt; with Id=”SignIn”
@@ -218,15 +218,15 @@ provide some or all the following data points:
 
 -   **Metadata:**
 
-    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/b2c\_1a\<policyName\>/Samlp/metadata`
+    `https://login.microsoftonline.com/te/<tenantName>.onmicrosoft.com/b2c_1a_<policyName>/Samlp/metadata`
 
 -   **Issuer:**
 
-    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>`
+    `https://login.microsoftonline.com/te/<tenantName>.onmicrosoft.com/B2C_1A_<policyName>`
 
 -   **Login URL / SAML Endpoint / SAML URL:**
 
-    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>/samlp/sso/login`
+    `https://login.microsoftonline.com/te/<tenantName>.onmicrosoft.com/B2C_1A_<policyName>/samlp/sso/login`
 
 -   **Certificate:**
 
@@ -245,23 +245,7 @@ provide some or all the following data points:
  (Optional) Enable Debugging in your User Journey(s)
 ----------------------------------------------------
 
-You can enable debugging tools to help you follow through the each of
-the orchestration steps in the UserJourney and get details on issues
-that occur. This should only be enabled during development.
-
-1.  Open your new policy xml file (not the base.xml one)
-
-2.  Add the following attributes to the &lt;TrustFrameworkPolicy&gt;
-    element:
-
-    1.  DeploymentMode=”Development”
-
-    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=<guid\>"
-
-        1.  Replace &lt;guid&gt; with an actual GUID
-
-This will allow you to troubleshoot by going to
-https://b2crecorder.azurewebsites.net/trace\_102.html?id=<guid\>
+See https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-troubleshoot-custom for configuring logs collection through Application Insights.
 
 Policy Reference
 ================
@@ -476,7 +460,7 @@ how to define a relying party:
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"  PublicPolicyUri="http://example.com"  PolicySchemaVersion="0.3.0.0"  TenantId="contoso369b2c.onmicrosoft.com"  PolicyId="B2C\_1A\_MsolActive">
   <BasePolicy>
     <TenantId>contoso369b2c.onmicrosoft.com</TenantId>
-    <PolicyId>B2C\_1A\_base-v2</PolicyId>
+    <PolicyId>B2C_1A_base-v2</PolicyId>
   </BasePolicy>
   <RelyingParty>
     <DefaultUserJourney ReferenceId="ActiveRST"/>
