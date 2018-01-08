@@ -74,4 +74,5 @@ gulp.task('default', function() {
 
 
 ## Next steps
-N/A
+The script and a sample of its output is available as part of the Azure AD B2C Wingtip demo, aka.ms/aadb2cdemo with code samples located at https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/wingtipgamesb2c/Templates
+
