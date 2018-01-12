@@ -22,7 +22,7 @@ Azure Active Directory B2C loads user created content in HTML, CSS and javascrip
 
 
 ## The solution is to minify and inline the CSS
-The issue is solved by minifying and inlining the CSS in a style element in the header.  This is also known as compressing and internalizing what may otherwise be externalized content (such as CSS) into the HTML file.  This will avoid the delay of loading the externalized cotnent and prevent the page "flash" or "flicker."  We recommend that that this is performed on the final version of content before production.  Minimized CSS is much harder to edit.
+The issue is solved by minifying and inlining the CSS in a style element in the header.  This is also known as compressing and internalizing what may otherwise be externalized content (such as CSS) into the HTML file.  This will avoid the delay of loading the externalized content and prevent the page "flash" or "flicker."  We recommend that that this is performed on the final version of content before production.  Minimized CSS is much harder to edit.
 
 
 ## Manual approach
@@ -31,7 +31,7 @@ If done manually, the task involves concatenating and minifying all of the CSS f
 ## Script using Gulp.js
 Advanced users may wish to automate the task using a task/build runner.  The sample gulp.js script below will concatenate and minify all of the CSS files and then "inject" them into each of the HTML files which are sued for templates.
 
-```gulp
+```javascript
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var cssmin = require('gulp-cssmin');
