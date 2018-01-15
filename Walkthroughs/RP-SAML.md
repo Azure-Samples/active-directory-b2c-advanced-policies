@@ -5,7 +5,7 @@ This document will walk you through adding a SAML-based Relying party
 to Azure AD B2C.
 
 
-**IMPORTANT NOTE: SAML - Relying Party support is available only a private preview feature.** Support is not available for the general public on this functionality as it has only been tested on some specific modalities. The team will ship this into public preview in the first few months of 2018.
+**IMPORTANT NOTE: SAML - Relying Party support is available as a preview feature.** Support is not available for the general public on this functionality as it has only been tested on some specific modalities.
 
 **If you are interested in this feature, make sure to [vote for it](https://feedback.azure.com/forums/169401-azure-active-directory/suggestions/15334323-saml-protocol-support) in order to support it and get updates on its progress.**
 
@@ -60,7 +60,7 @@ add the capability for your tenant to issue SAML tokens.
   <Protocol Name="None"/>
   <OutputTokenFormat>SAML2</OutputTokenFormat>
   <Metadata>
-    <Item Key="IssuerUri">https://login.microsoftonline.com/te/contoso.onmicrosoft.com/saml</Item>
+    <Item Key="IssuerUri">https://login.microsoftonline.com/te/contoso.onmicrosoft.com/SAMLRPPolicy</Item>
   </Metadata>
   <CryptographicKeys>
     <Key Id="SamlAssertionSigning" StorageReferenceId="YourAppNameSamlCert" />
@@ -68,12 +68,19 @@ add the capability for your tenant to issue SAML tokens.
   </CryptographicKeys>
   <InputClaims/>
   <OutputClaims/>
+  <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml" />  
 </TechnicalProfile>
+
+<TechnicalProfile Id="SM-Saml">
+  <DisplayName>Session Management Provider</DisplayName>
+    <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </TechnicalProfile>
+
 ```
 
 4.  Configure Metadata
 
-    1.  IssuerUri – Update *contoso.onmicrosoft.com* to your tenant
+    1.  IssuerUri – Update *contoso.onmicrosoft.com* to your tenant, and *SAMLRPPolicy* to your relying party policy
 
 5.  Upload Certs - These are the certificates used to sign the SAML
     response.
@@ -133,7 +140,7 @@ journey that will be the one issuing this SAML tokens.
 3.  Rename the Id of that new &lt;UserJourney&gt; (i.e SignInSaml)
 
 4.  In the last &lt;OrchestrationStep&gt; (Type=”SendClaims”), modify
-    the CpimIssuerTechnicalProfileReferenceId value from to
+    the CpimIssuerTechnicalProfileReferenceId value from JwtIssuer to
     Saml2AssertionIssuer
 
 5.  Save your changes and upload the updated policy
@@ -153,56 +160,33 @@ journey that will be the one issuing this SAML tokens.
 
 ```xml
 <RelyingParty>
-  <DefaultUserJourney ReferenceId="SignInSamlSF"/>
-  <TechnicalProfile Id="PolicyProfile">
-    <DisplayName>PolicyProfile</DisplayName>
-    <Protocol Name="SAML2"/>
-    <Metadata>
-      <Item Key="PartnerEntity">
-        <![CDATA[
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://contoso.3dmetrics.com" validUntil="2026-12-27T23:42:22.079Z" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-<md:SPSSODescriptor WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-<md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
-<md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://contoso.3dmetrics.com/samlp " index="0" isDefault="true"/> </md:SPSSODescriptor> </md:EntityDescriptor>
- ]]>
-      </Item>
-      <Item Key="Saml2AttributeEncodingInfo">
-        <![CDATA[ 
-<saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"><saml2:Attribute FriendlyName="UserPrincipalName" Name="UserId"NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"><saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string"></saml2:AttributeValue></saml2:Attribute></saml2:AttributeStatement> 
- ]]>
-      </Item>
-      <Item Key="Saml11AttributeEncodingInfo">
-        <![CDATA[ 
-<saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"><saml:Attribute AttributeName="ImmutableID"AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05"><saml:AttributeValue></saml:AttributeValue></saml:Attribute><saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims"><saml:AttributeValue></saml:AttributeValue></saml:Attribute></saml:AttributeStatement> 
- ]]>
-      </Item>
-      <Item Key="client_id">customClientId</Item>
-    </Metadata>
-    <OutputClaims>
-      <OutputClaim ClaimTypeReferenceId="displayName"/>
-      <OutputClaim ClaimTypeReferenceId="givenName"/>
-      <OutputClaim ClaimTypeReferenceId="surname"/>
-      <OutputClaim ClaimTypeReferenceId="email"/>
-      <OutputClaim ClaimTypeReferenceId="userPrincipalName"/>
-      <OutputClaim ClaimTypeReferenceId="identityProvider"/>
-    </OutputClaims>
-    <SubjectNamingInfo ClaimType="userPrincipalName"/>
-  </TechnicalProfile>
+  <DefaultUserJourney ReferenceId="SignInSaml"/>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+        <Protocol Name="SAML2" />
+          <Metadata>
+            <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
+              <Item Key="KeyEncryptionMethod">Rsa15</Item>
+              <Item Key="DataEncryptionMethod">Aes256</Item>
+              <Item Key="XmlSignatureAlgorithm">Sha256</Item>
+          </Metadata>
+          
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+              <OutputClaim ClaimTypeReferenceId="objectId"/>
+              </OutputClaims>
+              <!-- The ClaimType in the SubjectNamingInfo element below is a reference to the name of the claim added to the claims bag used by the token minting process.
+                   This name is determined in the following order. If no PartnerClaimType is specified on the output claim above,
+                   then the DefaultPartnerClaimType for the protocol specified in the claims schema if one exists is used, otherwise
+                   the ClaimTypeReferenceId in the output claim is used.
+
+                   For the SubjectNamingInfo below we use the DefaultPartnerClaimType of http://schemas.microsoft.com/identity/claims/objectidentifier, since the output claim does not specify a PartnerClaimType. -->
+              <SubjectNamingInfo ClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" ExcludeAsClaim="true"/>
+    </TechnicalProfile>
 </RelyingParty>
 ```
 
-11. Update the &lt;Item&gt; with Key=”PartnerEntity“ as follows:
-
-    1.  Set the entityId attribute of &lt;md:EntityDescriptor&gt; to the
-        SAML RP’s identifier / Entity Id
-
-    2.  Set the Location attribute of
-        &lt;md:AssertionConsumerService&gt; to the SAML RP’s Reply URL /
-        Assertion Consumer Service (ACS) URL
-
-    3.  Alternatively, you can replace the entire value of the
-        &lt;Item&gt; element with the URL to the SAML RP’s metadata if
-        such exists
+11. Update the &lt;Item&gt; with Key=”PartnerEntity“ by adding the URL of the SAML RP’s metadata, if such exists:
 
         1.  e.g `<Item Key=”PartnerEntity”\>https://app.com/metadata<Item\>`;
 
@@ -245,23 +229,12 @@ provide some or all the following data points:
  (Optional) Enable Debugging in your User Journey(s)
 ----------------------------------------------------
 
-You can enable debugging tools to help you follow through the each of
+You can enable Application Insights to help you follow through the each of
 the orchestration steps in the UserJourney and get details on issues
 that occur. This should only be enabled during development.
 
-1.  Open your new policy xml file (not the base.xml one)
+See https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-troubleshoot-custom for details.
 
-2.  Add the following attributes to the &lt;TrustFrameworkPolicy&gt;
-    element:
-
-    1.  DeploymentMode=”Development”
-
-    2.  UserJourneyRecorderEndpoint="https://b2crecorder.azurewebsites.net/stream?id=<guid\>"
-
-        1.  Replace &lt;guid&gt; with an actual GUID
-
-This will allow you to troubleshoot by going to
-https://b2crecorder.azurewebsites.net/trace\_102.html?id=<guid\>
 
 Policy Reference
 ================
@@ -312,17 +285,26 @@ for a SAML 2.0 token issuer:
   <Protocol Name="None" />
   <OutputTokenFormat>SAML2</OutputTokenFormat>
   <Metadata>
-    <Item Key="IssuerUri">https://te.cpim.windows.net/csdii.onmicrosoft.com/B2C_1A_casinitiated</Item>
-    <Item Key="TokenLifeTimeInSeconds">600</Item>
+    <!-- The issuer contains the policy name, should the same one as configured in the relaying party application-->
+    <Item Key="IssuerUri">https://login.microsoftonline.com/te/contoso.onmicrosoft.com/B2C_1A_SAML2_signup_signin</Item>
   </Metadata>
   <CryptographicKeys>
-    <Key Id="SamlMessageSigning" StorageReferenceId="B2CSigningCertificate" />
-    <Key Id="SamlAssertionSigning" StorageReferenceId="B2CSigningCertificate" />
-    <Key Id="SamlAssertionDecryption" StorageReferenceId="B2CSigningCertificate" />
+    <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_SAMLWebAppCert" />
+    <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_SAMLWebAppCert" />
   </CryptographicKeys>
-  <InputClaims />
-  <OutputClaims />
+  <InputClaims/>
+  <OutputClaims/>
+  
+  <!-- For SAML token, you should use SAML session management technical profile-->
+  <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml" />
 </TechnicalProfile>
+
+<!-- This is the session management technical profile for SAML based tokens -->
+<TechnicalProfile Id="SM-Saml">
+  <DisplayName>Session Management Provider</DisplayName>
+  <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+</TechnicalProfile>
+
 ```
 
 Relying Party
@@ -481,37 +463,28 @@ how to define a relying party:
   <RelyingParty>
     <DefaultUserJourney ReferenceId="ActiveRST"/>
     <TechnicalProfile Id="PolicyProfile">
-      <DisplayName>WsFedProfile</DisplayName>
-      <Protocol Name="WsFed" />
-      <OutputTokenFormat>SAML11</OutputTokenFormat>
-      <SubjectAuthenticationRequirements TimeToLive="4" ResetExpiryWhenTokenIssued="false" />
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="SAML2" />
       <Metadata>
-        <Item Key="Saml2AttributeEncodingInfo">
-          <!\[CDATA\[            <saml2:AttributeStatement xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
-            <saml2:Attribute FriendlyName="UserPrincipalName"  Name="IDPEmail"  NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-              <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">                </saml2:AttributeValue>
-            </saml2:Attribute>
-          </saml2:AttributeStatement>  \]\]>
-        </Item>
-        <Item Key="Saml11AttributeEncodingInfo">
-          <!\[CDATA\[            <saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
-            <saml:Attribute AttributeName="ImmutableID"  AttributeNamespace="http://schemas.microsoft.com/LiveID/Federation/2008/05">
-              <saml:AttributeValue/>
-            </saml:Attribute>
-            <saml:Attribute AttributeName="UPN" AttributeNamespace="http://schemas.xmlsoap.org/claims">
-              <saml:AttributeValue/>
-            </saml:Attribute>
-          </saml:AttributeStatement>  \]\]>
-        </Item>
-        <Item Key="PartnerEntity">https://www.contoso369b2c.com/wp-content/uploads/2015/01/metadata.xml</Item>
-        <Item Key="client\_id">customClientId</Item>
+        <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
+          <Item Key="KeyEncryptionMethod">Rsa15</Item>
+          <Item Key="DataEncryptionMethod">Aes256</Item>
+          <Item Key="XmlSignatureAlgorithm">Sha256</Item>
       </Metadata>
+      
       <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="immutableId" PartnerClaimType="ImmutableID" />
-        <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="UPN" />
-        <OutputClaim ClaimTypeReferenceId="AuthenticationContext" DefaultValue="urn:federation:authentication:windows" />
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="objectId"/>
       </OutputClaims>
-      <SubjectNamingInfo ClaimType="immutableId" />
+      
+      <!-- The ClaimType in the SubjectNamingInfo element below is a reference to the name of the claim added to the claims bag used by the token minting process.
+                           
+This name is determined in the following order. If no PartnerClaimType is specified on the output claim above, then the DefaultPartnerClaimType for the protocol specified in the claims schema if one exists is used, otherwise the ClaimTypeReferenceId in the output claim is used.
+                           
+For the SubjectNamingInfo below we use the DefaultPartnerClaimType of http://schemas.microsoft.com/identity/claims/objectidentifier
+since the output claim does not specify a PartnerClaimType. -->
+
+<SubjectNamingInfo ClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" ExcludeAsClaim="true"/>
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
