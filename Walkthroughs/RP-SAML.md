@@ -464,9 +464,9 @@ how to define a relying party:
     <Protocol Name="SAML2" />
     <Metadata>
       <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
-        <Item Key="KeyEncryptionMethod">Rsa15</Item>
-        <Item Key="DataEncryptionMethod">Aes256</Item>
-        <Item Key="XmlSignatureAlgorithm">Sha256</Item>
+      <Item Key="KeyEncryptionMethod">Rsa15</Item>
+      <Item Key="DataEncryptionMethod">Aes256</Item>
+      <Item Key="XmlSignatureAlgorithm">Sha256</Item>
     </Metadata>
       
     <OutputClaims>
