@@ -74,7 +74,7 @@ add the capability for your tenant to issue SAML tokens.
 <TechnicalProfile Id="SM-Saml">
   <DisplayName>Session Management Provider</DisplayName>
     <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-  </TechnicalProfile>
+</TechnicalProfile>
 
 ```
 
