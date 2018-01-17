@@ -140,7 +140,8 @@ journey that will be the one issuing this SAML tokens.
 3.  Rename the Id of that new &lt;UserJourney&gt; (i.e SignInSaml)
 4.  In the last &lt;OrchestrationStep&gt; (Type=”SendClaims”), modify
     the CpimIssuerTechnicalProfileReferenceId value from JwtIssuer to
-    Saml2AssertionIssuer
+
+Saml2AssertionIssuer
 
 5.  Save your changes and upload the updated policy
 
@@ -161,24 +162,24 @@ journey that will be the one issuing this SAML tokens.
 <RelyingParty>
   <DefaultUserJourney ReferenceId="SignInSaml"/>
     <TechnicalProfile Id="PolicyProfile">
-    <DisplayName>PolicyProfile</DisplayName>
-    <Protocol Name="SAML2" />
-      <Metadata>
-        <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
-        <Item Key="KeyEncryptionMethod">Rsa15</Item>
-        <Item Key="DataEncryptionMethod">Aes256</Item>
-        <Item Key="XmlSignatureAlgorithm">Sha256</Item>
-      </Metadata>
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="SAML2" />
+        <Metadata>
+          <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
+          <Item Key="KeyEncryptionMethod">Rsa15</Item>
+          <Item Key="DataEncryptionMethod">Aes256</Item>
+          <Item Key="XmlSignatureAlgorithm">Sha256</Item>
+        </Metadata>
           
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="displayName" />
-        <OutputClaim ClaimTypeReferenceId="objectId"/>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="displayName" />
+          <OutputClaim ClaimTypeReferenceId="objectId"/>
         </OutputClaims>
         <!-- The ClaimType in the SubjectNamingInfo element below is a reference to the name of the claim added to the claims bag used by the token minting process.
         This name is determined in the following order. If no PartnerClaimType is specified on the output claim above, then the DefaultPartnerClaimType for the protocol specified in the claims schema if one exists is used, otherwise the ClaimTypeReferenceId in the output claim is used.
 
         For the SubjectNamingInfo below we use the DefaultPartnerClaimType of http://schemas.microsoft.com/identity/claims/objectidentifier, since the output claim does not specify a PartnerClaimType. -->
-      <SubjectNamingInfo ClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" ExcludeAsClaim="true"/>
+        <SubjectNamingInfo ClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" ExcludeAsClaim="true"/>
     </TechnicalProfile>
 </RelyingParty>
 ```
