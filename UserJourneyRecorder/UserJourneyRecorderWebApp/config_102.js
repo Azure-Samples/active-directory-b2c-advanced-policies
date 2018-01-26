@@ -23,7 +23,7 @@
     var Config_ReportEnabledTechnicalProfiles = false;
     var Config_PlaySound = false;
     var Config_Sound = "segment";
-    var Config_RecorderEndpoint = "https://b2crecorder.azurewebsites.net/stream";
+    var Config_RecorderEndpoint = "/stream";
 
     var Config_ConfigurationDefaults = {
         "Config_AutoRefresh": "false",
@@ -36,7 +36,7 @@
         "Config_EnableSuppressionOfEmptyHandlerResults": "true",
         "Config_ReportEnabledTechnicalProfiles": "false",
         "Config_PlaySound": "true",
-        "Config_RecorderEndpoint": "https://b2crecorder.azurewebsites.net/stream"
+        "Config_RecorderEndpoint": "/stream"
     };
 
     var Config_ConfigurationControlTypes = {
