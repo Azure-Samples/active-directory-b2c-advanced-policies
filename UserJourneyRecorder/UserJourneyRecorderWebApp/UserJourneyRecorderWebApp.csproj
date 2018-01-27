@@ -84,7 +84,6 @@
     <Content Include="packages.config" />
     <Content Include="languages\en-us_102.json" />
     <None Include="Properties\PublishProfiles\B2CRecorder.pubxml" />
-    <None Include="Properties\PublishProfiles\CumminsUserJourney - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
