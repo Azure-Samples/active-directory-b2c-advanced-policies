@@ -721,10 +721,11 @@
 					    break;
 						
 					case "ValidationResult":
-						break;
-						
+                        break;
+
                     default:
-                        alert("Unrecognized RecorderRecord Key: " + recorderRecord.Values[infoCount].Key);
+                        console.warn("Unrecognized RecorderRecord Key: " + recorderRecord.Values[infoCount].Key);
+                        console.log(recorderRecord);
                         break;
                 }
             }
