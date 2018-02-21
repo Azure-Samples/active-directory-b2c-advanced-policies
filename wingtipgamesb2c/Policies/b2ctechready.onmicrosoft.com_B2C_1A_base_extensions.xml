@@ -1,11 +1,11 @@
 <TrustFrameworkPolicy
-	PolicySchemaVersion="0.3.0.0"
-	TenantId="b2ctechready.onmicrosoft.com"
-	PolicyId="B2C_1A_base_extensions"
-	PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
-	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="b2ctechready.onmicrosoft.com"
+  PolicyId="B2C_1A_base_extensions"
+  PublicPolicyUri="http://b2ctechready.onmicrosoft.com"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <BasePolicy>
     <TenantId>b2ctechready.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_base</PolicyId>
@@ -27,6 +27,10 @@
       <!-- The following content definition is used for registering a local account via an activation link. -->
       <ContentDefinition Id="api.localaccount.activation">
         <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-activation.html</LoadUri>
+      </ContentDefinition>
+      <!-- The following content definition is used for discovering a local account by e-mail or phone. -->
+      <ContentDefinition Id="api.localaccount.discovery">
+        <LoadUri>https://wingtipb2ctmpls.blob.core.windows.net/wingtiptoys/localaccount-discovery.html</LoadUri>
       </ContentDefinition>
       <!-- The following content definition is used for logging in a local account. -->
       <ContentDefinition Id="api.localaccount.login">

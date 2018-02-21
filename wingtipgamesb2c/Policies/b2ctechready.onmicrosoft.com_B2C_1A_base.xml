@@ -128,8 +128,21 @@
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
+      <ClaimType Id="signInNameIsSameAsEmail">
+        <DisplayName>Sign-in Name is same as Email Address</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>
+      <ClaimType Id="signInNameIsSameAsPhone">
+        <DisplayName>Sign-in Name is same as Phone Number</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>
       <ClaimType Id="signInNames.emailAddress">
         <DisplayName>Email Address</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="signInNames.phoneNumber">
+        <DisplayName>Phone Number</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
@@ -441,6 +454,32 @@
       </ClaimType>
     </ClaimsSchema>
     <ClaimsTransformations>
+      <ClaimsTransformation Id="CompareSignInNameAndEmailClaims" TransformationMethod="CompareClaims">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="operator" DataType="string" Value="equal" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="signInNameIsSameAsEmail" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CompareSignInNameAndPhoneClaims" TransformationMethod="CompareClaims">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="operator" DataType="string" Value="equal" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="signInNameIsSameAsPhone" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
       <!-- The following claims transformation creates the alternative security identifier for an external user. -->
       <ClaimsTransformation Id="CreateAlternativeSecurityId" TransformationMethod="CreateAlternativeSecurityId">
         <InputClaims>
@@ -594,6 +633,18 @@
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.activation.en" />
           <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.activation.fr" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccount.discovery">
+        <LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Local Account Discovery</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.discovery.en" />
+          <LocalizedResourcesReference Language="fr" Url="https://bing.com" LocalizedResourcesReferenceId="api.localaccount.discovery.fr" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <!-- The following content definition is used for logging in a local account. -->
@@ -912,6 +963,14 @@
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're preparing your WingTip account</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email address</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Email address</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.discovery.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Next</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Sign in with your WingTip account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">We're finding your WingTip account</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Email address or phone number</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccount.login.en">
@@ -1368,6 +1427,14 @@
           <LocalizedString ElementType="ClaimType" ElementId="extension_VerifiedEmail" StringId="DisplayName">Adresse e-mail</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+      <LocalizedResources Id="api.localaccount.discovery.fr">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Après</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Connectez-vous avec votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Nous trouvons votre compte WingTip</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Adresse e-mail ou numéro de téléphone</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <LocalizedResources Id="api.localaccount.login.fr">
         <LocalizedStrings>
           <LocalizedString ElementType="UxElement" StringId="button_continue">Se connecter</LocalizedString>
@@ -1745,7 +1812,7 @@
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames" Required="true" />
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" Required="true" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
@@ -1762,6 +1829,24 @@
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreateSubject" />
           </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="AzureActiveDirectoryStore-Common" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="AzureActiveDirectoryStore-ReadUserByEmailOrPhone-ThrowIfNotExists">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="AzureActiveDirectoryStore-Common" />
         </TechnicalProfile>
         <!-- The following technical profile reads a user, identified by the object identifier for the user, from the Azure Active
@@ -2328,7 +2413,7 @@
             <OutputClaim ClaimTypeReferenceId="surnameFromSocialAccount" PartnerClaimType="last_name" />
             <OutputClaim ClaimTypeReferenceId="userId" PartnerClaimType="id" />
             <OutputClaim ClaimTypeReferenceId="extension_GenderFromSocialAccount" PartnerClaimType="gender" />
-            <OutputClaim ClaimTypeReferenceId="extension_PictureFromSocialAccount" PartnerClaimType="picture"/>
+            <OutputClaim ClaimTypeReferenceId="extension_PictureFromSocialAccount" PartnerClaimType="picture" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
@@ -2373,6 +2458,32 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="ClassicAccount-CheckNonce" />
             <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmail-ThrowIfNotExists" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+        <TechnicalProfile Id="LocalAccount-Discovery">
+          <DisplayName>Local Account Discovery</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.discovery</Item>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <IncludeInSso>false</IncludeInSso>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CompareSignInNameAndEmailClaims" />
+            <OutputClaimsTransformation ReferenceId="CompareSignInNameAndPhoneClaims" />
+          </OutputClaimsTransformations>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmailOrPhone-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <!-- The following technical profile logs in a local account. -->
@@ -2587,7 +2698,7 @@
             <ValidationTechnicalProfile ReferenceId="AzureActiveDirectoryStore-ReadUserByEmail-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
-         <!-- The following technical profile resets a local account password. -->
+        <!-- The following technical profile resets a local account password. -->
         <TechnicalProfile Id="LocalAccount-PasswordReset">
           <DisplayName>Reset password</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -2610,7 +2721,7 @@
             <ValidationTechnicalProfile ReferenceId="ClassicAccount-ResetPassword" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
-         <!-- The following technical profile sets a local account password. -->
+        <!-- The following technical profile sets a local account password. -->
         <TechnicalProfile Id="LocalAccount-PasswordSet">
           <DisplayName>Reset password</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -2754,7 +2865,7 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />
         </TechnicalProfile>
         <!-- The following technical profile verifies a verification phone. -->
-        <TechnicalProfile Id="PhoneFactor-Verify">
+        <TechnicalProfile Id="PhoneFactor-VerifyByAuthenticationPhoneNumber">
           <DisplayName>Phone Factor</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.PhoneFactorProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
@@ -2766,6 +2877,27 @@
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="UserId" />
             <InputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="verified.strongAuthenticationPhoneNumber" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />
+        </TechnicalProfile>
+        <!-- The following technical profile verifies a verification phone. -->
+        <TechnicalProfile Id="PhoneFactor-VerifyByPhoneNumberSignInName">
+          <DisplayName>Phone Factor</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.PhoneFactorProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.phonefactor</Item>
+            <Item Key="setting.authenticationMode">sms</Item>
+            <Item Key="setting.autodial">true</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="UserId" />
+            <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" PartnerClaimType="strongAuthenticationPhoneNumber" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="verified.strongAuthenticationPhoneNumber" />
@@ -2982,7 +3114,7 @@
             <PersistedClaim ClaimTypeReferenceId="signInName" />
           </PersistedClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="objectIdFromSession" DefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="objectIdFromSession" DefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
         <!-- The following technical profile manages a no-op SSO session. -->
@@ -3014,7 +3146,7 @@
             <PersistedClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
           </PersistedClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="isActivePhoneFactorSession" DefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="isActivePhoneFactorSession" DefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -3495,7 +3627,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. -->
@@ -3567,7 +3699,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It updates the password for a user, identified by the object identifier
@@ -3821,7 +3953,7 @@
         <!-- The following orchestration step is always executed to verify a verification phone. -->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It issues a SAML 2.0 token. -->
@@ -3950,6 +4082,55 @@
         <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
+    <!-- The following user journey is used for logging in a user to the WingTip Games app using either an email address or a phone number. -->
+    <UserJourney Id="SignInForGamesUsingEmailOrPhone">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountDiscoveryExchange" TechnicalProfileReferenceId="LocalAccount-Discovery" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signupsignin">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>signInNameIsSameAsEmail</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountLoginExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountLoginExchange" TechnicalProfileReferenceId="LocalAccount-Login" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>signInNameIsSameAsPhone</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByPhoneNumberSignInName" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureActiveDirectoryDirectoryReadUserByObjectIdExchange" TechnicalProfileReferenceId="AzureActiveDirectoryStore-ReadUserByObjectId-ThrowIfNotExists" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AzureFunctionsCalculatePlayerProfilePercentCompleteWebHookExchange" TechnicalProfileReferenceId="AzureFunctions-CalculatePlayerProfilePercentCompleteWebHook" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
     <!-- The following user journey is used for logging in a user to the WingTip Games app using a phone code.
          The high-level steps for this user journey are:
            1. The user enters the email address for a local account. If the local account does exist in the SQL identity service but
@@ -3970,7 +4151,7 @@
         <!-- The following orchestration step is always executed. It verifies the verification phone for the user. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It reads the user, identified by the object identifier for the user,
@@ -4065,7 +4246,7 @@
         <!-- The following orchestration step is always executed. It verifies a verification phone. -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It generates a verification app secret key for the user. -->
@@ -4166,7 +4347,7 @@
         <!-- The following orchestration step is always executed. It verifies a verification phone. -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It creates an Authy account for the user. -->
@@ -4703,7 +4884,7 @@
         <!-- The following orchestration step is always executed to verify a verification phone. -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-Verify" />
+            <ClaimsExchange Id="PhoneFactorVerifyExchange" TechnicalProfileReferenceId="PhoneFactor-VerifyByAuthenticationPhoneNumber" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The following orchestration step is always executed. It issues a JWT token to the relying party. -->
