@@ -7,6 +7,17 @@ namespace WingTipGamesWebApplication.Services
 {
     public class FreeGeoIpGeolocationService : IGeolocationService
     {
+        private readonly string _apiKey;
+        private readonly string _baseUrl;
+        private readonly string _format;
+
+        public FreeGeoIpGeolocationService(string baseUrl, string apiKey, string format)
+        {
+            _baseUrl = baseUrl;
+            _apiKey = apiKey;
+            _format = format;
+        }
+
         public async Task<Location> GetLocationAsync(string ipAddress)
         {
             if (string.IsNullOrEmpty(ipAddress))
@@ -16,7 +27,7 @@ namespace WingTipGamesWebApplication.Services
 
             using (var client = new HttpClient())
             {
-                var requestUri = $"http://freegeoip.net/json/{ipAddress}";
+                var requestUri = $"{_baseUrl}/{ipAddress}?access_key={_apiKey}&format={_format}";
                 var response = await client.GetAsync(requestUri);
                 response.EnsureSuccessStatusCode();
                 var responseContentAsString = await response.Content.ReadAsStringAsync();

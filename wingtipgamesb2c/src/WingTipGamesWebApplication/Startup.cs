@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -236,6 +237,10 @@ namespace WingTipGamesWebApplication
                 throw new ArgumentNullException(nameof(services));
             }
 
+            var applicationPartManager = new ApplicationPartManager();
+            applicationPartManager.ApplicationParts.Add(new AssemblyPart(typeof(Startup).Assembly));
+            services.AddSingleton(applicationPartManager);
+
             services.Configure<ActivationControllerOptions>(o =>
             {
                 var activationConfigurationSection = Configuration.GetSection("Activation");
@@ -277,7 +282,8 @@ namespace WingTipGamesWebApplication
             services.AddTransient<IGameRepository, GameRepository>();
             var billingService = new WingTipBillingService();
             services.AddSingleton<IBillingService>(billingService);
-            var geolocationService = new FreeGeoIpGeolocationService();
+            var geolocationServiceConfigurationSection = Configuration.GetSection("FreeGeoIpGeolocationService");
+            var geolocationService = new FreeGeoIpGeolocationService(geolocationServiceConfigurationSection["BaseUrl"], geolocationServiceConfigurationSection["ApiKey"], geolocationServiceConfigurationSection["Format"]);
             services.AddSingleton<IGeolocationService>(geolocationService);
             var musicService = new WingTipMusicService();
             services.AddSingleton<IMusicService>(musicService);
