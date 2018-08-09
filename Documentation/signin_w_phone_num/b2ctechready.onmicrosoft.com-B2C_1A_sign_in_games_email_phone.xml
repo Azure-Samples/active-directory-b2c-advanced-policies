@@ -1,0 +1,30 @@
+<TrustFrameworkPolicy PolicySchemaVersion="0.3.0.0" TenantId="b2ctechready.onmicrosoft.com" PolicyId="B2C_1A_sign_in_games_email_phone" PublicPolicyUri="http://b2ctechready.onmicrosoft.com" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TenantObjectId="ec0e2972-3403-4685-983a-7c0b8fbf7f86">
+  <BasePolicy>
+    <TenantId>b2ctechready.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_base_extensions</PolicyId>
+  </BasePolicy>
+  <!-- The following policy is used for logging in a user using an email address or phone number to the WingTip Games app. -->
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignInForGamesUsingEmailOrPhone" />
+    <UserJourneyBehaviors>
+      <SingleSignOn Scope="Tenant" />
+      <SessionExpiryType>Rolling</SessionExpiryType>
+      <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="SignInForGamesUsingEmailOrPhone">
+      <DisplayName>Sign In</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="extension_ListenerGenre" />
+        <OutputClaim ClaimTypeReferenceId="extension_Picture" />
+        <OutputClaim ClaimTypeReferenceId="extension_PlayerProfilePercentComplete" />
+        <OutputClaim ClaimTypeReferenceId="extension_PlayerTag" />
+        <OutputClaim ClaimTypeReferenceId="extension_PlayerZone" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
