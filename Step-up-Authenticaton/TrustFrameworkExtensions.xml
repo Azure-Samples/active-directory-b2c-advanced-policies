@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="sunflowersdemo.onmicrosoft.com" 
+  PolicyId="B2C_1A_B2CwithB2B_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://sunflowersdemo.onmicrosoft.com/B2C_1A_B2CwithB2B_TrustFrameworkExtensions">
+
+	<BasePolicy>
+		<TenantId>sunflowersdemo.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_B2CwithB2B_TrustFrameworkBase</PolicyId>
+	</BasePolicy>
+	<BuildingBlocks>
+		<ClaimsSchema>
+		   <!-- Demo: When an OAuth 2.0 client requests authorization from an identity provider (as specified in [RFC6749] sections 4.1 and 4.2), 
+					it MAY use the domain_hint query parameter. This query parameter provides a hint to the identity provider about the 
+					backend authentication service the end user can log in to.
+					
+					We later user this claim type to pass the domain_hint value the Azure AD pinedemo.com -->
+			<ClaimType Id="domain_hint">
+				<DisplayName>domain_hint</DisplayName>
+				<DataType>string</DataType>
+			</ClaimType>
+		</ClaimsSchema>
+	</BuildingBlocks>
+
+	<ClaimsProviders>
+		<!-- Local account Sign-Up claims provider -->
+		<ClaimsProvider>
+			<DisplayName>Local Account</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+					<Metadata>
+						<Item Key="EnforceEmailVerification">False</Item>
+					</Metadata>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+		<!-- Local account Sign-In claims provider -->
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="login-NonInteractive">
+					<Metadata>
+						<Item Key="client_id">988f9a13-7ba4-4261-af75-92b2c32a3652</Item>
+						<Item Key="IdTokenAudience">917ac5bc-e856-45bf-ad6e-281f0c9f55fe</Item>
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="988f9a13-7ba4-4261-af75-92b2c32a3652" />
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="917ac5bc-e856-45bf-ad6e-281f0c9f55fe" />
+					</InputClaims>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+		<!-- Facebook claims provider -->
+		<ClaimsProvider>
+			<DisplayName>Facebook</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="Facebook-OAUTH">
+					<Metadata>
+						<Item Key="client_id">708931959302288</Item>
+						<Item Key="scope">email public_profile</Item>
+						<Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+					</Metadata>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+		<!-- Demo: Add the claims provider to federate with AAD -->
+		<ClaimsProvider>
+			<Domain>pinedemo.com</Domain>
+			<DisplayName>Login using pinedemo.com</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="Pinedemo-OIDC">
+					<DisplayName>Pinedemo.com Employee</DisplayName>
+					<Description>Login with your Pinedemo.com account</Description>
+					<Protocol Name="OpenIdConnect"/>
+					<OutputTokenFormat>JWT</OutputTokenFormat>
+					<Metadata>
+						<Item Key="METADATA">https://login.windows.net/pinedemo.com/.well-known/openid-configuration</Item>
+						<Item Key="ProviderName">https://sts.windows.net/e5e2d79f-510d-4395-9531-6207576d9d7d/</Item>
+						<Item Key="client_id">b948655f-f059-488d-b250-06b09308c3eb</Item>
+						<Item Key="IdTokenAudience">b948655f-f059-488d-b250-06b09308c3eb</Item>
+						<Item Key="response_types">id_token</Item>
+						<Item Key="UsePolicyInRedirectUri">false</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="client_secret" StorageReferenceId="B2C_1A_PineDemoAppSecret"/>
+					</CryptographicKeys>
+					<!-- Demo: set the domain hint-->
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="domain_hint" DefaultValue="pinedemo.com" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="oid"/>
+						<OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid"/>
+						<OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+						<OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+						<OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+						<OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="contosoAuthentication" />
+						<OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="AzureADContoso" />
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>
+						<OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>
+						<OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>
+						<OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>
+					</OutputClaimsTransformations>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+	</ClaimsProviders>
+
+	<UserJourneys>
+
+		<UserJourney Id="SignUpOrSignIn">
+			<OrchestrationSteps>
+
+				<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+						<ClaimsProviderSelection TargetClaimsExchangeId="AADExchange" />
+						<ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Check if the user has selected to sign in using one of the social providers -->
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+						<ClaimsExchange Id="AADExchange" TechnicalProfileReferenceId="Pinedemo-OIDC" />
+						<ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- For social IDP authentication, attempt to find the user account in the directory. -->
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>localAccountAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>socialIdpAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+				<OrchestrationStep Order="6" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+
+		<UserJourney Id="ProfileEdit">
+			<OrchestrationSteps>
+
+				<OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+						<ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+				</OrchestrationStep>
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>localAccountAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserRead" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>socialIdpAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+
+		<UserJourney Id="PasswordReset">
+			<OrchestrationSteps>
+				<OrchestrationStep Order="1" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+
+	</UserJourneys>
+
+
+</TrustFrameworkPolicy>
