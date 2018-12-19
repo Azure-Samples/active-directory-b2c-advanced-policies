@@ -34,3 +34,17 @@ For every desired identity provider, there will be four technical profiles.  Mic
 2.	“MSA-OIDC” – this is the technical profile used to complete the authentication with the ID provider.  Upon successful auth by the user, it gathers the claims identified in the technical profile
 3.	MSA-OIDC-Link – Authenticates and adds the MSA issuer and issuer Id to the collection
 4.	MSA-OIDC-Unlink-Authenticates and removes the MSA issuer and issuer Id(s) from the userIdentities collection
+
+
+Claims Transformations
+
+|    Transformation    |    Method    |    Used For    |
+|------------------------------------------------|----------------------------------------------------------|--------------------------------------------------------------------|
+|    CreateUserIdentity    |    CreateUserIdentity    |    Create   a userIdentity pair (issuer, issuerID)    |
+|    CreateUserIdentityToLink    |    CreateUserIdentity    |    Create   the userIdentity pair that will be added    |
+|    AppendUserIdentity    |    AddItemToUserIdentityCollection    |    Add   a userIdentity to an existing Identity Collection    |
+|    AppendUserIdentitytoLink    |    AddItemToUserIdentityCollection    |    Add   the new user Identity to an existing collection    |
+|    RemoveUserIdentityFromCollectionByIssuer    |    RemoveUserIdentityFromCollectionByIssuer    |    Remove   all the userIdentities of a user for a given issuer    |
+|    ExtractIssuers    |    GetIssuersFRomUserIdentityCollectionTransformation    |    Get   the issuers from a userIdentity Collection    |
+
+
