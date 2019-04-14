@@ -1,4 +1,4 @@
-Scenario
+Scenario - AAD B2C integration with a SAML RP
 ========
 
 This document will walk you through adding a SAML-based Relying party
@@ -45,63 +45,62 @@ add the capability for your tenant to issue SAML tokens.
 > contains more details around each of the XML elements referenced in
 > this section.*
 
-1.  Open the B2C\_1A\_base.xml policy from your working directory.
+1.  Open the B2C_1A_TrustFrameworkExtensions.xml policy from your working directory.
 
-2.  Find the section with the &lt;ClaimsProviders&gt; and look for the
-    &lt;ClaimsProvider&gt; with &lt;DisplayName&gt;Token
-    Issuer&lt;/DisplayName&gt;
+2.  Find the section with the &lt;ClaimsProviders&gt;.
 
-3.  Inside of that &lt;ClaimProvider&gt; add the following
-    &lt;TechnicalProfile&gt; right after the one with Id=”JwtIssuer”:
+3.  Add the following &lt;ClaimsProvider&gt; and
+    &lt;TechnicalProfile&gt;:
 
 ```xml
-<TechnicalProfile Id="Saml2AssertionIssuer">
-  <DisplayName>Token Issuer</DisplayName>
-  <Protocol Name="None"/>
-  <OutputTokenFormat>SAML2</OutputTokenFormat>
-  <Metadata>
-    <Item Key="IssuerUri">https://login.microsoftonline.com/te/contoso.onmicrosoft.com/SAMLRPPolicy</Item>
-  </Metadata>
-  <CryptographicKeys>
-    <Key Id="SamlAssertionSigning" StorageReferenceId="YourAppNameSamlCert" />
-    <Key Id="SamlMessageSigning" StorageReferenceId="YourAppNameSamlCert "/>
-  </CryptographicKeys>
-  <InputClaims/>
-  <OutputClaims/>
-  <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml" />  
-</TechnicalProfile>
+<ClaimsProvider>
+    <TechnicalProfile Id="Saml2AssertionIssuer">
+    <DisplayName>Token Issuer</DisplayName>
+    <Protocol Name="None"/>
+    <OutputTokenFormat>SAML2</OutputTokenFormat>
+    <Metadata>
+        <Item Key="IssuerUri">https://login.microsoftonline.com/te/contoso.onmicrosoft.com/SAMLRPPolicy</Item>
+    </Metadata>
+    <CryptographicKeys>
+        <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_YourAppNameSamlCert" />
+        <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_YourAppNameSamlCert "/>
+    </CryptographicKeys>
+    <InputClaims/>
+    <OutputClaims/>
+    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml" />  
+    </TechnicalProfile>
 
-<TechnicalProfile Id="SM-Saml">
-  <DisplayName>Session Management Provider</DisplayName>
-  <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-</TechnicalProfile>
+    <TechnicalProfile Id="SM-Saml">
+    <DisplayName>Session Management Provider</DisplayName>
+    <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    </TechnicalProfile>
 
 ```
 
 4.  Configure Metadata
 
-    1.  IssuerUri – Update *contoso.onmicrosoft.com* to your tenant, and *SAMLRPPolicy* to your relying party policy
+    A.  IssuerUri – Update *contoso.onmicrosoft.com* to your tenant, and `SAMLRPPolicy` to your relying party policies `DefaultUserJourney`. This is the IssuerUri that will be returned in the SAML Response from Azure AD B2C. Your relying party must be configured to validate against this Issuer URI during SAML Assertion validation. It can be any string value as long as it is what the application expects.
 
-5.  Upload Certs - These are the certificates used to sign the SAML
-    response.
+5.  Upload Certificates - These are the certificates used to sign the SAML
+    response that AAD B2C issues.
 
-    1.  (If you don’t have a cert already) Create the cert [using
+    1.  (If you don’t have a certificate already) Create  one [using
         makecert](http://www.virtues.it/2015/08/howto-create-selfsigned-certificates-with-makecert/)
 
-        1.  makecert -r -pe -n
+        A.  makecert -r -pe -n
             "CN=yourappname.yourtenant.onmicrosoft.com" -a sha256 -sky
-            signature -len 2048 -e 12/21/2018 -sr CurrentUser -ss My
+            signature -len 2048 -e 101/01/2020 -sr CurrentUser -ss My
             YourAppNameSamlCert.cer
 
-        2. Go to cert store “Manage User Certificates” &gt; Current
+        B. Go to cert store “Manage User Certificates” &gt; Current
             User &gt; Personal &gt; Certificates &gt;
             yourappname.yourtenant.onmicrosoft.com
 
-        3. Right click &gt; All Tasks &gt; Export
+        C. Right click &gt; All Tasks &gt; Export
 
-        4. Yes, export the private key
+        D. Click Yes, export the private key
 
-        5.  Defaults (PFX and first checkbox)
+        E.  Select the defaults (PFX and first checkbox)
 
     2. Go to your Azure AD B2C tenant. Click **Settings > Identity Experience Framework > Policy Keys**.
 
@@ -119,10 +118,10 @@ add the capability for your tenant to issue SAML tokens.
 
 6.  Save your changes and upload updated policy
 
-    1.  This time, make sure you check the *Overwrite the policy if it
+    A.  This time, make sure you check the *Overwrite the policy if it
         exists* checkbox.
 
-    2.  At this point, this will not have any effect, the intent of
+    B.  At this point, this will not have any effect, the intent of
         uploading is confirming that what you’ve added thus far doesn’t
         have any issues.
 
@@ -130,85 +129,99 @@ Add the SAML Relaying Party to User Journey(s)
 ----------------------------------------------
 
 Now that your tenant can issue SAML tokens, we need to create a user
-journey that will be the one issuing this SAML tokens.
+journey that will be the one issuing a SAML token.
 
-1.  Open the B2C\_1A\_base.xml policy from your working directory.
+1.  Open the B2C_1A_TrustFrameworkBase.xml policy from your working directory.
 
-2.  Find the section with the &lt;UserJourneys&gt; and duplicate the
-    &lt;UserJourney&gt; with Id=”SignIn”
+2.  Find the section with the &lt;UserJourneys&gt; and copy the &lt;UserJourney&gt; with Id=SignUpOrSignIn into the B2C_1A_TrustFrameworkExtensions.xml file within the &lt;UserJourneys&gt; section.
 
-3.  Rename the Id of that new &lt;UserJourney&gt; (i.e SignInSaml)
+3.  Rename the Id of the new &lt;UserJourney&gt; in the B2C_1A_TrustFrameworkExtensions.xml file (i.e from SignUpOrSignIn to SignUpOrSignInSaml).
+
 4.  In the last &lt;OrchestrationStep&gt; (Type=”SendClaims”), modify
-    the CpimIssuerTechnicalProfileReferenceId value from JwtIssuer to
+    the CpimIssuerTechnicalProfileReferenceId value from JwtIssuer to Saml2AssertionIssuer.
 
-Saml2AssertionIssuer
+5.  Save your changes and upload the updated policies.
 
-5.  Save your changes and upload the updated policy
+6.  Create a copy of the SignUpOrSignin.xml file.
 
-6.  Copy the SignIn.xml file
+7.  Rename it to help identify its purpose based on its User Journey (i.e. SignUpOrSigninSAML.xml)
 
-7.  Rename it match the Id of the new journey you created (i.e.
-    SignInSaml)
-
-8.  Modify its PolicyId to a new Guid.
+8.  Modify the PolicyId in SignUpOrSigninSAML.xml (for example: PolicyId="B2C_1A_SignUpOrSigninSAML").
 
 9.  Update the value of the ReferenceId attribute in the
     &lt;DefaultUserJourney&gt; to match the Id of of the new journey you
-    created (i.e. SignInSaml)
+    created (i.e. SignUpOrSignInSAML)
 
-10. Replace its &lt;RelayingParty&gt; element with the following:
+10. Replace its &lt;RelyingParty&gt; element with the following:
 
 ```xml
 <RelyingParty>
-  <DefaultUserJourney ReferenceId="SignInSaml"/>
+  <DefaultUserJourney ReferenceId="SignUpOrSignInSAML"/>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
+      <!--B2C will understand that this is a SAML2 Application
+      Metadata is provided of the Relying party to validate the AuthN request
+      An output claim is issued as long as it is an output claim of the UserJourney steps and that a valid SAML2
+      defaultpartnerclaimtype is set for SAML2 on the Claims Provider section for that attribute-->
       <Protocol Name="SAML2" />
         <Metadata>
-          <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
-          <Item Key="KeyEncryptionMethod">Rsa15</Item>
-          <Item Key="DataEncryptionMethod">Aes256</Item>
-          <Item Key="XmlSignatureAlgorithm">Sha256</Item>
-        </Metadata>
-          
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="displayName" />
-          <OutputClaim ClaimTypeReferenceId="objectId"/>
-        </OutputClaims>
-        <!-- The ClaimType in the SubjectNamingInfo element below is a reference to the name of the claim added to the claims bag used by the token minting process.
-        This name is determined in the following order. If no PartnerClaimType is specified on the output claim above, then the DefaultPartnerClaimType for the protocol specified in the claims schema if one exists is used, otherwise the ClaimTypeReferenceId in the output claim is used.
-
-        For the SubjectNamingInfo below we use the DefaultPartnerClaimType of http://schemas.microsoft.com/identity/claims/objectidentifier, since the output claim does not specify a PartnerClaimType. -->
-        <SubjectNamingInfo ClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" ExcludeAsClaim="true"/>
+            <Item Key="PartnerEntity">https://yourRelyingParty/Metadata</Item>
+            <Item Key="IdpInitiatedProfileEnabled">true</Item>
+            <Item Key="WantsSignedAssertions">false</Item>
+			<Item Key="ResponsesSigned">true</Item>
+		</Metadata>
+			<OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress"/>
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="surname"/>
+		    <OutputClaim ClaimTypeReferenceId="objectId" DefaultValue="NOSUBSET" />
+			</OutputClaims>
+        <SubjectNamingInfo ClaimType="objectId" Format="urn:oasis:names:tc:SAML:1.1:nameid-format:persistent"/>
     </TechnicalProfile>
+
 </RelyingParty>
 ```
 
-11. Update the &lt;Item&gt; with Key=”PartnerEntity“ by adding the URL of the SAML RP’s metadata, if such exists:
+11. Update the &lt;Item&gt; with Key="PartnerEntity" by adding the URL of the SAML RP’s metadata, if such exists:
 
-        1.  e.g `<Item Key=”PartnerEntity”\>https://app.com/metadata<Item\>`;
+        <Item Key="PartnerEntity">https://app.com/metadata<Item>
 
 12. Save your changes and upload this new policy.
+
+13. When adding claims to the Relying Party policy file, you must add the <DefaultPartnerClaimType> to the ClaimsSchema for the respective claim name. For example, to output the email claim, you would add the following to the <OutputClaims> section in the SignUpOrSignInSAML.xml policy file.
+
+        <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress"/>
+    After which, you must add the following to the <ClaimType Id="signInNames.emailAddress"> in the B2C_1A_TrustFrameworkBase.xml file:
+
+        <DefaultPartnerClaimTypes>
+            <Protocol Name="OpenIdConnect" PartnerClaimType="email" />
+            <Protocol Name="SAML2" PartnerClaimType="http://schemas.microsoft.com/identity/claims/email
+
+Without this, you will be returned with this error:
+        
+    Error: The claim type 'email' specified in the SubjectNamingInfo element in policy 'B2C_1A_saml' of tenant 'contoso.onmicrosoft.com' does not specify a default partner claim for 'Saml2'.
 
 Setup the SAML IdP in the App / SAML RP
 ---------------------------------------
 
-You’ll need to setup B2C as a SAML IdP in the SAML RP / application.
-Each application has different steps to do so, look at your app’s
-documentation for guidance on how to do so. You will be required to
+You’ll need to setup B2C as a SAML IdP in the SAML Relying Party/Application.
+Each application has different steps to do this, review your app’s
+documentation for guidance on further guidance. You will be required to
 provide some or all the following data points:
 
 -   **Metadata:**
 
-    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/b2c\_1a\<policyName\>/Samlp/metadata`
+    `https://login.microsoftonline.com/te/<tenantName>.onmicrosoft.com/B2C_1A_<policyName>/Samlp/metadata`
 
 -   **Issuer:**
 
-    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>`
+    As configured in the Saml2AssertionIssuer Technical Profile.
+    `https://login.microsoftonline.com/te/<tenantName>.onmicrosoft.com/B2C_1A_<policyName>`
 
 -   **Login URL / SAML Endpoint / SAML URL:**
 
-    `https://login.microsoftonline.com/te/<tenantName\>.onmicrosoft.com/B2C\_1A\<policyName\>/samlp/sso/login`
+    `https://login.microsoftonline.com/te/<tenantName>.onmicrosoft.com/B2C_1A_<policyName>/samlp/sso/login`
 
 -   **Certificate:**
 
@@ -223,6 +236,28 @@ provide some or all the following data points:
 3.  Paste it into a text file
 
 4.  Save the text file as a .cer file
+
+Here is an example SAML Relying Party Metadata:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<EntityDescriptor ID="id123456789" entityID="https://myapp.com" validUntil="2099-12-31T23:59:59Z" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+              <SPSSODescriptor AuthnRequestsSigned="false" WantAssertionsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+              <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://myapp.com/logout" ResponseLocation="https://myapp.com/logout" />
+
+              <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+              <AssertionConsumerService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://myapp.com/SP/AssertionConsumer" />
+
+    </SPSSODescriptor>
+              <IDPSSODescriptor WantAuthnRequestsSigned="false" WantAssertionsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+              <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://myapp.com/logout" ResponseLocation="https://myapp.com/logout" />
+
+              <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+              <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://myapp.com/IDP/AuthNRequest" />
+    
+    </IDPSSODescriptor>
+</EntityDescriptor>
+```
 
  (Optional) Enable Debugging in your User Journey(s)
 ----------------------------------------------------
@@ -310,20 +345,17 @@ Relying Party
 
 ![](media/image7.png)
 
-The relying party information chooses the user journey to enforce for
-the current request. It also chooses the list of claims the relying
-party application would like to get as part of the issued token.
+The relying party information selects the user journey which will be executed for the authentication request. It also defines the list of claims the relying
+party application would like to recieve as part of the issued token.
 
-Multiple applications can use a given policy. They will all receive the
-same token with claims and the end user will go through the same user
-journey.
+Multiple applications can use a given policy. When doing so, all applications using the policy will recieve the same set of claims, and the user will expereince the same user journey.
 
 Conversely, a single application can use multiple policies. This allows
 the application to achieve functionality such as basic sign-in, step-up,
 sign-up, etc.
 
-To specify the relying party information, a *Relying Party* XML element
-must be declared must be declared under the top-level XML element of the
+To specify the relying party information, a &lt;RelyingParty&gt; XML element
+must be declared under the top-level XML element of the
 policy XML file. This element is optional.
 
 This element contains the following XML elements:
@@ -334,8 +366,8 @@ This element contains the following XML elements:
 |*UserJourneyBehaviors*|0:1|Control the scope of various user journey behaviors.|
 |*TechnicalProfile*|0:1|Define a technical profile supported by the relying party application. The technical profile provides in this context a contract for the relying party application to contact Azure AD B2C.|
 
-These above *DefaultUserJourney* and *TechnicalProfile* elements must be
-declared for any given *RelyingParty* XML element.
+The &lt;DefaultUserJourney&gt; and &lt;TechnicalProfile&gt; elements must be
+declared for any given &lt;RelyingParty&gt; XML element.
 
 The *DefaultUserJourney* XML element contains in turn the following
 attribute:
@@ -423,7 +455,7 @@ Each *OutputClaim* XML element contains the following attributes:
 |Attribute|Required|Description|
 |---------|--------|-----------|
 |*ClaimTypeReferenceId*|True|Specify a reference to a *ClaimType* already defined in the *ClaimsSchema* section in the policy XML file.<br/>Type: String|
-|*DefaultValue *|False|Specify a default value if not set.<br/>Type: String|
+|*DefaultValue*|False|Specify a default value if not set.<br/>Type: String|
 |*PartnerClaimType*|False|Specify the partner claim type.<br/>Type: String|
 |*Required*|False|Specify this claim is required.<br/>Type: String|
 
@@ -452,10 +484,10 @@ how to define a relying party:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"  PublicPolicyUri="http://example.com"  PolicySchemaVersion="0.3.0.0"  TenantId="contoso369b2c.onmicrosoft.com"  PolicyId="B2C\_1A\_MsolActive">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"  PublicPolicyUri="http://example.com"  PolicySchemaVersion="0.3.0.0"  TenantId="contoso369b2c.onmicrosoft.com"  PolicyId="B2C_1A_MsolActive">
   <BasePolicy>
     <TenantId>contoso369b2c.onmicrosoft.com</TenantId>
-    <PolicyId>B2C\_1A\_base-v2</PolicyId>
+    <PolicyId>B2C_1A_base-v2</PolicyId>
   </BasePolicy>
   <RelyingParty>
     <DefaultUserJourney ReferenceId="ActiveRST"/>
@@ -463,7 +495,7 @@ how to define a relying party:
     <DisplayName>PolicyProfile</DisplayName>
     <Protocol Name="SAML2" />
     <Metadata>
-      <Item Key="PartnerEntity">https://reflector.cpim.localhost.net/saml/reflector.metadata.cacheable.duration.xml</Item>
+      <Item Key="PartnerEntity">https://myApps.com/saml/metadata.xml</Item>
       <Item Key="KeyEncryptionMethod">Rsa15</Item>
       <Item Key="DataEncryptionMethod">Aes256</Item>
       <Item Key="XmlSignatureAlgorithm">Sha256</Item>
