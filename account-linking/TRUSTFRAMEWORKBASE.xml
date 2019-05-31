@@ -780,7 +780,7 @@
 
         <TechnicalProfile Id="AAD-UserWriteUsingUserIdentity">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Write</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
             <Item Key="UserMessageIfClaimsPrincipalAlreadyExists">You are already registered, please press the back button and sign in instead.</Item>
@@ -818,7 +818,7 @@
 
         <TechnicalProfile Id="AAD-UserUpdateWithUserIdentities">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Write</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
@@ -840,7 +840,7 @@
 
         <TechnicalProfile Id="AAD-UserReadUsingUserIdentity">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Read</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
             <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">User does not exist. Please sign up before you can sign in.</Item>
@@ -876,7 +876,7 @@
 
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Write</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
           </Metadata>
@@ -908,7 +908,7 @@
 
         <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Read</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
             <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
@@ -938,7 +938,7 @@
         <!-- The following technical profile is used to read data after user authenticates. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Read</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
           </Metadata>
@@ -992,7 +992,7 @@
 
         <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
           <Metadata>
-            <Item Key="ApiVersion">1.6</Item>
+            <Item Key="api-version">1.6</Item>
             <Item Key="Operation">Write</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
             <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
