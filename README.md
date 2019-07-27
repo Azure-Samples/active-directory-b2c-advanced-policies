@@ -1,9 +1,25 @@
-# Azure AD B2C Custom Policies with the Identity Experience Framework(IEF) 
+---
+languages:
+- csharp
+- powershell
+- objc
+- html
+- javascript
+page_type: sample
+description: "A demo of Azure AD B2C Custom Policies with the Identity Experience Framework (IEF)."
+products:
+- azure
+- azure-active-directory
+urlFragment: identity-experience-framework-azure-ad
+---
+
+# Azure AD B2C Custom Policies with the Identity Experience Framework (IEF) 
+
 Active Repos:
 
-•	Starter pack https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack
-•	App samples https://docs.microsoft.com/en-us/azure/active-directory-b2c/code-samples
-•	The community repo https://github.com/azure-ad-b2c. 
+- Starter pack https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack
+- App samples https://docs.microsoft.com/en-us/azure/active-directory-b2c/code-samples
+- The community repo https://github.com/azure-ad-b2c. 
 
 ### Solutions and training for Azure AD B2C
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/solution-articles
@@ -19,6 +35,7 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/solution-articles
 A Demo of Azure AD B2C is deployed at https://wingtipgamesb2c.azurewebsites.net/.
 
 ### Samples for Wingtipgamesb2c.azurewebsites.net. Including:
+
 * Web application /src/WingTipGamesWebApplication
 * Application Insights Viewer /src/WingTipUserJourneyPlayerWebApplication
 * Web app with admin side analytics src/WingTipToysWebApplication
