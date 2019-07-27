@@ -41,8 +41,10 @@ A Demo of Azure AD B2C is deployed at https://wingtipgamesb2c.azurewebsites.net/
 * Web app with admin side analytics src/WingTipToysWebApplication
 
 
-** The contents of this repository are unsupported and may or not be current. Replies to questions about unsupported material have the lowest priority **
+**The contents of this repository are unsupported and may or not be current. Replies to questions about unsupported material have the lowest priority**
+
 ## Why unsupported?
+
 The Identity Experience Framework is a powerful identity engine with a very comprehensive feature set, that is used internally for Microsoft services like Azure AD B2C.  Only a subset of features will be tested, monitored, documented, and supported over time. The supported list will increase quickly.  Unsupported samples and documentation are provided for our fans and partners for training, and feedback only. 
 
 
